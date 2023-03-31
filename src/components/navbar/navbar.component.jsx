@@ -3,12 +3,127 @@ import { RiArrowDownSLine } from "react-icons/ri";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
-function NavBar({ }) {
+function NavBar({ user }) {
   const [toggleLogoutBtn, setToggleLogoutBtn] = useState(false);
+  const [initials, setInitials] = useState("");
+  const [day, setDay] = useState("");
+  const [date, setDate] = useState("");
+  const [month, setMonth] = useState("");
+  const [year, setYear] = useState("");
+
+  const getCurrentDate = () => {
+    const currentDay = new Date().getDay();
+    const currentDate = new Date().getDate();
+    setDate(currentDate);
+    const currentMonth = new Date().getMonth();
+    const currentYear = new Date().getFullYear();
+    setYear(currentYear);
+    switch (currentDay) {
+      case 0:
+        setDay("Sunday");
+        break;
+
+      case 1:
+        setDay("Monday");
+        break;
+
+      case 2:
+        setDay("Tuesday");
+        break;
+
+      case 3:
+        setDay("Wednesday");
+        break;
+
+      case 4:
+        setDay("Thursday");
+        break;
+
+      case 5:
+        setDay("Friday");
+        break;
+
+      case 6:
+        setDay("Saturday");
+        break;
+
+      default:
+        console.log("error in date object");
+        break;
+    }
+
+    switch (currentMonth) {
+      case 0:
+        setMonth("January");
+        break;
+
+      case 1:
+        setMonth("February");
+        break;
+
+      case 2:
+        setMonth("March");
+        break;
+
+      case 3:
+        setMonth("April");
+        break;
+
+      case 4:
+        setMonth("May");
+        break;
+
+      case 5:
+        setMonth("June");
+        break;
+
+      case 6:
+        setMonth("July");
+        break;
+
+      case 7:
+        setMonth("August");
+        break;
+
+      case 8:
+        setMonth("September");
+        break;
+
+      case 9:
+        setMonth("October");
+        break;
+
+      case 10:
+        setMonth("November");
+        break;
+
+      case 11:
+        setMonth("December");
+        break;
+
+      default:
+        console.log("error in date object");
+        break;
+    }
+  };
+
+  useEffect(() => {
+    getCurrentDate();
+  }, [day, date, month, year]);
 
   const location = useLocation();
-  console.log(location);
 
+  const getInitials = (string) => {
+    return string
+      .match(/(\b\S)?/g)
+      .join("")
+      .match(/(^\S|\S$)?/g)
+      .join("");
+  };
+
+  useEffect(() => {
+    setInitials(getInitials(user));
+  }, [user]);
 
   const handleLogOutToggle = () => {
     setToggleLogoutBtn(() => !toggleLogoutBtn);
@@ -20,14 +135,15 @@ function NavBar({ }) {
           {location.pathname === "/home" ? "Home" : "Dashboard"}
         </span>
         <span className="block text-black text-sm">
-          <span className="font-semibold">Monday</span> 27 April 2023
+          <span className="font-semibold">{day}</span>{" "}
+          {`${date} ${month} ${year}`}
         </span>
       </div>
       <div className="auth-user-info flex justify-center items-center gap-2 text-base">
         <span className="block bg-gray-200 py-0.5 px-1 font-semibold rounded">
-          BN
+          {initials}
         </span>
-        <span className="font-semibold">Benjamin Nartey</span>
+        <span className="font-semibold">{user}</span>
         <span onClick={handleLogOutToggle}>
           <RiArrowDownSLine className="cursor-pointer" />
         </span>

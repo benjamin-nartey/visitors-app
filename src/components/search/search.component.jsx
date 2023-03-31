@@ -4,9 +4,9 @@ import { AiOutlineSearch } from "react-icons/ai";
 function Search() {
   return (
     <div className="searchbar-container w-full h-full relative">
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between h-full w-full items-center">
         <input
-          className="focus:outline-none focus:shadow-outline w-56"
+          className="focus:outline-none focus:shadow-outline w-56 h-ful"
           type="text"
           placeholder="Search staff by name..."
         />

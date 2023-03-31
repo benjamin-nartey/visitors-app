@@ -4,6 +4,7 @@ import Logo from "../../assets/logo-cocobod.png";
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import api from "../../axios/axios";
+import SignInLoader from "../../components/circlular-loader/circular-loader";
 
 const defaultFormFields = {
   email: "",
@@ -12,6 +13,9 @@ const defaultFormFields = {
 
 function SignIn() {
   const [formFields, setFormFields] = useState(defaultFormFields);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,6 +34,7 @@ function SignIn() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
+      setLoading(true);
       await api
         .post("/auth/signin", {
           email: email,
@@ -52,20 +57,32 @@ function SignIn() {
           if (userFetched) {
             localStorage.setItem("user", JSON.stringify(userFetched.data.name));
           }
+          clearFormFields();
+          setLoading(false);
           if (userFetched?.data) {
             navigate("/home");
           }
         });
     } catch (error) {
-      console.log(error);
+      setLoading(false);
+      setError(true);
+      switch (error.code) {
+        case "ERR_NETWORK":
+          setErrorMessage("Network Error!, check internet connection");
+          break;
+        case "ERR_BAD_REQUEST":
+          setErrorMessage("Opps! incorrect email or password!");
+          break;
+        default:
+          console.log(error);
+          break;
+      }
     }
   };
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormFields({ ...formFields, [name]: value });
   };
-
-  console.log(formFields);
 
   return (
     <div className="login-container grid grid-cols-2 h-screen overflow-hidden">
@@ -80,7 +97,7 @@ function SignIn() {
       <div className="login-form-div h-full grid place-items-center">
         <div className="login-form-container w-96 h-4/6 shadow-xl rounded-xl p-8 grid place-items-center z-10">
           <div className="form-content">
-            <h2 className="welcome-text text-center text-lg text-black font-medium mb-5">
+            <h2 className="welcome-text text-center text-lg text-gray-700 font-semibold mb-5">
               WELCOME TO
             </h2>
             <div className="brand-logo-box flex justify-center items-center gap-2 mb-4">
@@ -101,7 +118,7 @@ function SignIn() {
               </h2>
             </div>
 
-            <span className="mb-4 font-medium block">
+            <span className="mb-4 font-semibold block text-gray-600">
               Login to proceed to homepage
             </span>
             <form onSubmit={handleSubmit}>
@@ -113,20 +130,32 @@ function SignIn() {
                 name="email"
                 value={email}
                 onChange={handleChange}
+                required
               />
               <input
-                className="mb-10 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="mb-3 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="password"
                 type="password"
                 placeholder="Password"
                 name="password"
                 value={password}
                 onChange={handleChange}
+                required
               />
 
-              <button className="transition ease-linear duration-75 bg-gradient-to-r from-green-900 to-green-500 w-full hover:bg-gradient-to-r hover:from-green-500 hover:to-green-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                Sign In
-              </button>
+              {error && (
+                <span className="mb-5 block text-red-700 text-sm font-semibold">
+                  {errorMessage}
+                </span>
+              )}
+
+              {!loading ? (
+                <button className="transition ease-linear duration-75 bg-gradient-to-r from-green-900 to-green-500 w-full hover:bg-gradient-to-r hover:from-green-500 hover:to-green-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-5">
+                  Sign In
+                </button>
+              ) : (
+                <SignInLoader />
+              )}
             </form>
             <NavLink
               to=""

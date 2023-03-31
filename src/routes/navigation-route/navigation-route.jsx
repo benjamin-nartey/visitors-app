@@ -5,6 +5,12 @@ import { Outlet } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 function NavigationRoute() {
+  const [user, setUser] = useState("");
+
+  useEffect(() => {
+    setUser(`${JSON.parse(localStorage.getItem("user"))}`);
+  }, [user]);
+  console.log(user);
   return (
     <div className="home-container h-screen w-screen overflow-hidden grid grid-cols-12">
       <div className="sidebar-column col-span-2 shadow h-full w-full px-2">
@@ -14,7 +20,7 @@ function NavigationRoute() {
       </div>
       <div className="main-column col-span-10 ">
         <div className="navbar-container w-full h-12 px-6 pt-8">
-          <NavBar />
+          <NavBar user={user} />
         </div>
         <Outlet />
       </div>

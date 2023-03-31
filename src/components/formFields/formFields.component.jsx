@@ -63,7 +63,7 @@ function FormFields() {
                     data-te-select-init
                     required
                   >
-                    <option value="">Select Gender</option>
+                    {/* <option value="">Select Gender</option> */}
                     <option value="male">Male</option>
                     <option value="female">Female</option>
                   </select>

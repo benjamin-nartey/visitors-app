@@ -32,7 +32,7 @@ function Sidebar() {
         <NavLink
           className={({ isActive }) =>
             isActive
-              ? "flex mb-2 bg-gray-200 p-1 justify-left items-center gap-2 text-base font-medium"
+              ? "flex mb-2 bg-gray-200 p-1 justify-left items-center gap-2 text-base font-semibold"
               : "flex mb-2 hover:bg-gray-100 p-1 justify-left items-center gap-2 text-base font-medium"
           }
           to="/home"
@@ -42,7 +42,7 @@ function Sidebar() {
         <NavLink
           className={({ isActive }) =>
             isActive
-              ? "flex bg-gray-200 p-1 justify-left items-center gap-2 text-base font-medium"
+              ? "flex bg-gray-200 p-1 justify-left items-center gap-2 text-base font-semibold"
               : "flex hover:bg-gray-100 p-1 justify-left items-center gap-2 text-base font-medium"
           }
           to="/dashboard"
