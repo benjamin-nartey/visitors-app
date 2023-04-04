@@ -1,5 +1,8 @@
 import axios from "axios";
 
-export default axios.create({
+const axiosInstance = axios.create({
   baseURL: "https://receptionapi.cocobod.net",
 });
+
+export default axiosInstance;
+

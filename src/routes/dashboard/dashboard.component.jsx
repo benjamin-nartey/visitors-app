@@ -1,18 +1,34 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import DashboardImage from "../../assets/receptionist-02@2x.png";
 import { BsPeople } from "react-icons/bs";
 import { FiLogIn } from "react-icons/fi";
 import { FiLogOut } from "react-icons/fi";
+import { UserContext } from "../../components/context/user.context";
+import { useContext } from "react";
 
 function Dashboard() {
+  const { currentUser } = useContext(UserContext);
+  const [firstName, setFirstName] = useState("");
+
+  const getFirstName = (name) => {
+    const splittedName = name.split(" ");
+    const stripFirstName = splittedName.shift();
+    return stripFirstName;
+  };
+
+  useEffect(() => {
+    if (currentUser) {
+      setFirstName(getFirstName(currentUser.name));
+    }
+  }, [currentUser]);
   return (
     <div className="dashboard-container w-full mt-24 px-6 py-4">
       <div className="flex w-full justify-evenly">
         <div className="welcome-dashboard-div shadow-lg flex justify-start items-start bg-gray-300 rounded-md p-3 relative w-3/6 h-40">
           <div className="user-info-div flex flex-col justify-center items-start">
             <h2 className="text-base font-semibold capitalize mb-2">
-              Hello, Benjamin
+              Hello, {firstName}
             </h2>
             <p className="text-sm">The way to get started</p>
             <p className="text-sm">Is to quit talking, and begin doing</p>
@@ -147,7 +163,7 @@ function Dashboard() {
             </div>
           </div>
         </div>
-          <div className="checkout-div w-full  h-full bg-gray-100 round-md p-3 rounded-md overflow-hidden">
+        <div className="checkout-div w-full  h-full bg-gray-100 round-md p-3 rounded-md overflow-hidden">
           <div className="checkin-title-div w-full flex justify-start items-center gap-3  p-2 border-b border-solid border-gray-300">
             <FiLogOut className="text-lg font-semibold" />
             <h3 className="text-lg font-semibold">Today's Check-out</h3>

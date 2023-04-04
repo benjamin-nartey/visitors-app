@@ -3,8 +3,10 @@ import HeroImg from "../../assets/Login Illustration@2x.png";
 import Logo from "../../assets/logo-cocobod.png";
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import api from "../../axios/axios";
+// import axios from "axios";
+import axiosInstance from "../../interceptors/axios";
 import SignInLoader from "../../components/circlular-loader/circular-loader";
+import { useSignIn } from "react-auth-kit";
 
 const defaultFormFields = {
   email: "",
@@ -17,13 +19,8 @@ function SignIn() {
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const getUser = JSON.parse(localStorage.getItem("user"));
-    if (getUser) {
-      navigate("/home");
-    }
-  }, [navigate]);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const signIn = useSignIn();
 
   const { email, password } = formFields;
 
@@ -35,34 +32,26 @@ function SignIn() {
     event.preventDefault();
     try {
       setLoading(true);
-      await api
-        .post("/auth/signin", {
-          email: email,
-          password: password,
-        })
-        .then((response) =>
-          localStorage.setItem(
-            "accessToken",
-            JSON.stringify(response.data.access_token)
-          )
-        )
-        .then(async () => {
-          const userFetched = await api.get("/user/me", {
-            headers: {
-              Authorization: `Bearer ${JSON.parse(
-                localStorage.getItem("accessToken")
-              )}`,
-            },
-          });
-          if (userFetched) {
-            localStorage.setItem("user", JSON.stringify(userFetched.data.name));
-          }
-          clearFormFields();
-          setLoading(false);
-          if (userFetched?.data) {
-            navigate("/home");
-          }
-        });
+      const { data } = await axiosInstance.post("/auth/signin", {
+        email: email,
+        password: password,
+      });
+
+      signIn({
+        token: data.access_token,
+        expiresIn: 300,
+        tokenType: "Bearer",
+        authState: { email: email },
+        // refreshToken: data.refresh_token,
+        // refreshTokenExpireIn: 604800,
+      });
+
+      axiosInstance.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${data["access_token"]}`;
+
+      setIsAuthenticated(true);
+      setLoading(false);
     } catch (error) {
       setLoading(false);
       setError(true);
@@ -79,6 +68,9 @@ function SignIn() {
       }
     }
   };
+  if (isAuthenticated) {
+    navigate("/home");
+  }
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormFields({ ...formFields, [name]: value });

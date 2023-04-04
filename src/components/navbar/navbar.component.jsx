@@ -1,15 +1,26 @@
 import React from "react";
 import { RiArrowDownSLine } from "react-icons/ri";
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useSignOut } from "react-auth-kit";
+import { UserContext } from "../context/user.context";
+import { useContext } from "react";
 
-function NavBar({ user }) {
+function NavBar() {
   const [toggleLogoutBtn, setToggleLogoutBtn] = useState(false);
   const [initials, setInitials] = useState("");
   const [day, setDay] = useState("");
   const [date, setDate] = useState("");
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
+  const signOut = useSignOut();
+  const navigate = useNavigate();
+  const { currentUser } = useContext(UserContext);
+
+  const logoutUser = () => {
+    signOut();
+    navigate("/");
+  };
 
   const getCurrentDate = () => {
     const currentDay = new Date().getDay();
@@ -122,8 +133,10 @@ function NavBar({ user }) {
   };
 
   useEffect(() => {
-    setInitials(getInitials(user));
-  }, [user]);
+    if (currentUser) {
+      setInitials(getInitials(currentUser?.name));
+    }
+  }, [currentUser]);
 
   const handleLogOutToggle = () => {
     setToggleLogoutBtn(() => !toggleLogoutBtn);
@@ -143,15 +156,18 @@ function NavBar({ user }) {
         <span className="block bg-gray-200 py-0.5 px-1 font-semibold rounded">
           {initials}
         </span>
-        <span className="font-semibold">{user}</span>
+        <span className="font-semibold">{currentUser?.name}</span>
         <span onClick={handleLogOutToggle}>
           <RiArrowDownSLine className="cursor-pointer" />
         </span>
       </div>
       {toggleLogoutBtn && (
-        <div className="logout-div cursor-pointer absolute right-0 top-8 bg-gray-300 px-6 py-1 text-sm font-semibold">
+        <button
+          onClick={logoutUser}
+          className="logout-div cursor-pointer absolute right-0 top-8 bg-gray-300 px-6 py-1 text-sm font-semibold"
+        >
           Logout
-        </div>
+        </button>
       )}
     </div>
   );
