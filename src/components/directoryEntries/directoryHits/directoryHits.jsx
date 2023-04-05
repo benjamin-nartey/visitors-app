@@ -21,9 +21,9 @@ function DirectoryHits({ hits, RetrieveStaffRecord }) {
 
   return (
     <div className="data-result absolute top-10 h-60 w-full rounded shadow-xl p-2 z-10 bg-white overflow-y-scroll  ">
-      {hits.map((hit) => (
+      {hits.map((hit, index) => (
         <DirectoryHit
-          key={hit.ObjectID}
+          key={index}
           hit={hit}
           retrieveDataFromHit={retrieveDataFromHit}
         />

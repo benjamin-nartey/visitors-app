@@ -146,7 +146,7 @@ function SignIn() {
                   Sign In
                 </button>
               ) : (
-                <SignInLoader />
+                <SignInLoader loadingMessage="Signing" />
               )}
             </form>
             <NavLink

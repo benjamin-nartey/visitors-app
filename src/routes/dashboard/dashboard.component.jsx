@@ -68,7 +68,7 @@ function Dashboard() {
             <h3 className="text-lg font-semibold">Today's Check-in</h3>
           </div>
           <div className="checks-records h-full w-full flex flex-col">
-            <div className="records-header flex flex-wrap w-full text-base capitalize justify-evenly font-semibold py-2">
+            <div className="records-header flex flex-wrap w-full text-sm capitalize justify-evenly font-semibold py-2">
               <span>Visitor's Name</span>
               <span>Staff Name</span>
               <span>Department</span>
@@ -169,7 +169,7 @@ function Dashboard() {
             <h3 className="text-lg font-semibold">Today's Check-out</h3>
           </div>
           <div className="checks-records h-full w-full flex flex-col">
-            <div className="records-header flex flex-wrap w-full text-base capitalize justify-evenly font-semibold py-2">
+            <div className="records-header flex flex-wrap w-full text-sm capitalize justify-evenly font-semibold py-2">
               <span>Visitor's Name</span>
               <span>Staff Name</span>
               <span>Department</span>

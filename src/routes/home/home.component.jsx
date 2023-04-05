@@ -1,4 +1,3 @@
-import React from "react";
 import Logo from "../../assets/logo-cocobod.png";
 import { AiOutlineSearch } from "react-icons/ai";
 import { Hits, InstantSearch, SearchBox } from "react-instantsearch-dom";
@@ -7,17 +6,27 @@ import DirectoryHits from "../../components/directoryEntries/directoryHits/direc
 import "../../components/search/search.css";
 // import Search from "../../components/search/search.component";
 import WaitingImage from "../../assets/waiting area-01@2x.png";
-import { useState } from "react";
 import FormFields from "../../components/formFields/formFields.component";
-import { useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 function Home() {
   const [isReadyData, setIsReadyData] = useState(false);
   const [hitsContent, setHitsContent] = useState(false);
   const [defaultStaffRecord, setDefaultStaffRecord] = useState(null);
   const [showDataResult, setShowDataResult] = useState(true);
+  const searchRef = useRef();
 
-  console.log(showDataResult, "uuuuuu");
+  useEffect(() => {
+    document.addEventListener("click", handleClickOutsideSearch, true);
+  }, []);
+
+  const handleClickOutsideSearch = (e) => {
+    if (!searchRef?.current?.contains(e.target)) {
+      setHitsContent(false);
+    }
+  };
+
+  console.log(showDataResult, "uuuuuu")
 
   const RetrieveStaffRecord = (data1, data2) => {
     setDefaultStaffRecord(data1);
@@ -65,7 +74,10 @@ function Home() {
           </div>
         </div>
       )}
-      <div className="search-container w-3/6 h-9 mt-4 shadow-md rounded-lg px-5 grid place-items-center">
+      <div
+        ref={searchRef}
+        className="search-container w-3/6 h-9 mt-4 shadow-md rounded-lg px-5 grid place-items-center"
+      >
         <div className="searchbar-container w-full h-full relative">
           <InstantSearch indexName="directory" searchClient={searchClient}>
             <div className="search-box-wrapper w-full h-full flex justify-between items-center">
@@ -100,7 +112,7 @@ function Home() {
           />
         </div>
       )}
-      {isReadyData && <FormFields />}
+      {isReadyData && <FormFields defaultStaffRecord={defaultStaffRecord} />}
     </div>
   );
 }
