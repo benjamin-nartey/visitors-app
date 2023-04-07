@@ -2,9 +2,9 @@ import React, { useEffect } from "react";
 import FormImage from "../../assets/receptionist-02@2x.png";
 import { purposeOptions } from "../../utils/purpose-of-visit-options";
 import ReactSelect from "../react-select/react-select.component";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import axiosInstance from "../../interceptors/axios";
-import { useCookies } from "react-cookie";
+
 import { genderOptions } from "../../utils/genderOptions";
 import swal from "sweetalert";
 import SignInLoader from "../circlular-loader/circular-loader";
@@ -25,7 +25,6 @@ const defaultFormFields = {
 };
 
 function FormFields({ defaultStaffRecord }) {
-  const [cookies, setCookie] = useCookies();
   const [options, setOptions] = useState([""]);
   const [formFields, setFormFields] = useState(defaultFormFields);
   const [selectedGenderValue, setSelectedGenderValue] = useState("");
@@ -34,7 +33,14 @@ function FormFields({ defaultStaffRecord }) {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [error, setError] = useState(false);
+  const staffRef = useRef("");
+  const departmentRef = useRef("");
+  const divisionRef = useRef("");
+  const roomNoRef = useRef("");
+  const extentionRef = useRef("");
+  const directLineRef = useRef("");
 
+  const accessToken = JSON.parse(localStorage.getItem("access_token"));
   const {
     guest_name,
     guest_contact,
@@ -55,7 +61,21 @@ function FormFields({ defaultStaffRecord }) {
     setSelectedGenderValue("");
     setSelectedPurposeValue("");
     setSelectedTagValue("");
-    defaultStaffRecord = {};
+    staffRef.current.value = "";
+    departmentRef.current.value = "";
+    directLineRef.current.value = "";
+    divisionRef.current.value = "";
+    extentionRef.current.value = "";
+    roomNoRef.current.value = "";
+  };
+
+  const fillDefaultRecords = () => {
+    staffRef.current.value = defaultStaffRecord?.employee;
+    departmentRef.current.value = defaultStaffRecord?.Department;
+    directLineRef.current.value = defaultStaffRecord?.directno;
+    divisionRef.current.value = defaultStaffRecord?.DDivisions;
+    extentionRef.current.value = defaultStaffRecord?.extensionno;
+    roomNoRef.current.value = defaultStaffRecord?.roomno;
   };
 
   const handleSubmit = async (event) => {
@@ -69,7 +89,7 @@ function FormFields({ defaultStaffRecord }) {
         },
         {
           headers: {
-            Authorization: `Bearer ${cookies.accessToken}`,
+            Authorization: `Bearer ${accessToken}`,
           },
         }
       );
@@ -88,6 +108,7 @@ function FormFields({ defaultStaffRecord }) {
           setErrorMessage("error sending request...");
           break;
       }
+      clearFormFields();
       console.log(error);
     }
   };
@@ -128,6 +149,7 @@ function FormFields({ defaultStaffRecord }) {
   }, []);
 
   useEffect(() => {
+    fillDefaultRecords();
     setFormFields({
       ...formFields,
       tagId: selectedTagValue,
@@ -145,6 +167,12 @@ function FormFields({ defaultStaffRecord }) {
     selectedPurposeValue,
     selectedTagValue,
     defaultStaffRecord,
+    staffRef,
+    departmentRef,
+    directLineRef,
+    divisionRef,
+    extentionRef,
+    roomNoRef,
   ]);
 
   console.log(formFields);
@@ -163,44 +191,98 @@ function FormFields({ defaultStaffRecord }) {
         <div className="main-form-column w-full px-20">
           <div className="form-container flex flex-col justify-center items-center w-full">
             <div className="default-form-fields-div w-full h-48 flex justify-center items-center rounded-md shadow-md gap-3 p-3 bg-gray-200">
-              <div className="left-left-col w-full flex flex-col gap-3">
+              <div className="left-col w-full flex flex-col gap-3">
                 <div className="staff-record-div flex flex-col">
                   <h4 className="text-base font-semibold">Staff Name</h4>
-                  <span className="text-sm capitalize">
+                  {/* <span className="text-sm capitalize">
                     {defaultStaffRecord?.employee}
-                  </span>
+                  </span> */}
+                  <input
+                    readOnly
+                    ref={staffRef}
+                    className="text-sm capitalize bg-transparent focus:outline-none"
+                    type="text"
+                    name="staff_name"
+                    // value={defaultStaffRecord?.employee}
+                    value={staffRef?.current?.value}
+                  />
                 </div>
                 <div className="staff-record-div flex flex-col">
                   <h4 className="text-base font-semibold">Division</h4>
-                  <span className="text-sm capitalize">
+                  {/* <span className="text-sm capitalize">
                     {defaultStaffRecord?.DDivisions}
-                  </span>
+                  </span> */}
+                  <input
+                    readOnly
+                    ref={divisionRef}
+                    className="text-sm capitalize bg-transparent focus:outline-none"
+                    type="text"
+                    name="division"
+                    // value={defaultStaffRecord?.DDivisions}
+                    value={divisionRef?.current?.value}
+                  />
                 </div>
                 <div className="staff-record-div flex flex-col">
                   <h4 className="text-base font-semibold">Direct Line</h4>
-                  <span className="text-sm capitalize">
+                  {/* <span className="text-sm capitalize">
                     {defaultStaffRecord?.directno}
-                  </span>
+                  </span> */}
+                  <input
+                    readOnly
+                    ref={directLineRef}
+                    className="text-sm capitalize bg-transparent focus:outline-none"
+                    type="text"
+                    name="direct_line"
+                    value={directLineRef?.current?.value}
+                    // value={defaultStaffRecord?.directno}
+                  />
                 </div>
               </div>
-              <div className="left-left-col w-full flex flex-col gap-3">
+              <div className="right-col w-full flex flex-col gap-3">
                 <div className="staff-record-div flex flex-col">
                   <h4 className="text-base font-semibold">Department</h4>
-                  <span className="text-sm capitalize">
+                  {/* <span className="text-sm capitalize">
                     {defaultStaffRecord?.Department}
-                  </span>
+                  </span> */}
+                  <input
+                    readOnly
+                    ref={departmentRef}
+                    className="text-sm capitalize bg-transparent focus:outline-none"
+                    type="text"
+                    name="department"
+                    // value={defaultStaffRecord?.Department}
+                    value={departmentRef?.current?.value}
+                  />
                 </div>
                 <div className="staff-record-div flex flex-col">
                   <h4 className="text-base font-semibold">Room No.</h4>
-                  <span className="text-sm capitalize">
+                  {/* <span className="text-sm capitalize">
                     {defaultStaffRecord?.roomno}
-                  </span>
+                  </span> */}
+                  <input
+                    readOnly
+                    ref={roomNoRef}
+                    className="text-sm capitalize bg-transparent focus:outline-none"
+                    type="text"
+                    name="room_no"
+                    value={roomNoRef?.current?.value}
+                    // value={defaultStaffRecord?.roomno}
+                  />
                 </div>
                 <div className="staff-record-div flex flex-col">
                   <h4 className="text-base font-semibold">Extension </h4>
-                  <span className="text-sm capitalize">
+                  {/* <span className="text-sm capitalize">
                     {defaultStaffRecord?.extensionno}
-                  </span>
+                  </span> */}
+                  <input
+                    readOnly
+                    ref={extentionRef}
+                    className="text-sm capitalize bg-transparent focus:outline-none"
+                    type="text"
+                    name="extension"
+                    value={extentionRef?.current?.value}
+                    // value={defaultStaffRecord?.extensionno}
+                  />
                 </div>
               </div>
             </div>

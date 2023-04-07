@@ -2,27 +2,26 @@ import React from "react";
 import Sidebar from "../../components/sidebar/sidebar.component";
 import NavBar from "../../components/navbar/navbar.component";
 import { Outlet } from "react-router-dom";
-import { useState, useEffect, useContext } from "react";
-import { useCookies } from "react-cookie";
+import { useState, useEffect } from "react";
 import axiosInstance from "../../interceptors/axios";
-import { UserContext } from "../../components/context/user.context";
+import { AuthContext } from "../../components/context/useAuth.context";
+import { useContext } from "react";
 
 function NavigationRoute() {
-  const { setCurrentUser, currentUser } = useContext(UserContext);
-  const [cookies, setCookie] = useCookies();
-
+  const accessToken = JSON.parse(localStorage.getItem("access_token"));
+  const { login, user } = useContext(AuthContext);
   useEffect(() => {
     (async () => {
       const { data } = await axiosInstance.get("/user/me", {
         headers: {
-          Authorization: `Bearer ${cookies.accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       });
 
-      setCurrentUser(data);
+      login(data);
     })();
   }, []);
-  console.log(currentUser);
+  console.log(user);
   return (
     <div className="home-container h-screen w-screen overflow-hidden grid grid-cols-12">
       <div className="sidebar-column col-span-2 shadow h-full w-full px-2">

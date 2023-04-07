@@ -6,7 +6,8 @@ import { NavLink, useNavigate } from "react-router-dom";
 // import axios from "axios";
 import axiosInstance from "../../interceptors/axios";
 import SignInLoader from "../../components/circlular-loader/circular-loader";
-import { useSignIn } from "react-auth-kit";
+import { AuthContext } from "../../components/context/useAuth.context";
+import { useContext } from "react";
 
 const defaultFormFields = {
   email: "",
@@ -20,9 +21,15 @@ function SignIn() {
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const signIn = useSignIn();
+  const { user } = useContext(AuthContext);
 
   const { email, password } = formFields;
+
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user]);
 
   const clearFormFields = () => {
     setFormFields(defaultFormFields);
@@ -37,14 +44,7 @@ function SignIn() {
         password: password,
       });
 
-      signIn({
-        token: data.access_token,
-        expiresIn: 300,
-        tokenType: "Bearer",
-        authState: { email: email },
-        // refreshToken: data.refresh_token,
-        // refreshTokenExpireIn: 604800,
-      });
+      localStorage.setItem("access_token", JSON.stringify(data.access_token));
 
       axiosInstance.defaults.headers.common[
         "Authorization"

@@ -15,8 +15,6 @@
     "dotenv": "^16.0.3",
     "instantsearch.css": "^8.0.0",
     "react": "^18.2.0",
-    "react-auth-kit": "^2.10.0",
-    "react-cookie": "^4.1.1",
     "react-dom": "^18.2.0",
     "react-icons": "^4.8.0",
     "react-instantsearch-dom": "^6.39.1",

@@ -1,10 +1,9 @@
 import React from "react";
 import { RiArrowDownSLine } from "react-icons/ri";
 import { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useSignOut } from "react-auth-kit";
-import { UserContext } from "../context/user.context";
+import { useLocation } from "react-router-dom";
 import { useContext } from "react";
+import { AuthContext } from "../context/useAuth.context";
 
 function NavBar() {
   const [toggleLogoutBtn, setToggleLogoutBtn] = useState(false);
@@ -13,14 +12,8 @@ function NavBar() {
   const [date, setDate] = useState("");
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
-  const signOut = useSignOut();
-  const navigate = useNavigate();
-  const { currentUser } = useContext(UserContext);
 
-  const logoutUser = () => {
-    signOut();
-    navigate("/");
-  };
+  const { user, logout } = useContext(AuthContext);
 
   const getCurrentDate = () => {
     const currentDay = new Date().getDay();
@@ -133,14 +126,15 @@ function NavBar() {
   };
 
   useEffect(() => {
-    if (currentUser) {
-      setInitials(getInitials(currentUser?.name));
+    if (user) {
+      setInitials(getInitials(user?.name));
     }
-  }, [currentUser]);
+  }, [user]);
 
   const handleLogOutToggle = () => {
     setToggleLogoutBtn(() => !toggleLogoutBtn);
   };
+
   return (
     <div className="navbar w-full h-full flex justify-between items-center relative">
       <div className="home-welcome-div flex flex-col">
@@ -156,14 +150,14 @@ function NavBar() {
         <span className="block bg-gray-200 py-0.5 px-1 font-semibold rounded">
           {initials}
         </span>
-        <span className="font-semibold">{currentUser?.name}</span>
+        <span className="font-semibold">{user?.name}</span>
         <span onClick={handleLogOutToggle}>
           <RiArrowDownSLine className="cursor-pointer" />
         </span>
       </div>
       {toggleLogoutBtn && (
         <button
-          onClick={logoutUser}
+          onClick={logout}
           className="logout-div cursor-pointer absolute right-0 top-8 bg-gray-300 px-6 py-1 text-sm font-semibold"
         >
           Logout

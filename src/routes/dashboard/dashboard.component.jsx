@@ -4,11 +4,11 @@ import DashboardImage from "../../assets/receptionist-02@2x.png";
 import { BsPeople } from "react-icons/bs";
 import { FiLogIn } from "react-icons/fi";
 import { FiLogOut } from "react-icons/fi";
-import { UserContext } from "../../components/context/user.context";
+import { AuthContext } from "../../components/context/useAuth.context";
 import { useContext } from "react";
 
 function Dashboard() {
-  const { currentUser } = useContext(UserContext);
+  const { user } = useContext(AuthContext);
   const [firstName, setFirstName] = useState("");
 
   const getFirstName = (name) => {
@@ -18,10 +18,10 @@ function Dashboard() {
   };
 
   useEffect(() => {
-    if (currentUser) {
-      setFirstName(getFirstName(currentUser.name));
+    if (user) {
+      setFirstName(getFirstName(user.name));
     }
-  }, [currentUser]);
+  }, [user]);
   return (
     <div className="dashboard-container w-full mt-24 px-6 py-4">
       <div className="flex w-full justify-evenly">

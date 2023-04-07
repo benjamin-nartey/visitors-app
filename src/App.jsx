@@ -3,9 +3,19 @@ import SignIn from "./routes/sign-in/sign-in.component";
 import Home from "./routes/home/home.component";
 import NavigationRoute from "./routes/navigation-route/navigation-route";
 import Dashboard from "./routes/dashboard/dashboard.component";
-import { RequireAuth } from "react-auth-kit";
+import { ProtectedRoute } from "./routes/protectedRoute/protectedRoute";
+import { AuthContext } from "./components/context/useAuth.context";
+import { useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom/dist";
 
 const App = () => {
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (user) {
+      navigate("/home");
+    }
+  }, [user]);
   return (
     <Routes>
       <Route index element={<SignIn />} />
@@ -13,17 +23,17 @@ const App = () => {
         <Route
           path="home"
           element={
-            <RequireAuth loginPath="/">
+            <ProtectedRoute>
               <Home />
-            </RequireAuth>
+            </ProtectedRoute>
           }
         />
         <Route
           path="dashboard"
           element={
-            <RequireAuth loginPath="/">
+            <ProtectedRoute>
               <Dashboard />
-            </RequireAuth>
+            </ProtectedRoute>
           }
         />
       </Route>
