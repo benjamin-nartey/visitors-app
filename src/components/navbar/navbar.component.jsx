@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../context/useAuth.context";
+import { useRef } from "react";
 
 function NavBar() {
   const [toggleLogoutBtn, setToggleLogoutBtn] = useState(false);
@@ -12,8 +13,19 @@ function NavBar() {
   const [date, setDate] = useState("");
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
-
+  const location = useLocation();
   const { user, logout } = useContext(AuthContext);
+  const logoutRef = useRef();
+
+  useEffect(() => {
+    document.addEventListener("click", handleClickOutsideLogut, true);
+  }, []);
+
+  const handleClickOutsideLogut = (e) => {
+    if (!logoutRef?.current?.contains(e.target)) {
+      setToggleLogoutBtn(false);
+    }
+  };
 
   const getCurrentDate = () => {
     const currentDay = new Date().getDay();
@@ -115,8 +127,6 @@ function NavBar() {
     getCurrentDate();
   }, [day, date, month, year]);
 
-  const location = useLocation();
-
   const getInitials = (string) => {
     return string
       .match(/(\b\S)?/g)
@@ -157,8 +167,9 @@ function NavBar() {
       </div>
       {toggleLogoutBtn && (
         <button
+          ref={logoutRef}
           onClick={logout}
-          className="logout-div cursor-pointer absolute right-0 top-8 bg-gray-300 px-6 py-1 text-sm font-semibold"
+          className="logout-div hover:bg-gray-400 hover:font-bold z-50 cursor-pointer absolute right-0 top-8 bg-gray-300 px-6 py-1 text-sm font-semibold"
         >
           Logout
         </button>

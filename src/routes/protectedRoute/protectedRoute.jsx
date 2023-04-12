@@ -5,8 +5,7 @@ import { useContext } from "react";
 export const ProtectedRoute = ({ children }) => {
   const { user } = useContext(AuthContext);
   if (!user) {
-    // user is not authenticated
-    return <Navigate to="/" />;
+    return <Navigate to="/" replace={true} />;
   }
   return children;
 };

@@ -4,6 +4,7 @@ import { purposeOptions } from "../../utils/purpose-of-visit-options";
 import ReactSelect from "../react-select/react-select.component";
 import { useState, useRef } from "react";
 import axiosInstance from "../../interceptors/axios";
+import { useLocalStorage } from "../../utils/useLocalStorage";
 
 import { genderOptions } from "../../utils/genderOptions";
 import swal from "sweetalert";
@@ -25,6 +26,7 @@ const defaultFormFields = {
 };
 
 function FormFields({ defaultStaffRecord }) {
+  const [accessToken, setAccessToken] = useLocalStorage("access_token", "null");
   const [options, setOptions] = useState([""]);
   const [formFields, setFormFields] = useState(defaultFormFields);
   const [selectedGenderValue, setSelectedGenderValue] = useState("");
@@ -40,7 +42,8 @@ function FormFields({ defaultStaffRecord }) {
   const extentionRef = useRef("");
   const directLineRef = useRef("");
 
-  const accessToken = JSON.parse(localStorage.getItem("access_token"));
+  // const accessToken = JSON.parse(localStorage.getItem("access_token"));
+  console.log(("accessToken", accessToken));
   const {
     guest_name,
     guest_contact,
@@ -82,17 +85,9 @@ function FormFields({ defaultStaffRecord }) {
     event.preventDefault();
     try {
       setLoading(true);
-      const response = await axiosInstance.post(
-        "/visit/checkIn",
-        {
-          ...formFields,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+      const response = await axiosInstance.post("/visit/checkIn", {
+        ...formFields,
+      });
       console.log(response);
       setLoading(false);
       clearFormFields();
@@ -130,20 +125,14 @@ function FormFields({ defaultStaffRecord }) {
   useEffect(() => {
     const getData = async () => {
       const arr = [];
-      await axiosInstance
-        .get("/tag/unIssuedTags", {
-          headers: {
-            Authorization: `Bearer ${cookies.accessToken}`,
-          },
-        })
-        .then((res) => {
-          let result = res.data;
-          console.log("Results", result);
-          result.map((tag) => {
-            return arr.push({ value: tag.id, label: tag.number });
-          });
-          setOptions(arr);
+      await axiosInstance.get("/tag/unIssuedTags").then((res) => {
+        let result = res.data;
+        console.log("Results", result);
+        result.map((tag) => {
+          return arr.push({ value: tag.id, label: tag.number });
         });
+        setOptions(arr);
+      });
     };
     getData();
   }, []);
@@ -179,7 +168,7 @@ function FormFields({ defaultStaffRecord }) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className="form-home-screen-container w-full p-6 grid grid-cols-2 gap-4">
+      <div className="form-home-screen-container w-full p-6 grid grid-cols-2 gap-4 ">
         <div className="form-image-col w-full grid place-items-center">
           <img
             src={FormImage}
@@ -189,7 +178,7 @@ function FormFields({ defaultStaffRecord }) {
           />
         </div>
         <div className="main-form-column w-full px-20">
-          <div className="form-container flex flex-col justify-center items-center w-full">
+          <div className="form-container flex flex-col justify-center items-center w-96">
             <div className="default-form-fields-div w-full h-48 flex justify-center items-center rounded-md shadow-md gap-3 p-3 bg-gray-200">
               <div className="left-col w-full flex flex-col gap-3">
                 <div className="staff-record-div flex flex-col">

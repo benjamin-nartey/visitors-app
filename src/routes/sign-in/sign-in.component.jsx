@@ -3,11 +3,12 @@ import HeroImg from "../../assets/Login Illustration@2x.png";
 import Logo from "../../assets/logo-cocobod.png";
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-// import axios from "axios";
+import axios from "axios";
 import axiosInstance from "../../interceptors/axios";
 import SignInLoader from "../../components/circlular-loader/circular-loader";
 import { AuthContext } from "../../components/context/useAuth.context";
 import { useContext } from "react";
+import { useLocalStorage } from "../../utils/useLocalStorage";
 
 const defaultFormFields = {
   email: "",
@@ -20,14 +21,15 @@ function SignIn() {
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
+  const { user, setTokens,} = useContext(AuthContext);
+  const [authTokens, setAuthTokens] = useLocalStorage("authTokens", null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const { user } = useContext(AuthContext);
 
   const { email, password } = formFields;
 
   useEffect(() => {
     if (user) {
-      navigate("/");
+      navigate("/home");
     }
   }, [user]);
 
@@ -35,23 +37,25 @@ function SignIn() {
     setFormFields(defaultFormFields);
   };
 
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       setLoading(true);
-      const { data } = await axiosInstance.post("/auth/signin", {
-        email: email,
-        password: password,
-      });
-
-      localStorage.setItem("access_token", JSON.stringify(data.access_token));
-
-      axiosInstance.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${data["access_token"]}`;
-
-      setIsAuthenticated(true);
-      setLoading(false);
+      await axios
+        .post("https://receptionapi.cocobod.net/auth/signin", {
+          email: email,
+          password: password,
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            setAuthTokens(response.data);
+            setTokens(response.data);
+            console.log("authResponse", response.data);
+            setIsAuthenticated(true);
+            setLoading(false);
+          }
+        });
     } catch (error) {
       setLoading(false);
       setError(true);
@@ -68,9 +72,11 @@ function SignIn() {
       }
     }
   };
+
   if (isAuthenticated) {
     navigate("/home");
   }
+
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormFields({ ...formFields, [name]: value });

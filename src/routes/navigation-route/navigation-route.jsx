@@ -8,20 +8,8 @@ import { AuthContext } from "../../components/context/useAuth.context";
 import { useContext } from "react";
 
 function NavigationRoute() {
-  const accessToken = JSON.parse(localStorage.getItem("access_token"));
-  const { login, user } = useContext(AuthContext);
-  useEffect(() => {
-    (async () => {
-      const { data } = await axiosInstance.get("/user/me", {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-
-      login(data);
-    })();
-  }, []);
-  console.log(user);
+  // const {fetchUser} = useContext(AuthContext)
+  // fetchUser()
   return (
     <div className="home-container h-screen w-screen overflow-hidden grid grid-cols-12">
       <div className="sidebar-column col-span-2 shadow h-full w-full px-2">

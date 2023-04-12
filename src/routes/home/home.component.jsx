@@ -8,6 +8,9 @@ import "../../components/search/search.css";
 import WaitingImage from "../../assets/waiting area-01@2x.png";
 import FormFields from "../../components/formFields/formFields.component";
 import { useState, useEffect, useRef } from "react";
+import { FiLogOut } from "react-icons/fi";
+import Modal from "../../components/modal/modal.component";
+import CheckoutForm from "../../components/checkout/checkout.component";
 
 function Home() {
   const [isReadyData, setIsReadyData] = useState(false);
@@ -15,9 +18,15 @@ function Home() {
   const [defaultStaffRecord, setDefaultStaffRecord] = useState(null);
   const [showDataResult, setShowDataResult] = useState(true);
   const searchRef = useRef();
+  const [showModal, setShowModal] = useState(false);
+
+  const handleShowModal = () => {
+    setShowModal(true);
+  };
 
   useEffect(() => {
     document.addEventListener("click", handleClickOutsideSearch, true);
+   
   }, []);
 
   const handleClickOutsideSearch = (e) => {
@@ -26,7 +35,11 @@ function Home() {
     }
   };
 
-  console.log(showDataResult, "uuuuuu")
+  const handleHideModal = () => {
+    setShowModal(false);
+  };
+
+  console.log(showDataResult, "uuuuuu");
 
   const RetrieveStaffRecord = (data1, data2) => {
     setDefaultStaffRecord(data1);
@@ -46,7 +59,15 @@ function Home() {
     }
   }, [showDataResult]);
   return (
-    <div className="main-body-container w-full pt-10 grid place-items-center">
+    <div className="main-body-container w-full pt-10 grid place-items-center relative">
+      {showModal && <Modal handleHideModal = {handleHideModal}/>}
+      {showModal && <CheckoutForm />}
+      <div
+        onClick={handleShowModal}
+        className="sign-guest-out text-base font-medium hover:font-semibold hover:bg-slate-300 absolute right-24 py-1 px-2 bg-slate-200 rounded-sm cursor-pointer top-10 flex justify-center items-center gap-3"
+      >
+        <FiLogOut className="text-base font-extrabold " /> Checkout
+      </div>
       {!isReadyData && (
         <div className="brand-logo-box flex justify-center items-center gap-2 mb-4">
           <div className="logo-container h-16">
