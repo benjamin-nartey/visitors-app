@@ -20,7 +20,7 @@ function DirectoryHits({ hits, RetrieveStaffRecord }) {
   }, [retrievedData]);
 
   return (
-    <div className="data-result absolute top-10 h-60 w-full rounded shadow-xl p-2 z-10 bg-white overflow-y-scroll  ">
+    <div className="data-result absolute top-10 max-h-60 w-full rounded shadow-xl p-2 z-10 bg-white overflow-y-scroll  ">
       {hits.map((hit, index) => (
         <DirectoryHit
           key={index}

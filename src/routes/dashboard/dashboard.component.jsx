@@ -11,6 +11,10 @@ function Dashboard() {
   const { user } = useContext(AuthContext);
   const [firstName, setFirstName] = useState("");
 
+  const fetchCheckedIn = async(event)=>{
+    
+  }
+
   const getFirstName = (name) => {
     const splittedName = name.split(" ");
     const stripFirstName = splittedName.shift();
@@ -62,7 +66,7 @@ function Dashboard() {
         </NavLink>
       </div>
       <div className="checks-container w-full h-72 grid grid-cols-2 gap-4 mt-6">
-        <div className="checkin-div w-full  h-full bg-gray-100 round-md p-3 rounded-md overflow-hidden">
+        <div className="checkin-div w-full  h-full shadow-xl round-md p-3 rounded-md overflow-hidden">
           <div className="checkin-title-div w-full flex justify-start items-center gap-3  p-2 border-b border-solid border-gray-300">
             <FiLogIn className="text-lg font-semibold" />
             <h3 className="text-lg font-semibold">Today's Check-in</h3>
@@ -76,84 +80,84 @@ function Dashboard() {
               <span>Time In</span>
             </div>
             <div className="record-body-container w-full h-auto py-6 flex flex-col overflow-scroll [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
-              <div className="records-body flex flex-wrap w-full text-xs capitalize justify-evenly py-2 bg-slate-200 hover:bg-slate-300 cursor-pointer mb-3">
+              <div className="records-body flex flex-wrap w-full text-xs capitalize justify-evenly py-2 hover:bg-gray-200 cursor-pointer mb-3">
                 <span>Benjamin Nartey</span>
                 <span>Richard Arthur</span>
                 <span>Information Systems Unit</span>
                 <span>201</span>
                 <span>12:45pm</span>
               </div>
-              <div className="records-body flex flex-wrap w-full text-xs capitalize justify-evenly py-2 bg-slate-200 hover:bg-slate-300 cursor-pointer mb-3">
+              <div className="records-body flex flex-wrap w-full text-xs capitalize justify-evenly py-2 hover:bg-gray-200 cursor-pointer mb-3">
                 <span>Benjamin Nartey</span>
                 <span>Richard Arthur</span>
                 <span>Information Systems Unit</span>
                 <span>201</span>
                 <span>12:45pm</span>
               </div>
-              <div className="records-body flex flex-wrap w-full text-xs capitalize justify-evenly py-2 bg-slate-200 hover:bg-slate-300 cursor-pointer mb-3">
+              <div className="records-body flex flex-wrap w-full text-xs capitalize justify-evenly py-2 hover:bg-gray-200 cursor-pointer mb-3">
                 <span>Benjamin Nartey</span>
                 <span>Richard Arthur</span>
                 <span>Information Systems Unit</span>
                 <span>201</span>
                 <span>12:45pm</span>
               </div>
-              <div className="records-body flex flex-wrap w-full text-xs capitalize justify-evenly py-2 bg-slate-200 hover:bg-slate-300 cursor-pointer mb-3">
+              <div className="records-body flex flex-wrap w-full text-xs capitalize justify-evenly py-2 hover:bg-gray-200 cursor-pointer mb-3">
                 <span>Benjamin Nartey</span>
                 <span>Richard Arthur</span>
                 <span>Information Systems Unit</span>
                 <span>201</span>
                 <span>12:45pm</span>
               </div>
-              <div className="records-body flex flex-wrap w-full text-xs capitalize justify-evenly py-2 bg-slate-200 hover:bg-slate-300 cursor-pointer mb-3">
+              <div className="records-body flex flex-wrap w-full text-xs capitalize justify-evenly py-2 hover:bg-gray-200 cursor-pointer mb-3">
                 <span>Benjamin Nartey</span>
                 <span>Richard Arthur</span>
                 <span>Information Systems Unit</span>
                 <span>201</span>
                 <span>12:45pm</span>
               </div>
-              <div className="records-body flex flex-wrap w-full text-xs capitalize justify-evenly py-2 bg-slate-200 hover:bg-slate-300 cursor-pointer mb-3">
+              <div className="records-body flex flex-wrap w-full text-xs capitalize justify-evenly py-2 hover:bg-gray-200 cursor-pointer mb-3">
                 <span>Benjamin Nartey</span>
                 <span>Richard Arthur</span>
                 <span>Information Systems Unit</span>
                 <span>201</span>
                 <span>12:45pm</span>
               </div>
-              <div className="records-body flex flex-wrap w-full text-xs capitalize justify-evenly py-2 bg-slate-200 hover:bg-slate-300 cursor-pointer mb-3">
+              <div className="records-body flex flex-wrap w-full text-xs capitalize justify-evenly py-2 hover:bg-gray-200 cursor-pointer mb-3">
                 <span>Benjamin Nartey</span>
                 <span>Richard Arthur</span>
                 <span>Information Systems Unit</span>
                 <span>201</span>
                 <span>12:45pm</span>
               </div>
-              <div className="records-body flex flex-wrap w-full text-xs capitalize justify-evenly py-2 bg-slate-200 hover:bg-slate-300 cursor-pointer mb-3">
+              <div className="records-body flex flex-wrap w-full text-xs capitalize justify-evenly py-2 hover:bg-gray-200 cursor-pointer mb-3">
                 <span>Benjamin Nartey</span>
                 <span>Richard Arthur</span>
                 <span>Information Systems Unit</span>
                 <span>201</span>
                 <span>12:45pm</span>
               </div>
-              <div className="records-body flex flex-wrap w-full text-xs capitalize justify-evenly py-2 bg-slate-200 hover:bg-slate-300 cursor-pointer mb-3">
+              <div className="records-body flex flex-wrap w-full text-xs capitalize justify-evenly py-2 hover:bg-gray-200 cursor-pointer mb-3">
                 <span>Benjamin Nartey</span>
                 <span>Richard Arthur</span>
                 <span>Information Systems Unit</span>
                 <span>201</span>
                 <span>12:45pm</span>
               </div>
-              <div className="records-body flex flex-wrap w-full text-xs capitalize justify-evenly py-2 bg-slate-200 hover:bg-slate-300 cursor-pointer mb-3">
+              <div className="records-body flex flex-wrap w-full text-xs capitalize justify-evenly py-2 hover:bg-gray-200 cursor-pointer mb-3">
                 <span>Isaac Nartey</span>
                 <span>Richard Arthur</span>
                 <span>Information Systems Unit</span>
                 <span>201</span>
                 <span>12:45pm</span>
               </div>
-              <div className="records-body flex flex-wrap w-full text-xs capitalize justify-evenly py-2 bg-slate-200 hover:bg-slate-300 cursor-pointer mb-3">
+              <div className="records-body flex flex-wrap w-full text-xs capitalize justify-evenly py-2 hover:bg-gray-200 cursor-pointer mb-3">
                 <span>Emannuel Nartey</span>
                 <span>Richard Arthur</span>
                 <span>Information Systems Unit</span>
                 <span>201</span>
                 <span>12:45pm</span>
               </div>
-              <div className="records-body flex flex-wrap w-full text-xs capitalize justify-evenly py-2 bg-slate-200 hover:bg-slate-300 cursor-pointer mb-3">
+              <div className="records-body flex flex-wrap w-full text-xs capitalize justify-evenly py-2 hover:bg-gray-200 cursor-pointer mb-3">
                 <span>Emannuel Nartey</span>
                 <span>Richard Arthur</span>
                 <span>Information Systems Unit</span>
@@ -163,7 +167,7 @@ function Dashboard() {
             </div>
           </div>
         </div>
-        <div className="checkout-div w-full  h-full bg-gray-100 round-md p-3 rounded-md overflow-hidden">
+        <div className="checkout-div w-full  h-full shadow-xl round-md p-3 rounded-md overflow-hidden">
           <div className="checkin-title-div w-full flex justify-start items-center gap-3  p-2 border-b border-solid border-gray-300">
             <FiLogOut className="text-lg font-semibold" />
             <h3 className="text-lg font-semibold">Today's Check-out</h3>
@@ -177,70 +181,70 @@ function Dashboard() {
               <span>Time Out</span>
             </div>
             <div className="record-body-container py-6 w-full h-auto flex flex-col overflow-scroll [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
-              <div className="records-body flex flex-wrap w-full text-xs capitalize justify-evenly py-2 bg-slate-200 hover:bg-slate-300 cursor-pointer mb-3">
+              <div className="records-body flex flex-wrap w-full text-xs capitalize justify-evenly py-2 hover:bg-gray-200 cursor-pointer mb-3">
                 <span>Benjamin Nartey</span>
                 <span>Richard Arthur</span>
                 <span>Information Systems Unit</span>
                 <span>201</span>
                 <span>12:45pm</span>
               </div>
-              <div className="records-body flex flex-wrap w-full text-xs capitalize justify-evenly py-2 bg-slate-200 hover:bg-slate-300 cursor-pointer mb-3">
+              <div className="records-body flex flex-wrap w-full text-xs capitalize justify-evenly py-2 hover:bg-gray-200 cursor-pointer mb-3">
                 <span>Benjamin Nartey</span>
                 <span>Richard Arthur</span>
                 <span>Information Systems Unit</span>
                 <span>201</span>
                 <span>12:45pm</span>
               </div>
-              <div className="records-body flex flex-wrap w-full text-xs capitalize justify-evenly py-2 bg-slate-200 hover:bg-slate-300 cursor-pointer mb-3">
+              <div className="records-body flex flex-wrap w-full text-xs capitalize justify-evenly py-2 hover:bg-gray-200 cursor-pointer mb-3">
                 <span>Benjamin Nartey</span>
                 <span>Richard Arthur</span>
                 <span>Information Systems Unit</span>
                 <span>201</span>
                 <span>12:45pm</span>
               </div>
-              <div className="records-body flex flex-wrap w-full text-xs capitalize justify-evenly py-2 bg-slate-200 hover:bg-slate-300 cursor-pointer mb-3">
+              <div className="records-body flex flex-wrap w-full text-xs capitalize justify-evenly py-2 hover:bg-gray-200 cursor-pointer mb-3">
                 <span>Benjamin Nartey</span>
                 <span>Richard Arthur</span>
                 <span>Information Systems Unit</span>
                 <span>201</span>
                 <span>12:45pm</span>
               </div>
-              <div className="records-body flex flex-wrap w-full text-xs capitalize justify-evenly py-2 bg-slate-200 hover:bg-slate-300 cursor-pointer mb-3">
+              <div className="records-body flex flex-wrap w-full text-xs capitalize justify-evenly py-2 hover:bg-gray-200 cursor-pointer mb-3">
                 <span>Benjamin Nartey</span>
                 <span>Richard Arthur</span>
                 <span>Information Systems Unit</span>
                 <span>201</span>
                 <span>12:45pm</span>
               </div>
-              <div className="records-body flex flex-wrap w-full text-xs capitalize justify-evenly py-2 bg-slate-200 hover:bg-slate-300 cursor-pointer mb-3">
+              <div className="records-body flex flex-wrap w-full text-xs capitalize justify-evenly py-2 hover:bg-gray-200 cursor-pointer mb-3">
                 <span>Benjamin Nartey</span>
                 <span>Richard Arthur</span>
                 <span>Information Systems Unit</span>
                 <span>201</span>
                 <span>12:45pm</span>
               </div>
-              <div className="records-body flex flex-wrap w-full text-xs capitalize justify-evenly py-2 bg-slate-200 hover:bg-slate-300 cursor-pointer mb-3">
+              <div className="records-body flex flex-wrap w-full text-xs capitalize justify-evenly py-2 hover:bg-gray-200 cursor-pointer mb-3">
                 <span>Benjamin Nartey</span>
                 <span>Richard Arthur</span>
                 <span>Information Systems Unit</span>
                 <span>201</span>
                 <span>12:45pm</span>
               </div>
-              <div className="records-body flex flex-wrap w-full text-xs capitalize justify-evenly py-2 bg-slate-200 hover:bg-slate-300 cursor-pointer mb-3">
+              <div className="records-body flex flex-wrap w-full text-xs capitalize justify-evenly py-2 hover:bg-gray-200 cursor-pointer mb-3">
                 <span>Benjamin Nartey</span>
                 <span>Richard Arthur</span>
                 <span>Information Systems Unit</span>
                 <span>201</span>
                 <span>12:45pm</span>
               </div>
-              <div className="records-body flex flex-wrap w-full text-xs capitalize justify-evenly py-2 bg-slate-200 hover:bg-slate-300 cursor-pointer mb-3">
+              <div className="records-body flex flex-wrap w-full text-xs capitalize justify-evenly py-2 hover:bg-gray-200 cursor-pointer mb-3">
                 <span>Benjamin Nartey</span>
                 <span>Richard Arthur</span>
                 <span>Information Systems Unit</span>
                 <span>201</span>
                 <span>12:45pm</span>
               </div>
-              <div className="records-body flex flex-wrap w-full text-xs capitalize justify-evenly py-2 bg-slate-200 hover:bg-slate-300 cursor-pointer mb-3">
+              <div className="records-body flex flex-wrap w-full text-xs capitalize justify-evenly py-2 hover:bg-gray-200 cursor-pointer mb-3">
                 <span>Benjamin Nartey</span>
                 <span>Richard Arthur</span>
                 <span>Information Systems Unit</span>

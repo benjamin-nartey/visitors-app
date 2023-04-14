@@ -5,7 +5,6 @@ import ReactSelect from "../react-select/react-select.component";
 import { useState, useRef } from "react";
 import axiosInstance from "../../interceptors/axios";
 import { useLocalStorage } from "../../utils/useLocalStorage";
-
 import { genderOptions } from "../../utils/genderOptions";
 import swal from "sweetalert";
 import SignInLoader from "../circlular-loader/circular-loader";
@@ -41,36 +40,28 @@ function FormFields({ defaultStaffRecord }) {
   const roomNoRef = useRef("");
   const extentionRef = useRef("");
   const directLineRef = useRef("");
+  const selectRef = useRef();
 
   // const accessToken = JSON.parse(localStorage.getItem("access_token"));
   console.log(("accessToken", accessToken));
-  const {
-    guest_name,
-    guest_contact,
-    guest_type,
-    tagId,
-    gender,
-    purpose,
-    department,
-    direct_line,
-    division,
-    extension,
-    room_no,
-    staff_name,
-  } = formFields;
+  const { guest_name, guest_contact, guest_type } = formFields;
 
   const clearFormFields = () => {
     setFormFields(defaultFormFields);
-    setSelectedGenderValue("");
-    setSelectedPurposeValue("");
-    setSelectedTagValue("");
+    selectRef.value = "";
     staffRef.current.value = "";
     departmentRef.current.value = "";
     directLineRef.current.value = "";
     divisionRef.current.value = "";
     extentionRef.current.value = "";
     roomNoRef.current.value = "";
+    setSelectedGenderValue("");
+    setSelectedPurposeValue("");
+    setSelectedTagValue("");
   };
+  // useEffect(()=>{
+  //   clearFormFields()
+  // },[])
 
   const fillDefaultRecords = () => {
     staffRef.current.value = defaultStaffRecord?.employee;
@@ -85,13 +76,16 @@ function FormFields({ defaultStaffRecord }) {
     event.preventDefault();
     try {
       setLoading(true);
-      const response = await axiosInstance.post("/visit/checkIn", {
-        ...formFields,
-      });
-      console.log(response);
-      setLoading(false);
-      clearFormFields();
-      swal("Visitor Created", "visitor details submitted", "success");
+      await axiosInstance
+        .post("/visit/checkIn", {
+          ...formFields,
+        })
+        .then(() => setLoading(false))
+        .then(() => clearFormFields())
+        .then(() => getData())
+        .then(() =>
+          swal("Visitor Created", "visitor details submitted", "success")
+        );
     } catch (error) {
       setError(true);
       setLoading(false);
@@ -122,18 +116,19 @@ function FormFields({ defaultStaffRecord }) {
     });
   };
 
-  useEffect(() => {
-    const getData = async () => {
-      const arr = [];
-      await axiosInstance.get("/tag/unIssuedTags").then((res) => {
-        let result = res.data;
-        console.log("Results", result);
-        result.map((tag) => {
-          return arr.push({ value: tag.id, label: tag.number });
-        });
-        setOptions(arr);
+  const getData = async () => {
+    const arr = [];
+    await axiosInstance.get("/tag/unIssuedTags").then((res) => {
+      let result = res.data;
+      console.log("Results", result);
+      result.map((tag) => {
+        return arr.push({ value: tag.id, label: tag.number });
       });
-    };
+      setOptions(arr);
+    });
+  };
+
+  useEffect(() => {
     getData();
   }, []);
 
@@ -152,9 +147,9 @@ function FormFields({ defaultStaffRecord }) {
       staff_name: defaultStaffRecord?.employee,
     });
   }, [
-    selectedGenderValue,
-    selectedPurposeValue,
-    selectedTagValue,
+    // selectedGenderValue,
+    // selectedPurposeValue,
+    // selectedTagValue,
     defaultStaffRecord,
     staffRef,
     departmentRef,
@@ -287,6 +282,7 @@ function FormFields({ defaultStaffRecord }) {
               />
               <div className="mb-3 shadow appearance-none border rounded w-full py-0 px-0 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                 <ReactSelect
+                  ref={selectRef}
                   options={genderOptions}
                   placeholder="Select Gender"
                   name="gender"
@@ -295,6 +291,7 @@ function FormFields({ defaultStaffRecord }) {
               </div>
               <div className="mb-3 shadow appearance-none border rounded w-full py-0 px-0 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                 <ReactSelect
+                  ref={selectRef}
                   options={options}
                   placeholder="Select Tag"
                   name="tag_no"
@@ -323,6 +320,7 @@ function FormFields({ defaultStaffRecord }) {
               />
               <div className="mb-3 shadow appearance-none border rounded w-full py-0 px-0 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                 <ReactSelect
+                  ref={selectRef}
                   options={purposeOptions}
                   placeholder="Purpose"
                   name="purpose"
@@ -331,7 +329,7 @@ function FormFields({ defaultStaffRecord }) {
               </div>
             </div>
             {error && (
-              <span className="mb-5 block text-red-700 text-sm font-semibold w-full">
+              <span className="mb-1 block text-red-700 text-sm font-semibold w-full">
                 {errorMessage}
               </span>
             )}

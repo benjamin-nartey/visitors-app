@@ -11,6 +11,7 @@ import { useState, useEffect, useRef } from "react";
 import { FiLogOut } from "react-icons/fi";
 import Modal from "../../components/modal/modal.component";
 import CheckoutForm from "../../components/checkout/checkout.component";
+import FormDialog from "../../components/formDialog/form-dialog";
 
 function Home() {
   const [isReadyData, setIsReadyData] = useState(false);
@@ -18,7 +19,7 @@ function Home() {
   const [defaultStaffRecord, setDefaultStaffRecord] = useState(null);
   const [showDataResult, setShowDataResult] = useState(true);
   const searchRef = useRef();
-  const [showModal, setShowModal] = useState(false);
+  // const [showModal, setShowModal] = useState(false);
 
   const handleShowModal = () => {
     setShowModal(true);
@@ -26,7 +27,6 @@ function Home() {
 
   useEffect(() => {
     document.addEventListener("click", handleClickOutsideSearch, true);
-   
   }, []);
 
   const handleClickOutsideSearch = (e) => {
@@ -60,14 +60,15 @@ function Home() {
   }, [showDataResult]);
   return (
     <div className="main-body-container w-full pt-10 grid place-items-center relative">
-      {showModal && <Modal handleHideModal = {handleHideModal}/>}
+      <FormDialog />
+      {/* {showModal && <Modal handleHideModal = {handleHideModal}/>}
       {showModal && <CheckoutForm />}
       <div
         onClick={handleShowModal}
         className="sign-guest-out text-base font-medium hover:font-semibold hover:bg-slate-300 absolute right-24 py-1 px-2 bg-slate-200 rounded-sm cursor-pointer top-10 flex justify-center items-center gap-3"
       >
         <FiLogOut className="text-base font-extrabold " /> Checkout
-      </div>
+      </div> */}
       {!isReadyData && (
         <div className="brand-logo-box flex justify-center items-center gap-2 mb-4">
           <div className="logo-container h-16">

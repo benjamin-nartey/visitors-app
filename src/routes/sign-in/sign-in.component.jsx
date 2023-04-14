@@ -21,7 +21,7 @@ function SignIn() {
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
-  const { user, setTokens,} = useContext(AuthContext);
+  const { user, setTokens } = useContext(AuthContext);
   const [authTokens, setAuthTokens] = useLocalStorage("authTokens", null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -36,7 +36,6 @@ function SignIn() {
   const clearFormFields = () => {
     setFormFields(defaultFormFields);
   };
-
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -148,7 +147,7 @@ function SignIn() {
               )}
 
               {!loading ? (
-                <button className="transition ease-linear duration-75 bg-gradient-to-r from-green-900 to-green-500 w-full hover:bg-gradient-to-r hover:from-green-500 hover:to-green-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-5">
+                <button className="transition ease-linear duration-75 bg-gradient-to-r from-green-900 to-green-500 w-full hover:bg-gradient-to-r hover:from-green-500 hover:to-green-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                   Sign In
                 </button>
               ) : (
