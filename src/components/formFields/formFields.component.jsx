@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import FormImage from "../../assets/receptionist-02@2x.png";
 import { purposeOptions } from "../../utils/purpose-of-visit-options";
-import ReactSelect from "../react-select/react-select.component";
 import { useState, useRef } from "react";
 import axiosInstance from "../../interceptors/axios";
 import { useLocalStorage } from "../../utils/useLocalStorage";
 import { genderOptions } from "../../utils/genderOptions";
 import swal from "sweetalert";
 import SignInLoader from "../circlular-loader/circular-loader";
+import SelectComponent from "../Select/select-component";
 
 const defaultFormFields = {
   guest_name: "",
@@ -40,28 +40,31 @@ function FormFields({ defaultStaffRecord }) {
   const roomNoRef = useRef("");
   const extentionRef = useRef("");
   const directLineRef = useRef("");
-  const selectRef = useRef();
+  // const selectRefTag = useRef();
+  // const selectRefGender = useRef();
+  // const selectRefPurpose = useRef();
 
   // const accessToken = JSON.parse(localStorage.getItem("access_token"));
   console.log(("accessToken", accessToken));
   const { guest_name, guest_contact, guest_type } = formFields;
 
+  const clearAllSelectValue = () => {
+    setSelectedGenderValue("");
+    setSelectedPurposeValue("");
+    setSelectedTagValue("");
+  };
+
   const clearFormFields = () => {
     setFormFields(defaultFormFields);
-    selectRef.value = "";
+    clearAllSelectValue();
+    // defaultStaffRecord = null;
     staffRef.current.value = "";
     departmentRef.current.value = "";
     directLineRef.current.value = "";
     divisionRef.current.value = "";
     extentionRef.current.value = "";
     roomNoRef.current.value = "";
-    setSelectedGenderValue("");
-    setSelectedPurposeValue("");
-    setSelectedTagValue("");
   };
-  // useEffect(()=>{
-  //   clearFormFields()
-  // },[])
 
   const fillDefaultRecords = () => {
     staffRef.current.value = defaultStaffRecord?.employee;
@@ -85,7 +88,13 @@ function FormFields({ defaultStaffRecord }) {
         .then(() => getData())
         .then(() =>
           swal("Visitor Created", "visitor details submitted", "success")
-        );
+        )
+        .then(() => {
+          if (error) {
+            setError(false);
+          }
+        })
+        .finally(() => event.target.reset());
     } catch (error) {
       setError(true);
       setLoading(false);
@@ -97,8 +106,8 @@ function FormFields({ defaultStaffRecord }) {
           setErrorMessage("error sending request...");
           break;
       }
-      clearFormFields();
       console.log(error);
+      // console.log("origee",formFields);
     }
   };
 
@@ -106,12 +115,12 @@ function FormFields({ defaultStaffRecord }) {
     const { name, value } = event?.target;
     setFormFields({
       ...formFields,
-      department: defaultStaffRecord?.Department,
-      direct_line: defaultStaffRecord?.directno,
-      division: defaultStaffRecord?.DDivisions,
-      extension: defaultStaffRecord?.extensionno,
-      room_no: defaultStaffRecord?.roomno,
-      staff_name: defaultStaffRecord?.employee,
+      department: departmentRef?.current?.value,
+      direct_line: directLineRef?.current?.value,
+      division: divisionRef?.current?.value,
+      extension: extentionRef?.current?.value,
+      room_no: roomNoRef.current?.value,
+      staff_name: staffRef?.current?.value,
       [name]: value,
     });
   };
@@ -133,6 +142,15 @@ function FormFields({ defaultStaffRecord }) {
   }, []);
 
   useEffect(() => {
+    setFormFields({
+      ...formFields,
+      tagId: selectedTagValue,
+      gender: selectedGenderValue,
+      purpose: selectedPurposeValue,
+    });
+  }, [selectedGenderValue, selectedPurposeValue, selectedTagValue]);
+
+  useEffect(() => {
     fillDefaultRecords();
     setFormFields({
       ...formFields,
@@ -147,9 +165,6 @@ function FormFields({ defaultStaffRecord }) {
       staff_name: defaultStaffRecord?.employee,
     });
   }, [
-    // selectedGenderValue,
-    // selectedPurposeValue,
-    // selectedTagValue,
     defaultStaffRecord,
     staffRef,
     departmentRef,
@@ -178,39 +193,29 @@ function FormFields({ defaultStaffRecord }) {
               <div className="left-col w-full flex flex-col gap-3">
                 <div className="staff-record-div flex flex-col">
                   <h4 className="text-base font-semibold">Staff Name</h4>
-                  {/* <span className="text-sm capitalize">
-                    {defaultStaffRecord?.employee}
-                  </span> */}
+
                   <input
                     readOnly
                     ref={staffRef}
                     className="text-sm capitalize bg-transparent focus:outline-none"
                     type="text"
                     name="staff_name"
-                    // value={defaultStaffRecord?.employee}
                     value={staffRef?.current?.value}
                   />
                 </div>
                 <div className="staff-record-div flex flex-col">
                   <h4 className="text-base font-semibold">Division</h4>
-                  {/* <span className="text-sm capitalize">
-                    {defaultStaffRecord?.DDivisions}
-                  </span> */}
                   <input
                     readOnly
                     ref={divisionRef}
                     className="text-sm capitalize bg-transparent focus:outline-none"
                     type="text"
                     name="division"
-                    // value={defaultStaffRecord?.DDivisions}
                     value={divisionRef?.current?.value}
                   />
                 </div>
                 <div className="staff-record-div flex flex-col">
                   <h4 className="text-base font-semibold">Direct Line</h4>
-                  {/* <span className="text-sm capitalize">
-                    {defaultStaffRecord?.directno}
-                  </span> */}
                   <input
                     readOnly
                     ref={directLineRef}
@@ -218,31 +223,23 @@ function FormFields({ defaultStaffRecord }) {
                     type="text"
                     name="direct_line"
                     value={directLineRef?.current?.value}
-                    // value={defaultStaffRecord?.directno}
                   />
                 </div>
               </div>
               <div className="right-col w-full flex flex-col gap-3">
                 <div className="staff-record-div flex flex-col">
                   <h4 className="text-base font-semibold">Department</h4>
-                  {/* <span className="text-sm capitalize">
-                    {defaultStaffRecord?.Department}
-                  </span> */}
                   <input
                     readOnly
                     ref={departmentRef}
                     className="text-sm capitalize bg-transparent focus:outline-none"
                     type="text"
                     name="department"
-                    // value={defaultStaffRecord?.Department}
                     value={departmentRef?.current?.value}
                   />
                 </div>
                 <div className="staff-record-div flex flex-col">
                   <h4 className="text-base font-semibold">Room No.</h4>
-                  {/* <span className="text-sm capitalize">
-                    {defaultStaffRecord?.roomno}
-                  </span> */}
                   <input
                     readOnly
                     ref={roomNoRef}
@@ -250,14 +247,10 @@ function FormFields({ defaultStaffRecord }) {
                     type="text"
                     name="room_no"
                     value={roomNoRef?.current?.value}
-                    // value={defaultStaffRecord?.roomno}
                   />
                 </div>
                 <div className="staff-record-div flex flex-col">
                   <h4 className="text-base font-semibold">Extension </h4>
-                  {/* <span className="text-sm capitalize">
-                    {defaultStaffRecord?.extensionno}
-                  </span> */}
                   <input
                     readOnly
                     ref={extentionRef}
@@ -265,14 +258,13 @@ function FormFields({ defaultStaffRecord }) {
                     type="text"
                     name="extension"
                     value={extentionRef?.current?.value}
-                    // value={defaultStaffRecord?.extensionno}
                   />
                 </div>
               </div>
             </div>
             <div className="form-fields-div w-full grid grid-cols-2 gap-4 mt-2">
               <input
-                className="mb-3 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="mb-3 text-sm shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 type="text"
                 placeholder="Visitor's Name"
                 name="guest_name"
@@ -281,28 +273,30 @@ function FormFields({ defaultStaffRecord }) {
                 required
               />
               <div className="mb-3 shadow appearance-none border rounded w-full py-0 px-0 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                <ReactSelect
-                  ref={selectRef}
-                  options={genderOptions}
+                <SelectComponent
                   placeholder="Select Gender"
-                  name="gender"
-                  onChange={(e) => setSelectedGenderValue(e?.value)}
+                  nothingFound="nothing found"
+                  value={selectedGenderValue}
+                  onChange={setSelectedGenderValue}
+                  data={genderOptions}
                 />
               </div>
               <div className="mb-3 shadow appearance-none border rounded w-full py-0 px-0 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                <ReactSelect
-                  ref={selectRef}
-                  options={options}
+                <SelectComponent
                   placeholder="Select Tag"
-                  name="tag_no"
-                  // defaultValue={{ label: "", value: "" }}
-                  onChange={(e) => setSelectedTagValue(e?.value)}
+                  nothingFound="nothing found"
+                  value={selectedTagValue}
+                  onChange={setSelectedTagValue}
+                  data={options}
                 />
               </div>
 
               <input
-                className="mb-3 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                type="number"
+                className="mb-3 text-sm shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                type="tel"
+                pattern="(02|05|)\d{8}"
+                maxLength={10}
+                minLength={10}
                 placeholder="Visitor's Contact"
                 name="guest_contact"
                 value={guest_contact}
@@ -310,7 +304,7 @@ function FormFields({ defaultStaffRecord }) {
                 required
               />
               <input
-                className="mb-3 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="mb-3 text-sm shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 type="text"
                 placeholder="Company"
                 name="guest_type"
@@ -319,12 +313,12 @@ function FormFields({ defaultStaffRecord }) {
                 required
               />
               <div className="mb-3 shadow appearance-none border rounded w-full py-0 px-0 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                <ReactSelect
-                  ref={selectRef}
-                  options={purposeOptions}
-                  placeholder="Purpose"
-                  name="purpose"
-                  onChange={(e) => setSelectedPurposeValue(e?.value)}
+                <SelectComponent
+                  placeholder="Select Purpose"
+                  nothingFound="nothing found"
+                  value={selectedPurposeValue}
+                  onChange={setSelectedPurposeValue}
+                  data={purposeOptions}
                 />
               </div>
             </div>

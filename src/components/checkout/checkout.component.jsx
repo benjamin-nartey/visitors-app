@@ -123,12 +123,12 @@ const CheckoutForm = () => {
 
           {checkoutVistorRecord && (
             <div className="v-record-value w-full flex flex-col items-start text-sm">
-              <span>{checkoutVistorRecord?.visit[0].guest_name}</span>
-              <span>{checkoutVistorRecord?.visit[0].guest_contact}</span>
+              <span>{checkoutVistorRecord?.visit[0]?.guest_name}</span>
+              <span>{checkoutVistorRecord?.visit[0]?.guest_contact}</span>
               <span>{checkoutVistorRecord?.number}</span>
-              <span>{checkoutVistorRecord?.visit[0].staff_name}</span>
-              <span>{checkoutVistorRecord?.visit[0].department}</span>
-              <span>{checkoutVistorRecord?.visit[0].room_no}</span>
+              <span>{checkoutVistorRecord?.visit[0]?.staff_name}</span>
+              <span>{checkoutVistorRecord?.visit[0]?.department}</span>
+              <span>{checkoutVistorRecord?.visit[0]?.room_no}</span>
             </div>
           )}
         </div>

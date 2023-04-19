@@ -5,9 +5,7 @@ import NavigationRoute from "./routes/navigation-route/navigation-route";
 import Dashboard from "./routes/dashboard/dashboard.component";
 import { ProtectedRoute } from "./routes/protectedRoute/protectedRoute";
 
-
 const App = () => {
-
   return (
     <Routes>
       <Route index element={<SignIn />} />
