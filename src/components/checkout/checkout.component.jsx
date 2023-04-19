@@ -7,7 +7,6 @@ import swal from "sweetalert";
 
 const CheckoutForm = () => {
   const [issuedTags, setIssuedTags] = useState([]);
-  const [pendingIssuedTags, setPendingIssuedTags] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [wordEntered, setWordEntered] = useState("");
   const [checkoutVistorRecord, setCheckoutVisitorRecord] = useState(null);
@@ -16,13 +15,6 @@ const CheckoutForm = () => {
   const clearRecord = () => {
     setCheckoutVisitorRecord(null);
   };
-
-  useEffect(() => {
-    const newPendingIssuedTags = issuedTags.filter(
-      (pendingTags) => pendingTags.visit.length !== 0
-    );
-    setPendingIssuedTags(newPendingIssuedTags);
-  }, [issuedTags]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -55,10 +47,11 @@ const CheckoutForm = () => {
   const handleFilter = (event) => {
     const searchWord = event.target.value;
     setWordEntered(searchWord);
-    const newFilter = pendingIssuedTags.filter((value) => {
-      return value.number
-        .toLowerCase()
-        .includes(searchWord.trim().toLowerCase());
+    const newFilter = issuedTags.filter((value) => {
+      return (
+        value.number.toLowerCase().includes(searchWord.trim().toLowerCase()) &&
+        value.visit.length !== 0
+      );
     });
     if (searchWord === "") {
       setFilteredData([]);
