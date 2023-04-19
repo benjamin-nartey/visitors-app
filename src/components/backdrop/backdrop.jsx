@@ -22,10 +22,7 @@ export default function Backdrop({ open, setOpen, onPremise }) {
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>On Premise</DialogTitle>
         <DialogContent>
-          {/* <DialogContentText>
-            To subscribe to this website, please enter your email address here.
-            We will send updates occasionally.
-          </DialogContentText> */}
+          
           <div className="grid place-items-center ">
             {/* <CheckoutForm /> */}
             <OnpremiseComponent onPremise ={onPremise} />
