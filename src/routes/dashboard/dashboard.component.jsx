@@ -58,8 +58,8 @@ function Dashboard() {
     }
   }, [user]);
   return (
-    <div className="dashboard-container w-full mt-24 px-6 py-4">
-      <Backdrop open={open} setOpen={setOpen} onPremise ={onPremise} />
+    <div className="dashboard-container w-full h-full grid place-items-center px-6 py-4">
+      <Backdrop open={open} setOpen={setOpen} onPremise={onPremise} />
       <div className="flex w-full justify-evenly">
         <div className="welcome-dashboard-div shadow-lg flex justify-start items-start bg-gray-300 rounded-md p-3 relative w-3/6 h-40">
           <div className="user-info-div flex flex-col justify-center items-start">

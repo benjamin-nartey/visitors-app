@@ -17,6 +17,7 @@ export const typesenseAdapter = new TypesenseInstantsearchAdapter({
   server: TYPESENSE_SERVER_CONFIG,
   additionalSearchParameters: {
     query_by: "employee,Department,DDivisions,roomno,email",
+    per_page: "100",
     query_by_weights: "7,5,3,2,1",
     num_typos: 3,
     typo_tokens_threshold: 1,

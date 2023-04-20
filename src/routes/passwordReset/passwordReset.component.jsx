@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ChangePassImg from "../../assets/change-password-svg.svg";
 import axios from "axios";
+import SignInLoader from "../../components/circlular-loader/circular-loader";
 
 const defaultEmailField = {
   email: "",
@@ -9,6 +10,8 @@ const defaultEmailField = {
 function PasswordReset() {
   const [emailField, setEmailField] = useState(defaultEmailField);
   const { email } = emailField;
+  const [loading, setLoading] = useState(false);
+  const [successEmail, setSuccessEmail] = useState("");
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -19,14 +22,25 @@ function PasswordReset() {
     event.preventDefault();
 
     try {
+      setLoading(true);
       const response = await axios.post(
         "https://receptionapi.cocobod.net/password/forgot",
         { ...emailField }
       );
-      console.log(response);
+      if (response.status === 200) {
+        console.log(response);
+        setSuccessEmail(email);
+        setLoading(false);
+        clearFormFields();
+      }
     } catch (error) {
+      setLoading(false);
       console.log(error);
     }
+  };
+
+  const clearFormFields = () => {
+    setEmailField(defaultEmailField);
   };
 
   console.log(emailField);
@@ -42,10 +56,10 @@ function PasswordReset() {
             onSubmit={handleSubmit}
             className="w-96 h-96 bg-white rounded-md shadow-md p-5 flex flex-col justify-start items-center"
           >
-            <h4 className="mb-28 text-xl font-bold">Password Reset</h4>
-            <div className="forget-password-form">
+            <h4 className="mb-20 text-xl font-bold">Password Reset</h4>
+            <div className="forget-password-form w-full flex flex-col">
               <input
-                className="mb-5 shadow appearance-none border rounded w-80 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="mb-5 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="email"
                 type="email"
                 placeholder="Enter Email"
@@ -54,9 +68,21 @@ function PasswordReset() {
                 required
                 onChange={handleChange}
               />
-              <button className="transition ease-linear duration-75 bg-gradient-to-r from-green-900 to-green-500 w-80  hover:bg-gradient-to-r hover:from-green-500 hover:to-green-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                Send
-              </button>
+              {successEmail && (
+                <span className="mb-2 text-sm">
+                  A reset token has been sent to
+                  <span className="text-sm font-bold inline-block ml-1 text-green-600">
+                    {successEmail}
+                  </span>
+                </span>
+              )}
+              {!loading ? (
+                <button className="transition ease-linear duration-75 bg-gradient-to-r from-green-900 to-green-500 w-full  hover:bg-gradient-to-r hover:from-green-500 hover:to-green-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                  Send
+                </button>
+              ) : (
+                <SignInLoader loadingMessage="Sending" />
+              )}
             </div>
           </form>
         </div>

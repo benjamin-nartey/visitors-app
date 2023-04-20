@@ -1,27 +1,26 @@
 import ChangePassImg from "../../assets/change-password-svg.svg";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import swal from "sweetalert";
+import SignInLoader from "../../components/circlular-loader/circular-loader";
 
 const defaultFormFields = {
   password: "",
-  confirmPassword: "",
+  password_confirm: "",
 };
 
 function ConfirmPasswordReset() {
   const [formFields, setFormFields] = useState(defaultFormFields);
-  const { password, confirmPassword } = formFields;
+  const { password, password_confirm } = formFields;
   const [errorMessage, setErrorMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [isReset, setIsReset] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
   const token = searchParams.get("token");
   const email = searchParams.get("email");
-
-  useEffect(() => {
-    // Do something when the query string parameters change...
-    console.log(`New token: ${token}`);
-    console.log(`New email: ${email}`);
-  }, [token, email]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -31,15 +30,21 @@ function ConfirmPasswordReset() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      if (password !== confirmPassword) {
+      setLoading(true);
+      if (password !== password_confirm) {
         throw new Error("Passwords do not match");
       }
-      const response = axios.post(
+      const response = await axios.post(
         "https://receptionapi.cocobod.net/password/reset",
         { ...formFields, token: token, email: email }
       );
-      console.log(response);
+      if (response.status === 200) {
+        setLoading(false);
+        swal("Done!", "Password has been reset successfuly", "success");
+        setIsReset(true);
+      }
     } catch (error) {
+      setLoading(false);
       // console.error(error)
       if (error.message === "Passwords do not match") {
         console.error(error);
@@ -47,6 +52,10 @@ function ConfirmPasswordReset() {
       }
     }
   };
+
+  if (isReset) {
+    navigate("/");
+  }
 
   return (
     <div className="w-screen h-screen grid place-items-center bg-white">
@@ -62,7 +71,7 @@ function ConfirmPasswordReset() {
             <h4 className="mb-20 text-xl font-bold">Password Reset</h4>
             <div className="forget-password-form">
               <input
-                className="mb-5 shadow appearance-none border rounded w-80 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="mb-5 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="password"
                 type="password"
                 placeholder="Password"
@@ -72,12 +81,12 @@ function ConfirmPasswordReset() {
                 onChange={handleChange}
               />
               <input
-                className="mb-3 shadow appearance-none border rounded w-80 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="confirmPassword"
+                className="mb-5 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="password_confirm"
                 type="password"
                 placeholder="Confirm Password"
-                name="confirmPassword"
-                value={confirmPassword}
+                name="password_confirm"
+                value={password_confirm}
                 required
                 onChange={handleChange}
               />
@@ -86,9 +95,13 @@ function ConfirmPasswordReset() {
                   {errorMessage}
                 </span>
               )}
-              <button className="transition ease-linear duration-75 bg-gradient-to-r from-green-900 to-green-500 w-80  hover:bg-gradient-to-r hover:from-green-500 hover:to-green-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                Reset
-              </button>
+              {!loading ? (
+                <button className="transition ease-linear duration-75 bg-gradient-to-r from-green-900 to-green-500 w-full  hover:bg-gradient-to-r hover:from-green-500 hover:to-green-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                  Reset
+                </button>
+              ) : (
+                <SignInLoader loadingMessage="Resseting" />
+              )}
             </div>
           </form>
         </div>
