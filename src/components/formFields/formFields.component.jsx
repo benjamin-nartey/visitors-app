@@ -177,8 +177,8 @@ function FormFields({ defaultStaffRecord }) {
   console.log(formFields);
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="form-home-screen-container w-full p-6 grid grid-cols-2 gap-4 ">
+    <form className=" h-full" onSubmit={handleSubmit}>
+      <div className="form-home-screen-container w-full px-6 grid grid-cols-2 gap-4 ">
         <div className="form-image-col w-full grid place-items-center">
           <img
             src={FormImage}
@@ -187,7 +187,7 @@ function FormFields({ defaultStaffRecord }) {
             style={{ height: "20rem" }}
           />
         </div>
-        <div className="main-form-column w-full px-20">
+        <div className="main-form-column w-full h-full px-20">
           <div className="form-container flex flex-col justify-center items-center w-96">
             <div className="default-form-fields-div w-full h-48 flex justify-center items-center rounded-md shadow-md gap-3 p-3 bg-gray-200">
               <div className="left-col w-full flex flex-col gap-3">

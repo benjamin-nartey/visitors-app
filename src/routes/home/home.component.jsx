@@ -77,7 +77,7 @@ function Home() {
           <InstantSearch indexName="directory" searchClient={searchClient}>
             <div className="search-box-wrapper w-full h-full flex justify-between items-center">
               <SearchBox
-                onChange={handleChange}
+                onInput={handleChange}
                 className="search-box"
                 translations={{ placeholder: "Search employee name..." }}
               />

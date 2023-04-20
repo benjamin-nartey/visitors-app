@@ -6,9 +6,7 @@
 .search-box button{
     display: none;
 }
-.search-box input[type = "search"]:active{
-outline: none
-}
+
 
 
 .ais-SearchBox-submit {

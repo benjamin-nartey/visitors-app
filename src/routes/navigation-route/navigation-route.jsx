@@ -12,7 +12,7 @@ function NavigationRoute() {
   return (
     <div className="home-container h-screen w-screen overflow-hidden grid grid-cols-12">
       <div className="sidebar-column col-span-2 shadow h-full w-full px-2">
-        <div className="sidebar-container w-full h-full">
+        <div className="sidebar-container w-full h-full p-2">
           <Sidebar />
         </div>
       </div>

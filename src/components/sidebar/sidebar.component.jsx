@@ -6,7 +6,7 @@ import { NavLink } from "react-router-dom";
 
 function Sidebar() {
   return (
-    <div className="sidebar w-full h-full p-4 flex-col justify-center items-center">
+    <div className="sidebar w-full h-full flex-col justify-center items-center">
       <div className="brand-logo-box flex justify-center items-center gap-1 mb-4 py-5 border-b border-solid border-gray-400 ">
         <div className="logo-container h-9 ">
           <img src={Logo} alt="cocobod logo" className="logo h-full" />
@@ -25,10 +25,7 @@ function Sidebar() {
         </h2>
       </div>
 
-      <div
-        className="navlinks-container w-full flex-col flex py-5 border-b border-solid border-gray-400"
-        style={{ height: "31rem" }}
-      >
+      <div className="navlinks-container w-full flex-col flex py-5">
         <NavLink
           className={({ isActive }) =>
             isActive
