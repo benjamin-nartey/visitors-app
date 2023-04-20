@@ -6,10 +6,9 @@ import { useState, useEffect } from "react";
 import axiosInstance from "../../interceptors/axios";
 import { AuthContext } from "../../components/context/useAuth.context";
 import { useContext } from "react";
+import FormDialog from "../../components/formDialog/form-dialog";
 
 function NavigationRoute() {
-  // const {fetchUser} = useContext(AuthContext)
-  // fetchUser()
   return (
     <div className="home-container h-screen w-screen overflow-hidden grid grid-cols-12">
       <div className="sidebar-column col-span-2 shadow h-full w-full px-2">
@@ -21,6 +20,7 @@ function NavigationRoute() {
         <div className="navbar-container w-full h-12 px-6 pt-8">
           <NavBar />
         </div>
+        <FormDialog />
         <Outlet />
       </div>
     </div>

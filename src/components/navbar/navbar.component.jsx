@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../context/useAuth.context";
 import { useRef } from "react";
+import { CheckOutToggleContext } from "../context/checkoutToggle.context";
 
 function NavBar() {
   const [toggleLogoutBtn, setToggleLogoutBtn] = useState(false);
@@ -16,6 +17,11 @@ function NavBar() {
   const location = useLocation();
   const { user, logout } = useContext(AuthContext);
   const logoutRef = useRef();
+  const { setOpen } = useContext(CheckOutToggleContext);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
 
   useEffect(() => {
     document.addEventListener("click", handleClickOutsideLogut, true);
@@ -157,6 +163,12 @@ function NavBar() {
         </span>
       </div>
       <div className="auth-user-info flex justify-center items-center gap-2 text-base">
+        <button
+          onClick={handleClickOpen}
+          className="p-2 font-semibold bg-green-400 hover:bg-green-600 hover:font-bold text-sm block mr-2 rounded"
+        >
+          Checkout
+        </button>
         <span className="block bg-gray-200 py-0.5 px-1 font-semibold rounded">
           {initials}
         </span>

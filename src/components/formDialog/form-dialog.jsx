@@ -8,13 +8,11 @@ import DialogContentText from "@mui/material/DialogContentText";
 import { FiLogOut } from "react-icons/fi";
 import DialogTitle from "@mui/material/DialogTitle";
 import CheckoutForm from "../checkout/checkout.component";
+import { useContext } from "react";
+import { CheckOutToggleContext } from "../context/checkoutToggle.context";
 
 export default function FormDialog() {
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+  const { open, setOpen } = useContext(CheckOutToggleContext);
 
   const handleClose = () => {
     setOpen(false);
@@ -22,35 +20,15 @@ export default function FormDialog() {
 
   return (
     <div>
-      <Button
-        style={{
-          right: "-24.5rem",
-          color: "green",
-          border: "1px solid green",
-          width: "40px",
-          top: "-17px",
-          fontSize: "bold",
-        }}
-        className="absolute"
-        variant="outlined"
-        onClick={handleClickOpen}
-      >
-        <FiLogOut />
-      </Button>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Checkout</DialogTitle>
         <DialogContent>
-          {/* <DialogContentText>
-            To subscribe to this website, please enter your email address here.
-            We will send updates occasionally.
-          </DialogContentText> */}
           <div className="w-full grid place-items-center">
             <CheckoutForm />
           </div>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          {/* <Button onClick={handleClose}>Subscribe</Button> */}
         </DialogActions>
       </Dialog>
     </div>

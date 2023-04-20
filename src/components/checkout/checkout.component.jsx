@@ -111,7 +111,7 @@ const CheckoutForm = () => {
           })}
         </div>
       )}
-      {checkoutVistorRecord && checkoutVistorRecord.visit.length !== 0 && (
+      {checkoutVistorRecord && (
         <div className="visitor-record grid grid-cols-2 place-content-center mt-2">
           <div className="v-record-name w-full flex flex-col items-start text-sm font-semibold">
             <span>Visitor's Name</span>
@@ -122,7 +122,7 @@ const CheckoutForm = () => {
             <span>Room no.</span>
           </div>
 
-          {checkoutVistorRecord && checkoutVistorRecord.visit.length !== 0 && (
+          {checkoutVistorRecord && (
             <div className="v-record-value w-full flex flex-col items-start text-sm">
               <span>{checkoutVistorRecord?.visit[0]?.guest_name}</span>
               <span>{checkoutVistorRecord?.visit[0]?.guest_contact}</span>

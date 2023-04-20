@@ -155,7 +155,7 @@ function SignIn() {
               )}
             </form>
             <NavLink
-              to=""
+              to="/password-reset"
               className="text-sm block mt-2 hover:text-blue-500 hover:decoration-solid"
             >
               Forgot your password?

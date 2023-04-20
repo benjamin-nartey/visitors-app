@@ -5,14 +5,14 @@ import NavigationRoute from "./routes/navigation-route/navigation-route";
 import Dashboard from "./routes/dashboard/dashboard.component";
 import { ProtectedRoute } from "./routes/protectedRoute/protectedRoute";
 import PasswordReset from "./routes/passwordReset/passwordReset.component";
-import ConfirmPasswordReset from "./routes/confirm-passwordReset/conform-passwordReset";
+import ConfirmPasswordReset from "./routes/confirm-passwordReset/confirm-passwordReset";
 
 const App = () => {
   return (
     <Routes>
       <Route index element={<SignIn />} />
       <Route path="password-reset" element={<PasswordReset />} />
-      <Route path="confirm-password-reset" element={<ConfirmPasswordReset />} />
+      <Route path="reset" element={<ConfirmPasswordReset />} />
       <Route element={<NavigationRoute />}>
         <Route
           path="home"
