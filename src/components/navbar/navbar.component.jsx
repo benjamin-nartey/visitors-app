@@ -165,7 +165,7 @@ function NavBar() {
       <div className="auth-user-info flex justify-center items-center gap-2 text-base">
         <button
           onClick={handleClickOpen}
-          className="p-2 font-semibold bg-green-400 hover:bg-green-600 hover:font-bold text-sm block mr-2 rounded"
+          className="p-2 font-semibold text-white bg-green-600 hover:bg-green-400 hover:font-bold text-sm block mr-2 rounded"
         >
           Checkout
         </button>

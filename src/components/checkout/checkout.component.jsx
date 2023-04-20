@@ -87,7 +87,7 @@ const CheckoutForm = () => {
         <input
           type="search"
           placeholder="Search by tag..."
-          className=" appearance-none border-none bg-transparent border rounded w-56 h-10 py-2 text-gray-700 leading-tight focus:outline-none"
+          className=" appearance-none border-none bg-transparent border rounded w-80 h-10 py-2 text-gray-700 leading-tight focus:outline-none"
           value={wordEntered}
           onChange={handleFilter}
         />

@@ -1,0 +1,9 @@
+.search-box input[type = "search"]{
+    width: 32rem;
+    outline: none;
+}
+
+.ais-SearchBox-submit {
+    display: none;
+  }
+  

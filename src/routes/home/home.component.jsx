@@ -3,7 +3,6 @@ import { AiOutlineSearch } from "react-icons/ai";
 import { Hits, InstantSearch, SearchBox } from "react-instantsearch-dom";
 import { searchClient } from "../../utils/typesenseAdapter";
 import DirectoryHits from "../../components/directoryEntries/directoryHits/directoryHits";
-import "../../components/search/search.css";
 // import Search from "../../components/search/search.component";
 import WaitingImage from "../../assets/waiting area-01@2x.png";
 import FormFields from "../../components/formFields/formFields.component";
@@ -50,6 +49,8 @@ function Home() {
   }, [showDataResult]);
   return (
     <div className="main-body-container w-full pt-10 grid place-items-center relative">
+   
+     
       {!isReadyData && (
         <div className="brand-logo-box flex justify-center items-center gap-2 mb-4">
           <div className="logo-container h-16">
