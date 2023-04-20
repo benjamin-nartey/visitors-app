@@ -3,14 +3,10 @@ import { AiOutlineSearch } from "react-icons/ai";
 import { Hits, InstantSearch, SearchBox } from "react-instantsearch-dom";
 import { searchClient } from "../../utils/typesenseAdapter";
 import DirectoryHits from "../../components/directoryEntries/directoryHits/directoryHits";
-// import Search from "../../components/search/search.component";
 import WaitingImage from "../../assets/waiting area-01@2x.png";
 import FormFields from "../../components/formFields/formFields.component";
 import { useState, useEffect, useRef } from "react";
-import { FiLogOut } from "react-icons/fi";
-import Modal from "../../components/modal/modal.component";
-import CheckoutForm from "../../components/checkout/checkout.component";
-import FormDialog from "../../components/formDialog/form-dialog";
+import "./search-box-edit.css";
 
 function Home() {
   const [isReadyData, setIsReadyData] = useState(false);
@@ -18,7 +14,6 @@ function Home() {
   const [defaultStaffRecord, setDefaultStaffRecord] = useState(null);
   const [showDataResult, setShowDataResult] = useState(true);
   const searchRef = useRef();
-
 
   useEffect(() => {
     document.addEventListener("click", handleClickOutsideSearch, true);
@@ -30,12 +25,10 @@ function Home() {
     }
   };
 
-
   const RetrieveStaffRecord = (data1, data2) => {
     setDefaultStaffRecord(data1);
     setShowDataResult(data2);
   };
-
 
   const handleChange = () => {
     setHitsContent(true);
@@ -49,8 +42,6 @@ function Home() {
   }, [showDataResult]);
   return (
     <div className="main-body-container w-full pt-10 grid place-items-center relative">
-   
-     
       {!isReadyData && (
         <div className="brand-logo-box flex justify-center items-center gap-2 mb-4">
           <div className="logo-container h-16">
