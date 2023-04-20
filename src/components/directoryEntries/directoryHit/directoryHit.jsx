@@ -5,12 +5,15 @@ export function DirectoryHit({ hit, retrieveDataFromHit }) {
   return (
     <div
       onClick={handleClick}
-      className="data-record flex justify-start gap-6 py-1 px-2 mb-3 w-full cursor-pointer hover:bg-gray-200"
+      className="data-record mb-1 p-2 grid grid-cols-5 gap-5 w-full cursor-pointer hover:bg-gray-200"
     >
-      <span className="text-sm font-semibold capitalize">{hit.employee}</span>
-      <span className="text-sm capitalize">{hit.Department}</span>
-      <span className="text-sm uppercase">{hit.DDivisions}</span>
-      <span className="text-sm">{hit.roomno}</span>
+      <span className="text-sm block w-full font-semibold capitalize">
+        {hit.employee}
+      </span>
+      <span className="text-sm block w-full capitalize">{hit.Department}</span>
+      <span className="text-sm block w-full uppercase">{hit.DDivisions}</span>
+      <span className="text-sm block w-full ">{hit.roomno}</span>
+      <span className="text-sm block w-full ">{hit.extensionno}</span>
     </div>
   );
 }
