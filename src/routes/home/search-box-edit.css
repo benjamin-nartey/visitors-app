@@ -1,6 +1,7 @@
 .search-box input[type = "search"]{
-    width: 32rem;
+    width: 37rem;
     outline: none;
+    /* background-color: red; */
 }
 
 .search-box button{

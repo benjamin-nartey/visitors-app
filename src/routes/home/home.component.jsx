@@ -71,7 +71,8 @@ function Home() {
       )}
       <div
         ref={searchRef}
-        className="search-container w-3/6 h-9 mt-4 shadow-md rounded-lg px-1 grid place-items-center"
+        style={{width:"39rem"}}
+        className="search-container h-9 mt-4 shadow-md rounded-lg px-1 grid place-items-center"
       >
         <div className="searchbar-container w-full h-full relative">
           <InstantSearch indexName="directory" searchClient={searchClient}>
