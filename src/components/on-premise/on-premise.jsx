@@ -1,18 +1,12 @@
 import * as React from "react";
-import Button from "@mui/material/Button";
-// import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-// import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import OnpremiseComponent from "../onPremise/onPremise.component";
+import { ONPREMISE_COLUMN } from "../../utils/onpremise-column/onpremise-column";
+import Table from "../Table/table";
 
-export default function Backdrop({ open, setOpen, onPremise }) {
-  //   const handleClickOpen = () => {
-  //     setOpen(true);
-  //   };
-
+export default function onPremise({ open, setOpen, onPremise }) {
   const handleClose = () => {
     setOpen(false);
   };
@@ -22,14 +16,23 @@ export default function Backdrop({ open, setOpen, onPremise }) {
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>On Premise</DialogTitle>
         <DialogContent>
-          
           <div className="grid place-items-center ">
             {/* <CheckoutForm /> */}
-            <OnpremiseComponent onPremise ={onPremise} />
+            <Table
+              mockData={onPremise}
+              mockColumns={ONPREMISE_COLUMN}
+              checkLable={"On Premise"}
+              checkIcon={"onpremiseIcon"}
+            />
           </div>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
+          <button
+            className="px-4 py-1 hover:font-bold rounded text-green-700 uppercase"
+            onClick={handleClose}
+          >
+            Cancel
+          </button>
           {/* <Button onClick={handleClose}>Subscribe</Button> */}
         </DialogActions>
       </Dialog>

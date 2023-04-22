@@ -148,7 +148,7 @@ function NavBar() {
   }, [user]);
 
   const handleLogOutToggle = () => {
-    setToggleLogoutBtn(() => !toggleLogoutBtn);
+    setToggleLogoutBtn(!toggleLogoutBtn);
   };
 
   return (

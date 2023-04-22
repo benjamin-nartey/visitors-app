@@ -1,5 +1,5 @@
 import ChangePassImg from "../../assets/change-password-svg.svg";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import swal from "sweetalert";
@@ -45,7 +45,6 @@ function ConfirmPasswordReset() {
       }
     } catch (error) {
       setLoading(false);
-      // console.error(error)
       if (error.message === "Passwords do not match") {
         console.error(error);
         setErrorMessage("Error!, Passwords do not match");

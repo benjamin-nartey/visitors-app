@@ -2,10 +2,6 @@ import React from "react";
 import Sidebar from "../../components/sidebar/sidebar.component";
 import NavBar from "../../components/navbar/navbar.component";
 import { Outlet } from "react-router-dom";
-import { useState, useEffect } from "react";
-import axiosInstance from "../../interceptors/axios";
-import { AuthContext } from "../../components/context/useAuth.context";
-import { useContext } from "react";
 import FormDialog from "../../components/formDialog/form-dialog";
 
 function NavigationRoute() {

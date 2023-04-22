@@ -25,7 +25,7 @@ const CheckoutForm = () => {
           tagId: checkoutVistorRecord.visit[0].tagId,
         })
         .then(() =>
-          swal("CheckedOut!", "Visitor has been checked out!", "success")
+          swal("Success", "Visitor has been checked out!", "success")
         )
         .then(() => setLoading(false))
         .then(() => clearRecord())

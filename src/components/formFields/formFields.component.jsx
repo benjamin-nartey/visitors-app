@@ -3,7 +3,6 @@ import FormImage from "../../assets/receptionist-02@2x.png";
 import { purposeOptions } from "../../utils/purpose-of-visit-options";
 import { useState, useRef } from "react";
 import axiosInstance from "../../interceptors/axios";
-import { useLocalStorage } from "../../utils/useLocalStorage";
 import { genderOptions } from "../../utils/genderOptions";
 import swal from "sweetalert";
 import SignInLoader from "../circlular-loader/circular-loader";
@@ -25,7 +24,6 @@ const defaultFormFields = {
 };
 
 function FormFields({ defaultStaffRecord }) {
-  const [accessToken, setAccessToken] = useLocalStorage("access_token", "null");
   const [options, setOptions] = useState([""]);
   const [formFields, setFormFields] = useState(defaultFormFields);
   const [selectedGenderValue, setSelectedGenderValue] = useState("");
@@ -40,12 +38,7 @@ function FormFields({ defaultStaffRecord }) {
   const roomNoRef = useRef("");
   const extentionRef = useRef("");
   const directLineRef = useRef("");
-  // const selectRefTag = useRef();
-  // const selectRefGender = useRef();
-  // const selectRefPurpose = useRef();
-
-  // const accessToken = JSON.parse(localStorage.getItem("access_token"));
-  console.log(("accessToken", accessToken));
+  
   const { guest_name, guest_contact, guest_type } = formFields;
 
   const clearAllSelectValue = () => {
@@ -57,7 +50,6 @@ function FormFields({ defaultStaffRecord }) {
   const clearFormFields = () => {
     setFormFields(defaultFormFields);
     clearAllSelectValue();
-    // defaultStaffRecord = null;
     staffRef.current.value = "";
     departmentRef.current.value = "";
     directLineRef.current.value = "";
@@ -87,7 +79,7 @@ function FormFields({ defaultStaffRecord }) {
         .then(() => clearFormFields())
         .then(() => getData())
         .then(() =>
-          swal("Visitor Created", "visitor details submitted", "success")
+          swal("Success", "visitor details submitted", "success")
         )
         .then(() => {
           if (error) {
@@ -107,7 +99,6 @@ function FormFields({ defaultStaffRecord }) {
           break;
       }
       console.log(error);
-      // console.log("origee",formFields);
     }
   };
 
@@ -129,7 +120,6 @@ function FormFields({ defaultStaffRecord }) {
     const arr = [];
     await axiosInstance.get("/tag/unIssuedTags").then((res) => {
       let result = res.data;
-      console.log("Results", result);
       result.map((tag) => {
         return arr.push({ value: tag.id, label: tag.number });
       });
@@ -173,8 +163,6 @@ function FormFields({ defaultStaffRecord }) {
     extentionRef,
     roomNoRef,
   ]);
-
-  console.log(formFields);
 
   return (
     <form className=" h-full" onSubmit={handleSubmit}>

@@ -28,7 +28,6 @@ function PasswordReset() {
         { ...emailField }
       );
       if (response.status === 200) {
-        console.log(response);
         setSuccessEmail(email);
         setLoading(false);
         clearFormFields();
@@ -42,8 +41,6 @@ function PasswordReset() {
   const clearFormFields = () => {
     setEmailField(defaultEmailField);
   };
-
-  console.log(emailField);
 
   return (
     <div className="w-screen h-screen grid place-items-center bg-white">

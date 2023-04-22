@@ -1,17 +1,12 @@
-import { Select } from '@mantine/core';
-import { useEffect, useState } from 'react';
+import { Select } from "@mantine/core";
+import { useState } from "react";
 
-function SelectComponent({placeholder, nothingFound, data, onChange ,value}) {
-  const [searchValue, onSearchChange] = useState('');
-//   const [value, setValue] = useState("")
-
-  useEffect(()=>{
-    console.log(value);
-  },[value])
+function SelectComponent({ placeholder, nothingFound, data, onChange, value }) {
+  const [searchValue, onSearchChange] = useState("");
 
   return (
     <Select
-      placeholder= {placeholder}
+      placeholder={placeholder}
       searchable
       onSearchChange={onSearchChange}
       searchValue={searchValue}
@@ -23,4 +18,4 @@ function SelectComponent({placeholder, nothingFound, data, onChange ,value}) {
   );
 }
 
-export default SelectComponent
+export default SelectComponent;

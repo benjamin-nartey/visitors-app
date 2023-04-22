@@ -4,7 +4,6 @@ import Logo from "../../assets/logo-cocobod.png";
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
-import axiosInstance from "../../interceptors/axios";
 import SignInLoader from "../../components/circlular-loader/circular-loader";
 import { AuthContext } from "../../components/context/useAuth.context";
 import { useContext } from "react";

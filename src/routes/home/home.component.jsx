@@ -1,6 +1,6 @@
 import Logo from "../../assets/logo-cocobod.png";
 import { AiOutlineSearch } from "react-icons/ai";
-import { Hits, InstantSearch, SearchBox } from "react-instantsearch-dom";
+import { InstantSearch, SearchBox } from "react-instantsearch-dom";
 import { searchClient } from "../../utils/typesenseAdapter";
 import DirectoryHits from "../../components/directoryEntries/directoryHits/directoryHits";
 import WaitingImage from "../../assets/waiting area-01@2x.png";
@@ -71,7 +71,7 @@ function Home() {
       )}
       <div
         ref={searchRef}
-        style={{width:"39rem"}}
+        style={{ width: "39rem" }}
         className="search-container h-9 mt-4 shadow-md rounded-lg px-1 grid place-items-center"
       >
         <div className="searchbar-container w-full h-full relative">
