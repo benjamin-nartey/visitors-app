@@ -43,7 +43,7 @@ const Table = ({ mockData, mockColumns, checkLable, checkIcon }) => {
   const handleClick = (row) => {
     setOverlay(true);
     setPopUpRecord(row.original);
-    console.log(row.original); // Log the row data
+    // console.log(row.original);
   };
 
   useEffect(() => {
@@ -104,7 +104,7 @@ const Table = ({ mockData, mockColumns, checkLable, checkIcon }) => {
             </div>
           </div>
         )}
-        <div className="checkin-title-div w-full flex justify-between items-center p-2 border-solid border-b border-gray-300">
+        <div className="checkin-title-div w-full flex justify-between gap-5 items-center p-2 border-solid border-b border-gray-300">
           <div className="flex justify-center items-center gap-3">
             {checksIcon()}
             <h3 className="text-lg font-semibold">{checkLable}</h3>
