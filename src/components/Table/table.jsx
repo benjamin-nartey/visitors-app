@@ -3,7 +3,9 @@ import { useTable, useSortBy, useGlobalFilter } from "react-table";
 import { GlobalFilter } from "../../components/global-filter/global-filter";
 import { FiLogIn } from "react-icons/fi";
 import { FiLogOut } from "react-icons/fi";
-import { BsPeople } from "react-icons/bs";
+import { BsCheckLg, BsPeople } from "react-icons/bs";
+import { Fragment } from "react";
+// import { Tooltip as ReactTooltip } from "react-tooltip";
 
 const Table = ({ mockData, mockColumns, checkLable, checkIcon }) => {
   const [overlay, setOverlay] = useState(false);
@@ -43,7 +45,7 @@ const Table = ({ mockData, mockColumns, checkLable, checkIcon }) => {
   const handleClick = (row) => {
     setOverlay(true);
     setPopUpRecord(row.original);
-    // console.log(row.original);
+    console.log(row.original);
   };
 
   useEffect(() => {
@@ -147,19 +149,33 @@ const Table = ({ mockData, mockColumns, checkLable, checkIcon }) => {
                   // Prepare the row for display
                   prepareRow(row);
                   return (
-                    <tr {...row.getRowProps()} onClick={() => handleClick(row)}>
-                      {
-                        // Loop over the rows cells
-                        row.cells.map((cell) => {
-                          // Apply the cell props
-                          return (
-                            <td {...cell.getCellProps()}>
-                              {cell.render("Cell")}
-                            </td>
-                          );
-                        })
-                      }
-                    </tr>
+                    <Fragment key={row.id}>
+                      <tr
+                        {...row.getRowProps()}
+                        onClick={() => handleClick(row)}
+                      >
+                        {
+                          // Loop over the rows cells
+                          row.cells.map((cell) => {
+                            // Apply the cell props
+                            {
+                              /* 
+                            if (cell.column.id === "additionalInfo") {
+                              console.log("null");
+                              return null;
+                            } */
+                            }
+
+                            return (
+                              <td {...cell.getCellProps()}>
+                                {cell.render("Cell")}
+                              </td>
+                            );
+                          })
+                        }
+                      </tr>
+                      {/* <ReactTooltip id={`row-${row.index}-tooltip`} /> */}
+                    </Fragment>
                   );
                 })
               }

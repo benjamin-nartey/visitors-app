@@ -15,7 +15,7 @@ export const ONPREMISE_COLUMN = [
   },
   {
     Header: " Tag",
-    accessor: "room_no",
+    accessor: "tag.number",
   },
   // {
   //   Header: "Time",

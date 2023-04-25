@@ -15,8 +15,18 @@ export const CHECKINS_COLUMN = [
   },
   {
     Header: " Tag",
-    accessor: "room_no",
+    accessor: "tag.number",
   },
+
+  // {
+  //   Header: "Custom Cell",
+  //   accessor: "additionalInfo",
+  //   Cell: ({ cell }) => (
+  //     <span data-tip={cell.value} data-for={`row-${cell.row.index}-tooltip`}>
+  //       Hover me
+  //     </span>
+  //   ),
+  // },
   // {
   //   Header: "Time",
   //   accessor: "time_in",
