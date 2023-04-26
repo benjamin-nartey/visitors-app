@@ -38,7 +38,7 @@ function FormFields({ defaultStaffRecord }) {
   const roomNoRef = useRef("");
   const extentionRef = useRef("");
   const directLineRef = useRef("");
-  
+
   const { guest_name, guest_contact, guest_type } = formFields;
 
   const clearAllSelectValue = () => {
@@ -76,11 +76,9 @@ function FormFields({ defaultStaffRecord }) {
           ...formFields,
         })
         .then(() => setLoading(false))
-        .then(() => clearFormFields())
         .then(() => getData())
-        .then(() =>
-          swal("Success", "visitor details submitted", "success")
-        )
+        .then(() => swal("Success", "visitor details submitted", "success"))
+        .then(() => clearFormFields())
         .then(() => {
           if (error) {
             setError(false);
