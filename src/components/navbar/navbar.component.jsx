@@ -24,10 +24,10 @@ function NavBar() {
   };
 
   useEffect(() => {
-    document.addEventListener("click", handleClickOutsideLogut, true);
+    document.addEventListener("click", handleClickOutsideLogout, true);
   }, []);
 
-  const handleClickOutsideLogut = (e) => {
+  const handleClickOutsideLogout = (e) => {
     if (!logoutRef?.current?.contains(e.target)) {
       setToggleLogoutBtn(false);
     }
@@ -191,3 +191,4 @@ function NavBar() {
 }
 
 export default NavBar;
+
