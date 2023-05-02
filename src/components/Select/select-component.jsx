@@ -19,3 +19,5 @@ function SelectComponent({ placeholder, nothingFound, data, onChange, value }) {
 }
 
 export default SelectComponent;
+
+

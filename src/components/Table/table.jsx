@@ -45,7 +45,7 @@ const Table = ({ mockData, mockColumns, checkLable, checkIcon }) => {
   const handleClick = (row) => {
     setOverlay(true);
     setPopUpRecord(row.original);
-    console.log(row.original);
+    // console.log(row.original);
   };
 
   useEffect(() => {
