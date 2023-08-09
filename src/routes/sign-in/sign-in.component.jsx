@@ -81,16 +81,16 @@ function SignIn() {
   };
 
   return (
-    <div className="login-container grid grid-cols-2 h-screen overflow-hidden">
-      <div className="hero-image-container h-full">
+    <div className="login-container flex h-screen overflow-hidden">
+      <div className="hero-image-container w-full h-full flex-1">
         <img
           src={HeroImg}
           alt="hero image"
-          className="hero-img object-cover"
-          style={{ height: "45rem" }}
+          className="hero-img object-cover w-full h-full"
+          // style={{ height: "45rem" }}
         />
       </div>
-      <div className="login-form-div h-full grid place-items-center">
+      <div className="login-form-div h-full w-full flex-1 grid place-items-center">
         <div className="login-form-container w-96 h-4/6 shadow-xl rounded-xl p-8 grid place-items-center z-10">
           <div className="form-content">
             <h2 className="welcome-text text-center text-lg text-gray-700 font-semibold mb-5">
