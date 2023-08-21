@@ -3,9 +3,9 @@ import SignIn from "./routes/sign-in/sign-in.component";
 import Home from "./routes/home/home.component";
 import NavigationRoute from "./routes/navigation-route/navigation-route";
 import Dashboard from "./routes/dashboard/dashboard.component";
-import { ProtectedRoute } from "./routes/protectedRoute/protectedRoute";
 import PasswordReset from "./routes/passwordReset/passwordReset.component";
 import ConfirmPasswordReset from "./routes/confirm-passwordReset/confirm-passwordReset";
+import ProtectedRoute from "./routes/protectedRoute/protectedRoute";
 
 const App = () => {
   return (

@@ -16,28 +16,26 @@ export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
   const [user, setUser] = useLocalStorage("user", null);
   const [tokens, setTokens] = useLocalStorage("tokens", null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const fetchUser = async () => {
-    if (tokens) {
+    try {
+      setLoading(true);
+
       const response = await axiosInstance.get("user/me");
       if (response.status === 200) {
         setUser(response?.data);
       }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     fetchUser();
-  }, [tokens]);
-
-
-  useEffect(() => {
-    if (tokens) {
-      fetchUser();
-    }
-    setLoading(false);
-  }, [tokens, loading]);
+  }, []);
 
   const logout = async () => {
     await axiosInstance
@@ -57,6 +55,7 @@ export const AuthProvider = ({ children }) => {
       tokens,
       setTokens,
       fetchUser,
+      setUser,
     }),
     [user]
   );

@@ -2,7 +2,9 @@ import React, { useEffect } from "react";
 import HeroImg from "../../assets/Login Illustration@2x.png";
 import Logo from "../../assets/logo-cocobod.png";
 import { useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+
 import axios from "axios";
 import SignInLoader from "../../components/circlular-loader/circular-loader";
 import { AuthContext } from "../../components/context/useAuth.context";
@@ -20,17 +22,18 @@ function SignIn() {
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
-  const { user, setTokens } = useContext(AuthContext);
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/home";
+  const { user, setTokens, setUser } = useContext(AuthContext);
   const [authTokens, setAuthTokens] = useLocalStorage("authTokens", null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const { email, password } = formFields;
 
-  useEffect(() => {
-    if (user) {
-      navigate("/home");
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (user) {
+  //     navigate("/home");
+  //   }
+  // }, [user]);
 
   const clearFormFields = () => {
     setFormFields(defaultFormFields);
@@ -40,22 +43,30 @@ function SignIn() {
     event.preventDefault();
     try {
       setLoading(true);
-      await axios
-        .post("https://receptionapi.cocobod.net/auth/signin", {
+      const response = await axios.post(
+        "https://receptionapi.cocobod.net/auth/signin",
+        {
           email: email,
           password: password,
-        })
-        .then((response) => {
-          if (response.status === 200) {
-            setAuthTokens(response.data);
-            setTokens(response.data);
-            console.log("authResponse", response.data);
-            setIsAuthenticated(true);
-            setLoading(false);
-          }
-        });
+        }
+      );
+
+      const userResponse = await axios.get(
+        "https://receptionapi.cocobod.net/user/me",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${response?.data?.access_token}`,
+          },
+        }
+      );
+
+      setAuthTokens(response.data);
+      setTokens(response.data);
+      setUser(userResponse?.data);
+      console.log("authResponse", response.data);
+      navigate(from, { replace: true });
     } catch (error) {
-      setLoading(false);
       setError(true);
       switch (error.code) {
         case "ERR_NETWORK":
@@ -68,12 +79,10 @@ function SignIn() {
           console.log(error);
           break;
       }
+    } finally {
+      setLoading(false);
     }
   };
-
-  if (isAuthenticated) {
-    navigate("/home");
-  }
 
   const handleChange = (event) => {
     const { name, value } = event.target;

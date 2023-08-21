@@ -4,6 +4,7 @@ import { MdHome } from "react-icons/md";
 import { MdDashboard } from "react-icons/md";
 import { NavLink } from "react-router-dom";
 
+
 function Sidebar() {
   return (
     <div className="sidebar w-full h-full flex-col justify-center items-center">
@@ -25,7 +26,7 @@ function Sidebar() {
         </h2>
       </div>
 
-      <div className="navlinks-container w-full flex-col flex py-5">
+      <div className="navlinks-container w-full flex-col gap-2 flex py-5">
         <NavLink
           className={({ isActive }) =>
             isActive
@@ -46,6 +47,7 @@ function Sidebar() {
         >
           <MdDashboard /> Dashboard
         </NavLink>
+       
       </div>
     </div>
   );
