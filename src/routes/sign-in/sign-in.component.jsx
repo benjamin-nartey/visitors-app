@@ -64,7 +64,6 @@ function SignIn() {
       setAuthTokens(response.data);
       setTokens(response.data);
       setUser(userResponse?.data);
-      console.log("authResponse", response.data);
       navigate(from, { replace: true });
     } catch (error) {
       setError(true);

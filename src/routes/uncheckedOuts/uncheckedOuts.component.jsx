@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import Table from '../../components/Table/table';
-import axiosInstance from '../../interceptors/axios';
+import React, { useEffect, useState } from "react";
+import Table from "../../components/Table/table";
+import axiosInstance from "../../interceptors/axios";
 
-import { HiCheck } from 'react-icons/hi';
-import Loader from '../../components/loader/loader';
+import { HiCheck } from "react-icons/hi";
+import Loader from "../../components/loader/loader";
 
 const UncheckedOuts = () => {
   const [uncheckedOut, setUncheckedOut] = useState([]);
@@ -11,12 +11,10 @@ const UncheckedOuts = () => {
   const [currentRow, setCurrentRow] = useState(-1);
 
   const fetchUncheckedOut = async () => {
-    const response = await axiosInstance.get('/visit/uncheckedOutVisits');
+    const response = await axiosInstance.get("/visit/uncheckedOutVisits");
 
     setUncheckedOut(response.data);
   };
-
-  console.log({ 2: currentRow, 3: isLoading });
 
   useEffect(() => {
     fetchUncheckedOut();
@@ -28,11 +26,11 @@ const UncheckedOuts = () => {
       setIsLoading(true);
 
       axiosInstance
-        .post('/visit/checkOut', {
+        .post("/visit/checkOut", {
           tagId: row.tag.id,
         })
         .then((willDelete) => {
-          swal('Success', 'Visitor has been checked out!', 'success');
+          swal("Success", "Visitor has been checked out!", "success");
         });
 
       setIsLoading(false);
@@ -44,35 +42,35 @@ const UncheckedOuts = () => {
   const columns = [
     {
       Header: "Visitor's Name",
-      accessor: 'guest_name',
+      accessor: "guest_name",
     },
     {
-      Header: 'Staff Name',
-      accessor: 'staff_name',
+      Header: "Staff Name",
+      accessor: "staff_name",
     },
     {
-      Header: ' Department',
-      accessor: 'department',
+      Header: " Department",
+      accessor: "department",
     },
     {
-      Header: 'Purpose',
-      accessor: 'purpose',
+      Header: "Purpose",
+      accessor: "purpose",
     },
     {
-      Header: 'Guest Contact',
-      accessor: 'guest_contact',
+      Header: "Guest Contact",
+      accessor: "guest_contact",
     },
     {
-      Header: ' Tag',
-      accessor: 'tag.number',
+      Header: " Tag",
+      accessor: "tag.number",
     },
     {
-      Header: 'Action',
+      Header: "Action",
       accessor: (row) => (
         <div
           onClick={() => handleCheckOut(row)}
           className={`flex justify-center ${
-            isLoading && row.id === currentRow ? ' ' : 'bg-green-300 w-[50%]'
+            isLoading && row.id === currentRow ? " " : "bg-green-300 w-[50%]"
           } px-1 py-2 rounded-sm  hover:scale-110 transition-all`}
         >
           {isLoading === true ? (
@@ -92,10 +90,10 @@ const UncheckedOuts = () => {
         <Table
           mockData={uncheckedOut}
           mockColumns={columns}
-          checkLable={'UncheckedOut Visits'}
-          checkIcon={'checkoutIcon'}
+          checkLable={"UncheckedOut Visits"}
+          checkIcon={"checkoutIcon"}
           clikableRow={false}
-          style={{ height: '50%' }}
+          style={{ height: "50%" }}
         />
       </div>
     </div>

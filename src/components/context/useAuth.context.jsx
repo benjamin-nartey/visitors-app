@@ -8,7 +8,7 @@ export const AuthContext = createContext({
   user: null,
   logout: () => null,
   token: null,
-  loading: true,
+  loading: false,
   setLoading: () => true,
 });
 
@@ -38,14 +38,21 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const logout = async () => {
-    await axiosInstance
-      .post("https://receptionapi.cocobod.net/auth/logout")
-      .then(() => {
-        setTokens(null);
-        setUser(null);
-        navigate("/");
-        localStorage.removeItem("authTokens");
-      });
+    try {
+      setLoading(true);
+      await axiosInstance
+        .post("https://receptionapi.cocobod.net/auth/logout")
+        .then(() => {
+          setTokens(null);
+          setUser(null);
+          navigate("/");
+          localStorage.removeItem("authTokens");
+        });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const value = useMemo(
@@ -56,12 +63,9 @@ export const AuthProvider = ({ children }) => {
       setTokens,
       fetchUser,
       setUser,
+      loading,
     }),
     [user]
   );
-  return (
-    <AuthContext.Provider value={value}>
-      {loading ? null : children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

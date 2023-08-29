@@ -48,7 +48,6 @@ const AddEmployee = (setFn) => {
   };
 
   const onSubmit = async (values) => {
-    console.log({ values });
     try {
       setIsLoading(true);
       setIsAddLoading(true);
@@ -67,7 +66,6 @@ const AddEmployee = (setFn) => {
       setIsLoading(false);
       setSelectedRecord(null);
     } catch (e) {
-      console.log(e.message);
       setIsLoading(false);
       setIsAddLoading(false);
     }

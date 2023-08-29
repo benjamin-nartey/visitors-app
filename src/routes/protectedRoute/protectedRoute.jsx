@@ -8,7 +8,7 @@ const ProtectedRoute = ({ allowedRoles, children }) => {
 
   return allowedRoles.some((role) => role.includes(user?.role)) ? (
     children
-  ) : user.name ? (
+  ) : user?.name ? (
     <Navigate to="/unauthorized" state={{ from: location }} replace />
   ) : (
     <Navigate to="/" state={{ from: location }} replace />

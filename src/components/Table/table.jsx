@@ -77,7 +77,6 @@ const Table = ({
   const handleClick = (row) => {
     setOverlay(true);
     setPopUpRecord(row.original);
-    // console.log(row.original);
   };
 
   useEffect(() => {

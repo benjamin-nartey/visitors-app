@@ -35,7 +35,6 @@ const CheckoutForm = () => {
           swal('Not found!', 'Visitor has already been checked out');
           break;
         default:
-          console.log(error);
           break;
       }
       clearRecord();
@@ -74,7 +73,6 @@ const CheckoutForm = () => {
     setWordEntered('');
   };
 
-  console.log('Record', checkoutVistorRecord);
 
   return (
     <div

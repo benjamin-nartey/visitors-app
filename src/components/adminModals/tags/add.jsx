@@ -62,7 +62,6 @@ const AddTag = (setFn) => {
       setIsLoading(false);
       setSelectedRecord(null);
     } catch (e) {
-      console.log(e.message);
       setIsLoading(false);
       setIsTagLoading(false);
     }
