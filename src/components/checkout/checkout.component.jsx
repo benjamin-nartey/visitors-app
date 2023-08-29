@@ -1,14 +1,14 @@
-import React, { useState } from "react";
-import { AiOutlineSearch } from "react-icons/ai";
-import { useEffect } from "react";
-import axiosInstance from "../../interceptors/axios";
-import SignInLoader from "../circlular-loader/circular-loader";
-import swal from "sweetalert";
+import React, { useState } from 'react';
+import { AiOutlineSearch } from 'react-icons/ai';
+import { useEffect } from 'react';
+import axiosInstance from '../../interceptors/axios';
+import SignInLoader from '../circlular-loader/circular-loader';
+import swal from 'sweetalert';
 
 const CheckoutForm = () => {
   const [issuedTags, setIssuedTags] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
-  const [wordEntered, setWordEntered] = useState("");
+  const [wordEntered, setWordEntered] = useState('');
   const [checkoutVistorRecord, setCheckoutVisitorRecord] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -21,20 +21,18 @@ const CheckoutForm = () => {
     try {
       setLoading(true);
       await axiosInstance
-        .post("/visit/checkout", {
+        .post('/visit/checkout', {
           tagId: checkoutVistorRecord.visit[0].tagId,
         })
-        .then(() =>
-          swal("Success", "Visitor has been checked out!", "success")
-        )
+        .then(() => swal('Success', 'Visitor has been checked out!', 'success'))
         .then(() => setLoading(false))
         .then(() => clearRecord())
         .then(() => fetchIssuedTags());
     } catch (error) {
       setLoading(false);
       switch (error.response.data.message) {
-        case "No visit exist for the Tag Number provided":
-          swal("Not found!", "Visitor has already been checked out");
+        case 'No visit exist for the Tag Number provided':
+          swal('Not found!', 'Visitor has already been checked out');
           break;
         default:
           console.log(error);
@@ -53,7 +51,7 @@ const CheckoutForm = () => {
         value.visit.length !== 0
       );
     });
-    if (searchWord === "") {
+    if (searchWord === '') {
       setFilteredData([]);
     } else {
       setFilteredData(newFilter);
@@ -61,7 +59,7 @@ const CheckoutForm = () => {
   };
 
   const fetchIssuedTags = async () => {
-    const response = await axiosInstance.get("/tag/issuedTags");
+    const response = await axiosInstance.get('/tag/issuedTags');
     if (response.status === 200) {
       setIssuedTags(response.data);
     }
@@ -73,15 +71,15 @@ const CheckoutForm = () => {
 
   const clearInput = () => {
     setFilteredData([]);
-    setWordEntered("");
+    setWordEntered('');
   };
 
-  console.log("Record", checkoutVistorRecord);
+  console.log('Record', checkoutVistorRecord);
 
   return (
     <div
       className="w-96 rounded-md flex flex-col justify-start px-3 py-3"
-      style={{ backgroundColor: "rgba(0,0,0,0.02)" }}
+      style={{ backgroundColor: 'rgba(0,0,0,0.02)' }}
     >
       <div className="search-wrapper-checkout mb-1 bg-white shadow flex justify-between items-center w-full px-2">
         <input
@@ -102,7 +100,7 @@ const CheckoutForm = () => {
                 onClick={() => {
                   setCheckoutVisitorRecord(data), clearInput();
                 }}
-                style={{ fontSize: "14px" }}
+                style={{ fontSize: '14px' }}
                 className="record py-2 cursor-pointer hover:bg-gray-200 hover:font-semibold w-full mb-3"
               >
                 <span className="w-full p-2">{data?.number}</span>
@@ -136,7 +134,7 @@ const CheckoutForm = () => {
       )}
       <form onSubmit={handleSubmit}>
         {!loading ? (
-          <button className="transition ease-linear duration-75 bg-gradient-to-r from-green-900 to-green-500 w-full hover:bg-gradient-to-r hover:from-green-500 hover:to-green-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-5">
+          <button className="transition ease-linear duration-75  w-full bg-black  text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-5 hover:outline-black hover:outline  hover:bg-white hover:text-black">
             Checkout
           </button>
         ) : (

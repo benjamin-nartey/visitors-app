@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from "react";
-import DashboardImage from "../../assets/receptionist-02@2x.png";
-import { BsPeople } from "react-icons/bs";
-import { AuthContext } from "../../components/context/useAuth.context";
-import { useContext } from "react";
-import axiosInstance from "../../interceptors/axios";
-import OnPremise from "../../components/on-premise/on-premise";
-import Table from "../../components/Table/table";
-import { CHECKINS_COLUMN } from "../../utils/checkins-column/checkins-column";
-import { CHECKOUTS_COLUMN } from "../../utils/checkouts-column/checkouts-column";
+import React, { useEffect, useState } from 'react';
+import DashboardImage from '../../assets/receptionist-02@2x.png';
+import { BsPeople } from 'react-icons/bs';
+import { AuthContext } from '../../components/context/useAuth.context';
+import { useContext } from 'react';
+import axiosInstance from '../../interceptors/axios';
+import OnPremise from '../../components/on-premise/on-premise';
+import Table from '../../components/Table/table';
+import { CHECKINS_COLUMN } from '../../utils/checkins-column/checkins-column';
+import { CHECKOUTS_COLUMN } from '../../utils/checkouts-column/checkouts-column';
 
 function Dashboard() {
   const { user } = useContext(AuthContext);
-  const [firstName, setFirstName] = useState("");
+  const [firstName, setFirstName] = useState('');
   const [checkedInToday, setCheckedInToday] = useState([]);
   const [checkedOutInToday, setCheckedOutInToday] = useState([]);
   const [onPremise, setOnPremise] = useState([]);
@@ -22,17 +22,17 @@ function Dashboard() {
   };
 
   const fetchCheckedInToday = async () => {
-    const response = await axiosInstance.get("/visit/checkinsTodayRecords");
+    const response = await axiosInstance.get('/visit/checkinsTodayRecords');
     setCheckedInToday(response.data.checkIns);
   };
 
   const fetchCheckedOutToday = async () => {
-    const response = await axiosInstance.get("/visit/checkoutsTodayRecords");
+    const response = await axiosInstance.get('/visit/checkoutsTodayRecords');
     setCheckedOutInToday(response.data.checkOuts);
   };
 
   const fetchOnPremises = async () => {
-    const response = await axiosInstance.get("/visit/onPremiseTodayRecords");
+    const response = await axiosInstance.get('/visit/onPremiseTodayRecords');
     setOnPremise(response.data.checkIns);
   };
 
@@ -43,7 +43,7 @@ function Dashboard() {
   }, []);
 
   const getFirstName = (name) => {
-    const splittedName = name.split(" ");
+    const splittedName = name.split(' ');
     const stripFirstName = splittedName.shift();
     return stripFirstName;
   };
@@ -70,7 +70,7 @@ function Dashboard() {
               className="absolute right-0 block bottom-0"
               src={DashboardImage}
               alt="dashboard-image"
-              style={{ height: "15rem" }}
+              style={{ height: '15rem' }}
             />
           </div>
         </div>
@@ -98,13 +98,19 @@ function Dashboard() {
           mockData={checkedInToday}
           mockColumns={CHECKINS_COLUMN}
           checkLable={"Today's check-in"}
-          checkIcon={"checkinIcon"}
+          checkIcon={'checkinIcon'}
+          clikableRow={true}
+          style={{ height: '14rem' }}
+          pagination={false}
         />
         <Table
           mockData={checkedOutInToday}
           mockColumns={CHECKOUTS_COLUMN}
           checkLable={"Today's check-out"}
-          checkIcon={"checkoutIcon"}
+          checkIcon={'checkoutIcon'}
+          clikableRow={true}
+          style={{ height: '14rem' }}
+          pagination={false}
         />
       </div>
     </div>

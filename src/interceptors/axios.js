@@ -1,21 +1,21 @@
-import axios from "axios";
-import jwt_decode from "jwt-decode";
-import dayjs from "dayjs";
-import { AuthContext } from "../components/context/useAuth.context";
+import axios from 'axios';
+import jwt_decode from 'jwt-decode';
+import dayjs from 'dayjs';
+import { AuthContext } from '../components/context/useAuth.context';
 
-let authTokens = localStorage.getItem("authTokens")
-  ? JSON.parse(localStorage.getItem("authTokens"))
+let authTokens = localStorage.getItem('authTokens')
+  ? JSON.parse(localStorage.getItem('authTokens'))
   : null;
 
 const axiosInstance = axios.create({
-  baseURL: "https://receptionapi.cocobod.net",
+  baseURL: 'http://localhost:9000',
   headers: { Authorization: `Bearer ${authTokens?.access_token}` },
 });
 
 axiosInstance.interceptors.request.use(async (req) => {
   if (!authTokens) {
-    authTokens = localStorage.getItem("authTokens")
-      ? JSON.parse(localStorage.getItem("authTokens"))
+    authTokens = localStorage.getItem('authTokens')
+      ? JSON.parse(localStorage.getItem('authTokens'))
       : null;
     req.headers.Authorization = `Bearer ${authTokens?.access_token}`;
   }
@@ -25,7 +25,7 @@ axiosInstance.interceptors.request.use(async (req) => {
   if (!isExpired) return req;
 
   const response = await axios.post(
-    "https://receptionapi.cocobod.net/auth/refresh",
+    'http://localhost:9000/auth/refresh',
     {},
     {
       headers: {
@@ -34,7 +34,7 @@ axiosInstance.interceptors.request.use(async (req) => {
     }
   );
 
-  localStorage.setItem("authTokens", JSON.stringify(response.data));
+  localStorage.setItem('authTokens', JSON.stringify(response.data));
   req.headers.Authorization = `Bearer ${response.data.access_token}`;
 
   return req;
