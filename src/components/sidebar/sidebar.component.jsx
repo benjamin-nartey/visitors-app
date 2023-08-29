@@ -1,19 +1,22 @@
-import React from 'react';
-import Logo from '../../assets/logo-cocobod.png';
-import { MdHome } from 'react-icons/md';
-import { MdDashboard } from 'react-icons/md';
-import { AiOutlineDown } from 'react-icons/ai';
+import React from "react";
+import Logo from "../../assets/logo-cocobod.png";
+import { MdHome } from "react-icons/md";
+import { MdDashboard } from "react-icons/md";
+import { AiOutlineDown } from "react-icons/ai";
 import {
   HiPresentationChartBar,
   HiXCircle,
   HiOutlineCog,
-} from 'react-icons/hi';
-import { NavLink } from 'react-router-dom';
-import { Dropdown, Space } from 'antd';
+} from "react-icons/hi";
+import { NavLink } from "react-router-dom";
+import { Dropdown, Space } from "antd";
+
+import { useContext } from "react";
+import { AuthContext } from "../context/useAuth.context";
 
 const items = [
   {
-    key: '1',
+    key: "1",
     label: (
       <NavLink className="mb-2" to="/admin/employees">
         Employees
@@ -21,7 +24,7 @@ const items = [
     ),
   },
   {
-    key: '2',
+    key: "2",
     label: (
       <NavLink className="mb-2" to="/admin/tags">
         Tags
@@ -31,6 +34,8 @@ const items = [
 ];
 
 function Sidebar() {
+  const { user } = useContext(AuthContext);
+
   return (
     <div className="sidebar w-full h-full flex-col justify-center items-center">
       <div className="brand-logo-box flex justify-center items-center gap-1 mb-4 py-5 border-b border-solid border-gray-400 ">
@@ -40,12 +45,12 @@ function Sidebar() {
 
         <div
           className="line w-px h-4"
-          style={{ backgroundColor: '#724c2a' }}
+          style={{ backgroundColor: "#724c2a" }}
         ></div>
 
         <h2
           className="brand-text text-sm font-semibold "
-          style={{ color: '#724c2a' }}
+          style={{ color: "#724c2a" }}
         >
           Ghana Cocoa Board
         </h2>
@@ -55,8 +60,8 @@ function Sidebar() {
         <NavLink
           className={({ isActive }) =>
             isActive
-              ? 'flex mb-2 bg-gray-200 p-1 justify-left items-center gap-2 text-base font-semibold'
-              : 'flex mb-2 hover:bg-gray-100 p-1 justify-left items-center gap-2 text-base font-medium'
+              ? "flex mb-2 bg-gray-200 p-1 justify-left items-center gap-2 text-base font-semibold"
+              : "flex mb-2 hover:bg-gray-100 p-1 justify-left items-center gap-2 text-base font-medium"
           }
           to="/home"
         >
@@ -65,8 +70,8 @@ function Sidebar() {
         <NavLink
           className={({ isActive }) =>
             isActive
-              ? 'flex bg-gray-200 p-1 justify-left items-center gap-2 text-base font-semibold'
-              : 'flex hover:bg-gray-100 p-1 justify-left items-center gap-2 text-base font-medium'
+              ? "flex bg-gray-200 p-1 justify-left items-center gap-2 text-base font-semibold"
+              : "flex hover:bg-gray-100 p-1 justify-left items-center gap-2 text-base font-medium"
           }
           to="/dashboard"
         >
@@ -75,8 +80,8 @@ function Sidebar() {
         <NavLink
           className={({ isActive }) =>
             isActive
-              ? 'flex bg-gray-200 p-1 justify-left items-center gap-2 text-base font-semibold'
-              : 'flex hover:bg-gray-100 p-1 justify-left items-center gap-2 text-base font-medium'
+              ? "flex bg-gray-200 p-1 justify-left items-center gap-2 text-base font-semibold"
+              : "flex hover:bg-gray-100 p-1 justify-left items-center gap-2 text-base font-medium"
           }
           to="/reports"
         >
@@ -85,29 +90,31 @@ function Sidebar() {
         <NavLink
           className={({ isActive }) =>
             isActive
-              ? 'flex bg-gray-200 p-1 justify-left items-center gap-2 text-base font-semibold'
-              : 'flex hover:bg-gray-100 p-1 justify-left items-center gap-2 text-base font-medium'
+              ? "flex bg-gray-200 p-1 justify-left items-center gap-2 text-base font-semibold"
+              : "flex hover:bg-gray-100 p-1 justify-left items-center gap-2 text-base font-medium"
           }
           to="/uncheckedOuts"
         >
           <HiXCircle /> UncheckedOuts
         </NavLink>
 
-        <div className="flex hover:bg-gray-100 p-1 justify-left items-center gap-2 text-base font-medium">
-          <Dropdown
-            menu={{
-              items,
-            }}
-          >
-            <a onClick={(e) => e.preventDefault()}>
-              <Space>
-                <HiOutlineCog />
-                Setup
-                <AiOutlineDown />
-              </Space>
-            </a>
-          </Dropdown>
-        </div>
+        {user?.role === "ADMIN" && (
+          <div className="flex hover:bg-gray-100 p-1 justify-left items-center gap-2 text-base font-medium">
+            <Dropdown
+              menu={{
+                items,
+              }}
+            >
+              <a onClick={(e) => e.preventDefault()}>
+                <Space>
+                  <HiOutlineCog />
+                  Setup
+                  <AiOutlineDown />
+                </Space>
+              </a>
+            </Dropdown>
+          </div>
+        )}
       </div>
     </div>
   );

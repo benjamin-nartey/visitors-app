@@ -8,7 +8,7 @@ let authTokens = localStorage.getItem('authTokens')
   : null;
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:9000',
+  baseURL: 'https://receptionapi.cocobod.net',
   headers: { Authorization: `Bearer ${authTokens?.access_token}` },
 });
 
@@ -25,7 +25,7 @@ axiosInstance.interceptors.request.use(async (req) => {
   if (!isExpired) return req;
 
   const response = await axios.post(
-    'http://localhost:9000/auth/refresh',
+    'https://receptionapi.cocobod.net/auth/refresh',
     {},
     {
       headers: {
