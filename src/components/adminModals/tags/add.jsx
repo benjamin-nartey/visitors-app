@@ -67,16 +67,22 @@ const AddTag = (setFn) => {
     }
   };
 
+  const handleCancel = () => {
+    if (selectedRecord) {
+      setShowTagEditModal(!showTagEditModal);
+      setSelectedRecord(null);
+    } else {
+      setShowTagAddModal(!showTagAddModal);
+      setSelectedRecord(null);
+    }
+  };
+
   return (
     <div>
       <Modal
         footer={false}
         open={showTagAddModal || showTagEditModal}
-        onCancel={() =>
-          selectedRecord
-            ? setShowTagEditModal(!showTagEditModal)
-            : setShowTagAddModal(!showTagAddModal)
-        }
+        onCancel={handleCancel}
       >
         <form
           onSubmit={handleSubmit(onSubmit)}

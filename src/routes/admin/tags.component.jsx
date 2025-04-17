@@ -32,9 +32,11 @@ const Tags = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    const res = fetchTags().then((res) => setTags(res));
+    const res = fetchTags()
+      .then((res) => setTags(res))
+      .finally(setIsLoading(false));
 
-    setIsLoading(false);
+    // setIsLoading(false);
   }, [isTagLoading]);
 
   const handleEdit = (row) => {

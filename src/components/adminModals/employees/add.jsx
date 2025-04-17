@@ -71,16 +71,22 @@ const AddEmployee = (setFn) => {
     }
   };
 
+  const handleCancel = () => {
+    if (selectedRecord) {
+      setShowEmployeeEditModal(!showEmployeeEditModal);
+      setSelectedRecord(null);
+    } else {
+      setShowEmployeeAddModal(!showEmployeeAddModal);
+      setSelectedRecord(null);
+    }
+  };
+
   return (
     <div>
       <Modal
         footer={false}
         open={showEmployeeAddModal || showEmployeeEditModal}
-        onCancel={() =>
-          selectedRecord
-            ? setShowEmployeeEditModal(!showEmployeeEditModal)
-            : setShowEmployeeAddModal(!showEmployeeAddModal)
-        }
+        onCancel={handleCancel}
       >
         <form
           onSubmit={handleSubmit(onSubmit)}
