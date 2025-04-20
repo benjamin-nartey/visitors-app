@@ -29,3 +29,10 @@ export const divisions = [
     value: 'Cocobod',
   },
 ];
+
+export const APPOINTMENT_STATUS = {
+  PENDING: 'Pending',
+  IN_PROGRESS: 'In Progress',
+  COMPLETED: 'Completed',
+  CANCELLED: 'Cancelled',
+};

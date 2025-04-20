@@ -17,17 +17,17 @@ export default function FormDialog() {
 
   return (
     <div>
-      <Dialog open={open} onClose={handleClose}>
+      {/* <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Checkout</DialogTitle>
-        <DialogContent>
-          <div className="w-full grid place-items-center">
-            <CheckoutForm />
-          </div>
-        </DialogContent>
+        <DialogContent> */}
+      <div className="w-full grid place-items-center">
+        <CheckoutForm />
+      </div>
+      {/* </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
         </DialogActions>
-      </Dialog>
+      </Dialog> */}
     </div>
   );
 }

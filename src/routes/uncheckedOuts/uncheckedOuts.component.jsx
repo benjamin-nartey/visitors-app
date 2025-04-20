@@ -1,99 +1,113 @@
-import React, { useEffect, useState } from "react";
-import Table from "../../components/Table/table";
-import axiosInstance from "../../interceptors/axios";
-
-import { HiCheck } from "react-icons/hi";
-import Loader from "../../components/loader/loader";
+import React, { useEffect, useState } from 'react';
+import { HiCheck } from 'react-icons/hi';
+import Loader from '../../components/loader/loader';
+import { useUnCheckedOut } from '../../query-hooks/visit';
+import { Input, message, Popconfirm, Table, Tooltip } from 'antd';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { checkout } from '../../http/visit';
 
 const UncheckedOuts = () => {
-  const [uncheckedOut, setUncheckedOut] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [currentRow, setCurrentRow] = useState(-1);
+  // const [uncheckedOut, setUncheckedOut] = useState([]);
+  const [searchText, setSearchText] = useState('');
 
-  const fetchUncheckedOut = async () => {
-    const response = await axiosInstance.get("/visit/uncheckedOutVisits");
+  // const fetchUncheckedOut = async () => {
+  //   const response = await axiosInstance.get('/visit/uncheckedOutVisits');
 
-    setUncheckedOut(response.data);
-  };
+  //   setUncheckedOut(response.data);
+  // };
 
-  useEffect(() => {
-    fetchUncheckedOut();
-  }, [isLoading]);
+  // useEffect(() => {
+  //   fetchUncheckedOut();
+  // }, [isLoading]);
+  const queryClient = useQueryClient();
 
-  const handleCheckOut = async (row) => {
-    try {
-      setCurrentRow(row.id);
-      setIsLoading(true);
+  const { data: uncheckedOuts, isLoading: uncheckedOutLoading } =
+    useUnCheckedOut();
 
-      axiosInstance
-        .post("/visit/checkOut", {
-          tagId: row.tag.id,
-        })
-        .then((willDelete) => {
-          swal("Success", "Visitor has been checked out!", "success");
-        });
-
-      setIsLoading(false);
-    } catch (err) {
-      setIsLoading(false);
-    }
-  };
+  const { mutate } = useMutation({
+    mutationKey: 'checkOutVisitor',
+    mutationFn: (data) => checkout(data),
+    onSuccess: () => {
+      message.success('Visitor has been checked out!');
+      queryClient.invalidateQueries({ queryKey: ['uncheckedOut'] });
+    },
+    onError: (err) => message.error(err.response.data.message),
+  });
 
   const columns = [
     {
-      Header: "Visitor's Name",
-      accessor: "guest_name",
+      title: "Visitor's Name",
+      dataIndex: 'guest_name',
+      key: 'guest_name',
+      filteredValue: [searchText],
+      onFilter: (value, record) => {
+        return (
+          record.guest_name.toLowerCase().includes(value.toLowerCase()) ||
+          record.staff_name.toLowerCase().includes(value.toLowerCase()) ||
+          record.purpose.toLowerCase().includes(value.toLowerCase()) ||
+          record.tag.number.toLowerCase().includes(value.toLowerCase())
+        );
+      },
     },
     {
-      Header: "Staff Name",
-      accessor: "staff_name",
+      title: 'Staff Name',
+      dataIndex: 'staff_name',
+      key: 'staff_name',
     },
     {
-      Header: " Department",
-      accessor: "department",
+      title: ' Department',
+      dataIndex: 'department',
+      key: 'department',
     },
     {
-      Header: "Purpose",
-      accessor: "purpose",
+      title: 'Purpose',
+      dataIndex: 'purpose',
+      key: 'purpose',
     },
     {
-      Header: "Guest Contact",
-      accessor: "guest_contact",
+      title: 'Guest Contact',
+      dataIndex: 'guest_contact',
+      key: 'guest_contact',
     },
     {
-      Header: " Tag",
-      accessor: "tag.number",
+      title: ' Tag',
+      dataIndex: ['tag', 'number'],
+      key: 'tag.number',
     },
     {
-      Header: "Action",
-      accessor: (row) => (
-        <div
-          onClick={() => handleCheckOut(row)}
-          className={`flex justify-center ${
-            isLoading && row.id === currentRow ? " " : "bg-green-300 w-[50%]"
-          } px-1 py-2 rounded-sm  hover:scale-110 transition-all`}
-        >
-          {isLoading === true ? (
-            <Loader width="w-4" height="h-4" fillColor="fill-[#6E431D]" />
-          ) : (
-            <HiCheck />
-          )}
-        </div>
+      title: 'Action',
+      dataIndex: 'tagId',
+      render: (value) => (
+        <Popconfirm title="Confirm check out" onConfirm={() => mutate(value)}>
+          <HiCheck className=" text-green-400 text-2xl cursor-pointer" />
+        </Popconfirm>
       ),
     },
   ];
 
   return (
     <div className="flex flex-col justify-center mt-10 gap-6">
-      <h4 className="mx-auto font-semibold text-3xl">UncheckedOut Visits</h4>
+      <div className="flex justify-center flex-col items-center w-[20rem] mx-auto gap-2 mb-5">
+        <h4 className="self-start font-semibold text-3xl">
+          UncheckedOut Visits
+        </h4>
+        <hr className=" self-start w-[50%]  h-1 bg-black" />
+      </div>
       <div className="w-[80%] mx-auto">
+        <Input.Search
+          className="w-full"
+          placeholder="Search..."
+          onChange={(e) => setSearchText(e.target.value)}
+        />
         <Table
-          mockData={uncheckedOut}
-          mockColumns={columns}
-          checkLable={"UncheckedOut Visits"}
-          checkIcon={"checkoutIcon"}
-          clikableRow={false}
-          style={{ height: "50%" }}
+          dataSource={
+            uncheckedOuts &&
+            uncheckedOuts.data.map((check) => ({
+              ...check,
+              key: check.id,
+            }))
+          }
+          columns={columns}
         />
       </div>
     </div>

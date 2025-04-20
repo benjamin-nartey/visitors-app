@@ -5,42 +5,56 @@ import { AuthContext } from '../../components/context/useAuth.context';
 import { useContext } from 'react';
 import axiosInstance from '../../interceptors/axios';
 import OnPremise from '../../components/on-premise/on-premise';
-import Table from '../../components/Table/table';
+
 import { CHECKINS_COLUMN } from '../../utils/checkins-column/checkins-column';
 import { CHECKOUTS_COLUMN } from '../../utils/checkouts-column/checkouts-column';
+import {
+  useFetchCheckedInToday,
+  useFetchCheckedOutToday,
+  useFetchOnPremises,
+} from '../../query-hooks/visit';
+import { Table } from 'antd';
 
 function Dashboard() {
   const { user } = useContext(AuthContext);
   const [firstName, setFirstName] = useState('');
-  const [checkedInToday, setCheckedInToday] = useState([]);
-  const [checkedOutInToday, setCheckedOutInToday] = useState([]);
-  const [onPremise, setOnPremise] = useState([]);
+  // const [checkedInToday, setCheckedInToday] = useState([]);
+  // const [checkedOutInToday, setCheckedOutInToday] = useState([]);
+  // const [onPremise, setOnPremise] = useState([]);
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
   };
 
-  const fetchCheckedInToday = async () => {
-    const response = await axiosInstance.get('/visit/checkinsTodayRecords');
-    setCheckedInToday(response.data.checkIns);
-  };
+  // const fetchCheckedInToday = async () => {
+  //   const response = await axiosInstance.get('/visit/checkinsTodayRecords');
+  //   setCheckedInToday(response.data.checkIns);
+  // };
 
-  const fetchCheckedOutToday = async () => {
-    const response = await axiosInstance.get('/visit/checkoutsTodayRecords');
-    setCheckedOutInToday(response.data.checkOuts);
-  };
+  // const fetchCheckedOutToday = async () => {
+  //   const response = await axiosInstance.get('/visit/checkoutsTodayRecords');
+  //   setCheckedOutInToday(response.data.checkOuts);
+  // };
 
-  const fetchOnPremises = async () => {
-    const response = await axiosInstance.get('/visit/onPremiseTodayRecords');
-    setOnPremise(response.data.checkIns);
-  };
+  // const fetchOnPremises = async () => {
+  //   const response = await axiosInstance.get('/visit/onPremiseTodayRecords');
+  //   setOnPremise(response.data.checkIns);
+  // };
 
-  useEffect(() => {
-    fetchCheckedInToday();
-    fetchCheckedOutToday();
-    fetchOnPremises();
-  }, []);
+  const { data: checkedInToday, isPending: loadingCheckedInToday } =
+    useFetchCheckedInToday();
+
+  const { data: checkedOutToday, isPending: loadingCheckedOutToday } =
+    useFetchCheckedOutToday();
+  const { data: onPremiseToday, isPending: loadingPremiseToday } =
+    useFetchOnPremises();
+
+  // useEffect(() => {
+  //   fetchCheckedInToday();
+  //   fetchCheckedOutToday();
+  //   fetchOnPremises();
+  // }, []);
 
   const getFirstName = (name) => {
     const splittedName = name.split(' ');
@@ -55,7 +69,11 @@ function Dashboard() {
   }, [user]);
   return (
     <div className="dashboard-container w-full h-full grid place-items-center px-6 py-4">
-      <OnPremise open={open} setOpen={setOpen} onPremise={onPremise} />
+      <OnPremise
+        open={open}
+        setOpen={setOpen}
+        onPremise={onPremiseToday && onPremiseToday?.data?.checkIns}
+      />
       <div className="flex w-full justify-evenly">
         <div className="welcome-dashboard-div shadow-lg flex justify-start items-start bg-gray-300 rounded-md p-3 relative w-3/6 h-40">
           <div className="user-info-div flex flex-col justify-center items-start">
@@ -88,29 +106,33 @@ function Dashboard() {
               </div>
             </div>
             <div className="w-full mt-3 text-5xl font-semibold text-center">
-              {onPremise.length}
+              {onPremiseToday?.data?.checkIns.length}
             </div>
           </div>
         </button>
       </div>
       <div className="checks-container w-full h-72 grid grid-cols-2 gap-4 mt-1">
         <Table
-          mockData={checkedInToday}
-          mockColumns={CHECKINS_COLUMN}
-          checkLable={"Today's check-in"}
-          checkIcon={'checkinIcon'}
-          clikableRow={true}
-          style={{ height: '14rem' }}
-          pagination={false}
+          dataSource={
+            checkedInToday &&
+            checkedInToday?.data?.checkIns.map((item) => ({
+              ...item,
+              key: item.id,
+            }))
+          }
+          columns={CHECKINS_COLUMN}
+          loading={loadingCheckedInToday}
         />
         <Table
-          mockData={checkedOutInToday}
-          mockColumns={CHECKOUTS_COLUMN}
-          checkLable={"Today's check-out"}
-          checkIcon={'checkoutIcon'}
-          clikableRow={true}
-          style={{ height: '14rem' }}
-          pagination={false}
+          dataSource={
+            checkedOutToday &&
+            checkedOutToday?.data?.checkOuts.map((item) => ({
+              ...item,
+              key: item.id,
+            }))
+          }
+          columns={CHECKOUTS_COLUMN}
+          loading={loadingCheckedOutToday}
         />
       </div>
     </div>

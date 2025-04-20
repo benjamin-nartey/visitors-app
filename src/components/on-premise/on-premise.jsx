@@ -1,10 +1,10 @@
-import * as React from "react";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
-import { ONPREMISE_COLUMN } from "../../utils/onpremise-column/onpremise-column";
-import Table from "../Table/table";
+import * as React from 'react';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import { ONPREMISE_COLUMN } from '../../utils/onpremise-column/onpremise-column';
+import { Table } from 'antd';
 
 export default function onPremise({ open, setOpen, onPremise }) {
   const handleClose = () => {
@@ -19,10 +19,14 @@ export default function onPremise({ open, setOpen, onPremise }) {
           <div className="grid place-items-center ">
             {/* <CheckoutForm /> */}
             <Table
-              mockData={onPremise}
-              mockColumns={ONPREMISE_COLUMN}
-              checkLable={"On Premise"}
-              checkIcon={"onpremiseIcon"}
+              dataSource={
+                onPremise &&
+                onPremise.map((item) => ({
+                  key: item.id,
+                  ...item,
+                }))
+              }
+              columns={ONPREMISE_COLUMN}
             />
           </div>
         </DialogContent>

@@ -1,19 +1,24 @@
-import { Popconfirm, Button, message } from 'antd';
+import { Popconfirm, Button, message, Table, Input } from 'antd';
 import React, { useEffect, useState } from 'react';
 import {
   HiOutlinePencil,
   HiOutlinePlus,
   HiOutlineTrash,
 } from 'react-icons/hi2';
-import Table from '../../components/Table/table';
+
 import axiosInstance from '../../interceptors/axios';
 import { useAdminContext } from './context/admin.context';
 import Loader from '../../components/loader/loader';
 import AddTag from '../../components/adminModals/tags/add';
+import { useGetAllTags } from '../../query-hooks/tags';
+import { set } from 'date-fns';
 
 const Tags = () => {
-  const [tags, setTags] = useState([]);
+  // const [tags, setTags] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [searchText, setSearchText] = useState('');
+
+  const { data: tags, isLoading: loadTags } = useGetAllTags();
   const {
     setShowTagAddModal,
     showTagAddModal,
@@ -23,19 +28,6 @@ const Tags = () => {
     setIsTagLoading,
     setSelectedRecord,
   } = useAdminContext();
-
-  const fetchTags = async () => {
-    const res = await axiosInstance.get('/tag');
-
-    return res?.data;
-  };
-
-  useEffect(() => {
-    setIsLoading(true);
-    const res = fetchTags().then((res) => setTags(res));
-
-    setIsLoading(false);
-  }, [isTagLoading]);
 
   const handleEdit = (row) => {
     setSelectedRecord(row);
@@ -51,27 +43,35 @@ const Tags = () => {
 
   const columns = [
     {
-      Header: 'Number',
-      accessor: 'number',
+      title: 'Number',
+      dataIndex: 'number',
+      key: 'number',
+      filteredValue: [searchText],
+      onFilter: (value, record) => {
+        return record.number.toLowerCase().includes(value.toLowerCase());
+      },
     },
 
     {
-      Header: 'Actions',
-      accessor: (row) => {
+      title: 'Actions',
+      render: (row) => {
         return (
           <div className="flex gap-2">
-            <HiOutlinePencil onClick={() => handleEdit(row)} color="blue" />
+            <HiOutlinePencil
+              onClick={() => handleEdit(row)}
+              color="blue"
+              className="cursor-pointer"
+            />
             <Popconfirm
               title="Delete the task"
               description="Are you sure to delete this task?"
               onConfirm={() => handleDelete(row?.id)}
-              // onCancel={cancel}
               okText="Yes"
               cancelText="No"
               okButtonProps={{ style: { backgroundColor: 'red' } }}
             >
               <div>
-                <HiOutlineTrash color="red" />
+                <HiOutlineTrash color="red" className="cursor-pointer" />
               </div>
             </Popconfirm>
           </div>
@@ -88,20 +88,25 @@ const Tags = () => {
         </div>
       ) : (
         <div className="mt-20 w-[90%]">
-          <Button
-            className="mb-3 bg-black text-white"
-            onClick={() => setShowTagAddModal(!showTagAddModal)}
-          >
-            <div className="flex">
-              <span>Add</span>
-              <HiOutlinePlus className="translate-y-1" />
-            </div>
-          </Button>
+          <div className="flex justify-end">
+            <Input.Search
+              placeholder="Search...."
+              onChange={(e) => setSearchText(e.target.value)}
+            />
+            <Button
+              className="mb-3 bg-black text-white"
+              onClick={() => setShowTagAddModal(!showTagAddModal)}
+            >
+              <div className="flex">
+                <span>Add</span>
+                <HiOutlinePlus className="translate-y-1" />
+              </div>
+            </Button>
+          </div>
+
           <Table
-            mockColumns={columns}
-            mockData={tags}
-            pagination={true}
-            checkLable={'Tags'}
+            columns={columns}
+            dataSource={tags?.data.map((tag) => ({ key: tag.id, ...tag }))}
           />
         </div>
       )}

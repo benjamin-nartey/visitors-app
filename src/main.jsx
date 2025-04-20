@@ -8,6 +8,9 @@ import './index.css';
 import 'react-tooltip/dist/react-tooltip.css';
 import { ReportContextProvider } from './routes/reports/context/report.context';
 import { AdminContextProvider } from './routes/admin/context/admin.context';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -16,7 +19,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <CheckOutToggleProvider>
           <ReportContextProvider>
             <AdminContextProvider>
-              <App />
+              <QueryClientProvider client={queryClient}>
+                <App />
+              </QueryClientProvider>
             </AdminContextProvider>
           </ReportContextProvider>
         </CheckOutToggleProvider>

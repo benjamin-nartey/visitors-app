@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Table from '../../components/Table/table';
+
 import axiosInstance from '../../interceptors/axios';
 import {
   HiOutlineEye,
@@ -8,13 +8,14 @@ import {
   HiOutlinePlus,
 } from 'react-icons/hi2';
 import Loader from '../../components/loader/loader';
-import { Button, Popconfirm, message } from 'antd';
+import { Button, Input, Popconfirm, Table, message } from 'antd';
 import { useAdminContext } from './context/admin.context';
 import AddEmployee from '../../components/adminModals/employees/add';
+import { useGetAllEmployees } from '../../query-hooks/user';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { deleteEmployee } from '../../http/user';
 
 const Employees = () => {
-  const [employees, setEmployees] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
   const {
     setShowEmployeeAddModal,
     showEmployeeAddModal,
@@ -25,49 +26,72 @@ const Employees = () => {
     setIsAddLoading,
   } = useAdminContext();
 
+  const { data: employees, isLoading: loadEmployees } = useGetAllEmployees();
+
+  const qClient = useQueryClient();
+
+  const { mutate: removeEmployee, isPending: isRemoving } = useMutation({
+    mutationKey: 'removeEmployee',
+    mutationFn: (id) => deleteEmployee(id),
+    onSuccess: () => {
+      message.success('Employee deleted successfully');
+      qClient.invalidateQueries({ queryKey: ['employees'] });
+    },
+    onError: (err) => message.error(err.response.data.message),
+  });
+
   const handleEdit = (row) => {
     setShowEmployeeEditModal(!showEmployeeAddModal);
     setSelectedRecord(row);
   };
 
   const handleDelete = async (id) => {
-    setIsAddLoading(true);
-    await axiosInstance.delete(`/visit/deleteEmployee/${id}`);
-    setIsAddLoading(false);
-    message.success('Employee deleted successfully');
+    removeEmployee(id);
   };
   const columns = [
     {
-      Header: 'Staff',
-      accessor: 'employee',
+      title: 'Staff',
+      dataIndex: 'employee',
+      key: 'employee',
     },
     {
-      Header: 'Department',
-      accessor: 'Department',
+      title: 'Department',
+      dataIndex: 'Department',
+      key: 'Department',
     },
     {
-      Header: 'Division',
-      accessor: 'DDivisions',
+      title: 'Division',
+      dataIndex: 'DDivisions',
+      key: 'DDivisions',
     },
     {
-      Header: 'Contact',
-      accessor: 'directno',
+      title: 'Contact',
+      dataIndex: 'directno',
+      key: 'directno',
     },
     {
-      Header: 'Room No.',
-      accessor: 'roomno',
+      title: 'Room No.',
+      dataIndex: 'roomno',
+      key: 'roomno',
     },
     {
-      Header: 'Extension',
-      accessor: 'extensionno',
+      title: 'Extension',
+      dataIndex: 'extensionno',
+      key: 'extensionno',
     },
 
     {
-      Header: 'Actions',
-      accessor: (row) => {
+      title: 'Actions',
+      dataIndex: 'id',
+      key: 'id',
+      render: (_, row) => {
         return (
           <div className="flex gap-2">
-            <HiOutlinePencil onClick={() => handleEdit(row)} color="blue" />
+            <HiOutlinePencil
+              className="text-blue-500 cursor-pointer text-lg"
+              onClick={() => handleEdit(row)}
+              // color="blue"
+            />
             <Popconfirm
               title="Delete the task"
               description="Are you sure to delete this task?"
@@ -78,7 +102,7 @@ const Employees = () => {
               okButtonProps={{ style: { backgroundColor: 'red' } }}
             >
               <div>
-                <HiOutlineTrash color="red" />
+                <HiOutlineTrash className="text-red-500 cursor-pointer text-lg" />
               </div>
             </Popconfirm>
           </div>
@@ -87,49 +111,53 @@ const Employees = () => {
     },
   ];
 
-  const fetchEmployees = async () => {
-    try {
-      setIsLoading(true);
-      const res = await axiosInstance.get('/visit/employees');
+  // const fetchEmployees = async () => {
+  //   try {
+  //     setIsLoading(true);
+  //     const res = await axiosInstance.get('/visit/employees');
 
-      setEmployees(res?.data);
-      setIsLoading(false);
-    } catch (err) {
-      setIsLoading();
-      console.log({ error: err.message });
-    }
-  };
+  //     setEmployees(res?.data);
+  //     setIsLoading(false);
+  //   } catch (err) {
+  //     setIsLoading();
+  //     console.log({ error: err.message });
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchEmployees();
-  }, [isAddLoading]);
+  // useEffect(() => {
+  //   fetchEmployees();
+  // }, [isAddLoading]);
 
   return (
     <div className="flex justify-center">
-      {isLoading ? (
-        <div className="flex justify-center mt-80">
-          <Loader height={'h-10'} width={'w-10'} fillColor={'fill-black'} />
-        </div>
-      ) : (
-        <div className="mt-20 w-[90%]">
-          <Button
-            className="mb-3 bg-black text-white"
-            onClick={() => setShowEmployeeAddModal(!showEmployeeAddModal)}
-          >
-            <div className="flex">
-              <span>Add</span>
+      {
+        <div className="mt-10 w-[90%]">
+          <div className="flex justify-end gap-3">
+            <Input.Search className="w-[20rem]" placeholder="Search....." />
+            <Button
+              className=" mb-3 bg-black text-white"
+              onClick={() => setShowEmployeeAddModal(!showEmployeeAddModal)}
+            >
+              <div className="flex">
+                <span>Add</span>
 
-              <HiOutlinePlus className="translate-y-1" />
-            </div>
-          </Button>
+                <HiOutlinePlus className="translate-y-1" />
+              </div>
+            </Button>
+          </div>
           <Table
-            mockColumns={columns}
-            mockData={employees}
-            pagination={true}
-            checkLable={'Employees'}
+            columns={columns}
+            dataSource={
+              employees &&
+              employees?.data.map((dat) => ({
+                ...dat,
+                key: dat?.id,
+              }))
+            }
+            loading={loadEmployees}
           />
         </div>
-      )}
+      }
 
       {(showEmployeeAddModal || showEmployeeEditModal) && <AddEmployee />}
     </div>

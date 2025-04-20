@@ -7,6 +7,8 @@ import { useAdminContext } from '../../../routes/admin/context/admin.context';
 import axiosInstance from '../../../interceptors/axios';
 
 import { TagValidation } from '../../../utils/validations/tag';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { createTag } from '../../../http/tags';
 
 const AddTag = (setFn) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -44,28 +46,27 @@ const AddTag = (setFn) => {
   };
 
   const onSubmit = async (values) => {
-    try {
-      setIsLoading(true);
-      setIsTagLoading(true);
-      const res = selectedRecord
-        ? await updateTag(values)
-        : await addTag(values);
+    saveTag(values);
+  };
 
-      setIsTagLoading(false);
+  const qClient = useQueryClient();
 
+  const { mutate: saveTag, isPending: isPendingTag } = useMutation({
+    mutationKey: 'savetag',
+    mutationFn: (data) => {
+      return selectedRecord ? updateTag(data) : createTag(data);
+    },
+    onSuccess: (data) => {
+      message.success(
+        `Tag ${selectedRecord ? 'updated' : 'added'}  successfully`
+      );
+      qClient.invalidateQueries({ queryKey: ['tags'] });
       selectedRecord
         ? setShowTagEditModal(!showTagEditModal)
         : setShowTagAddModal(!showTagAddModal);
-      message.success(
-        `Successfully ${selectedRecord ? 'Updated' : 'Added'} Tag`
-      );
-      setIsLoading(false);
-      setSelectedRecord(null);
-    } catch (e) {
-      setIsLoading(false);
-      setIsTagLoading(false);
-    }
-  };
+    },
+    onError: (err) => message.error(err.response.data.message),
+  });
 
   return (
     <div>
