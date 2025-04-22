@@ -142,14 +142,17 @@ const Appointments = () => {
                   }}
                 />
               </Tooltip>
-              <Tooltip title="CheckOut">
-                <HiLogout
-                  className="text-red-500"
-                  size={17}
-                  onClick={() => setOpen(true)}
-                />
-              </Tooltip>
             </div>
+          )}
+
+          {record.status === 'IN_PROGRESS' && (
+            <Tooltip title="CheckOut">
+              <HiLogout
+                className="text-red-500"
+                size={17}
+                onClick={() => setOpen(true)}
+              />
+            </Tooltip>
           )}
         </div>
       ),

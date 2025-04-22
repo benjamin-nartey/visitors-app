@@ -112,28 +112,40 @@ function Dashboard() {
         </button>
       </div>
       <div className="checks-container w-full h-72 grid grid-cols-2 gap-4 mt-1">
-        <Table
-          dataSource={
-            checkedInToday &&
-            checkedInToday?.data?.checkIns.map((item) => ({
-              ...item,
-              key: item.id,
-            }))
-          }
-          columns={CHECKINS_COLUMN}
-          loading={loadingCheckedInToday}
-        />
-        <Table
-          dataSource={
-            checkedOutToday &&
-            checkedOutToday?.data?.checkOuts.map((item) => ({
-              ...item,
-              key: item.id,
-            }))
-          }
-          columns={CHECKOUTS_COLUMN}
-          loading={loadingCheckedOutToday}
-        />
+        <div className="">
+          <h2 className="text-base font-semibold mb-1 flex justify-start ">
+            {`Checked In's (${checkedInToday?.data?.checkIns.length})`}
+          </h2>
+          <Table
+            dataSource={
+              checkedInToday &&
+              checkedInToday?.data?.checkIns.map((item) => ({
+                ...item,
+                key: item.id,
+              }))
+            }
+            columns={CHECKINS_COLUMN}
+            loading={loadingCheckedInToday}
+          />
+        </div>
+
+        <div>
+          <h2 className="text-base font-semibold mb-1 flex justify-end ">
+            {`Checked Outs (${checkedOutToday?.data?.checkOuts.length})`}
+          </h2>
+
+          <Table
+            dataSource={
+              checkedOutToday &&
+              checkedOutToday?.data?.checkOuts.map((item) => ({
+                ...item,
+                key: item.id,
+              }))
+            }
+            columns={CHECKOUTS_COLUMN}
+            loading={loadingCheckedOutToday}
+          />
+        </div>
       </div>
     </div>
   );

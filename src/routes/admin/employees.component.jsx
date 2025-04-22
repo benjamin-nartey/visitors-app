@@ -14,6 +14,7 @@ import AddEmployee from '../../components/adminModals/employees/add';
 import { useGetAllEmployees } from '../../query-hooks/user';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { deleteEmployee } from '../../http/user';
+import { set } from 'date-fns';
 
 const Employees = () => {
   const {
@@ -27,6 +28,8 @@ const Employees = () => {
   } = useAdminContext();
 
   const { data: employees, isLoading: loadEmployees } = useGetAllEmployees();
+
+  const [searchText, setSearchText] = useState('');
 
   const qClient = useQueryClient();
 
@@ -53,6 +56,13 @@ const Employees = () => {
       title: 'Staff',
       dataIndex: 'employee',
       key: 'employee',
+      filteredValue: [searchText],
+      onFilter: (value, record) => {
+        return (
+          record?.employee.toLowerCase().includes(searchText.toLowerCase()) ||
+          record?.Department.toLowerCase().includes(searchText.toLowerCase())
+        );
+      },
     },
     {
       title: 'Department',
@@ -111,29 +121,16 @@ const Employees = () => {
     },
   ];
 
-  // const fetchEmployees = async () => {
-  //   try {
-  //     setIsLoading(true);
-  //     const res = await axiosInstance.get('/visit/employees');
-
-  //     setEmployees(res?.data);
-  //     setIsLoading(false);
-  //   } catch (err) {
-  //     setIsLoading();
-  //     console.log({ error: err.message });
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchEmployees();
-  // }, [isAddLoading]);
-
   return (
     <div className="flex justify-center">
       {
         <div className="mt-10 w-[90%]">
           <div className="flex justify-end gap-3">
-            <Input.Search className="w-[20rem]" placeholder="Search....." />
+            <Input.Search
+              className="w-[20rem]"
+              placeholder="Search....."
+              onChange={(e) => setSearchText(e.target.value)}
+            />
             <Button
               className=" mb-3 bg-black text-white"
               onClick={() => setShowEmployeeAddModal(!showEmployeeAddModal)}
