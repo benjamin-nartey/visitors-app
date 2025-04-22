@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import DashboardImage from '../../assets/receptionist-02@2x.png';
-import { BsPeople } from 'react-icons/bs';
-import { AuthContext } from '../../components/context/useAuth.context';
-import { useContext } from 'react';
-import axiosInstance from '../../interceptors/axios';
-import OnPremise from '../../components/on-premise/on-premise';
+import React, { useEffect, useState } from "react";
+import DashboardImage from "../../assets/receptionist-02@2x.png";
+import { BsPeople } from "react-icons/bs";
+import { AuthContext } from "../../components/context/useAuth.context";
+import { useContext } from "react";
+import axiosInstance from "../../interceptors/axios";
+import OnPremise from "../../components/on-premise/on-premise";
 
-import { CHECKINS_COLUMN } from '../../utils/checkins-column/checkins-column';
-import { CHECKOUTS_COLUMN } from '../../utils/checkouts-column/checkouts-column';
+import { CHECKINS_COLUMN } from "../../utils/checkins-column/checkins-column";
+import { CHECKOUTS_COLUMN } from "../../utils/checkouts-column/checkouts-column";
 import {
   useFetchCheckedInToday,
   useFetchCheckedOutToday,
   useFetchOnPremises,
-} from '../../query-hooks/visit';
-import { Table } from 'antd';
+} from "../../query-hooks/visit";
+import { Table } from "antd";
 
 function Dashboard() {
   const { user } = useContext(AuthContext);
-  const [firstName, setFirstName] = useState('');
+  const [firstName, setFirstName] = useState("");
   // const [checkedInToday, setCheckedInToday] = useState([]);
   // const [checkedOutInToday, setCheckedOutInToday] = useState([]);
   // const [onPremise, setOnPremise] = useState([]);
@@ -57,7 +57,7 @@ function Dashboard() {
   // }, []);
 
   const getFirstName = (name) => {
-    const splittedName = name.split(' ');
+    const splittedName = name.split(" ");
     const stripFirstName = splittedName.shift();
     return stripFirstName;
   };
@@ -68,14 +68,14 @@ function Dashboard() {
     }
   }, [user]);
   return (
-    <div className="dashboard-container w-full h-full grid place-items-center px-6 py-4">
+    <div className="dashboard-container w-full h-[95vh] overflow-hidden grid place-items-center px-6 py-4 ">
       <OnPremise
         open={open}
         setOpen={setOpen}
         onPremise={onPremiseToday && onPremiseToday?.data?.checkIns}
       />
-      <div className="flex w-full justify-evenly">
-        <div className="welcome-dashboard-div shadow-lg flex justify-start items-start bg-gray-300 rounded-md p-3 relative w-3/6 h-40">
+      <div className="flex w-full justify-evenly mb-20">
+        <div className="welcome-dashboard-div shadow-lg flex justify-start items-start bg-gray-300 rounded-md p-3 relative w-3/6 h-40 mt-20 ">
           <div className="user-info-div flex flex-col justify-center items-start">
             <h2 className="text-base font-semibold capitalize mb-2">
               Hello, {firstName}
@@ -85,10 +85,10 @@ function Dashboard() {
           </div>
           <div className="dashboard-image-div ">
             <img
-              className="absolute right-0 block bottom-0"
+              className="absolute right-0 block bottom-0 "
               src={DashboardImage}
               alt="dashboard-image"
-              style={{ height: '15rem' }}
+              style={{ height: "15rem" }}
             />
           </div>
         </div>
@@ -111,12 +111,13 @@ function Dashboard() {
           </div>
         </button>
       </div>
-      <div className="checks-container w-full h-72 grid grid-cols-2 gap-4 mt-1">
-        <div className="">
+      <div className="checks-container h-[15rem] w-full grid grid-cols-2 gap-4 mt-1 overflow-y-scroll">
+        <div className="h-full">
           <h2 className="text-base font-semibold mb-1 flex justify-start ">
             {`Checked In's (${checkedInToday?.data?.checkIns.length})`}
           </h2>
           <Table
+            className="h-full"
             dataSource={
               checkedInToday &&
               checkedInToday?.data?.checkIns.map((item) => ({
@@ -129,7 +130,7 @@ function Dashboard() {
           />
         </div>
 
-        <div>
+        <div className="h-full">
           <h2 className="text-base font-semibold mb-1 flex justify-end ">
             {`Checked Outs (${checkedOutToday?.data?.checkOuts.length})`}
           </h2>

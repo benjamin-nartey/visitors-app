@@ -1,22 +1,22 @@
-import React from 'react';
-import Logo from '../../assets/logo-cocobod.png';
-import { MdHome } from 'react-icons/md';
-import { MdDashboard } from 'react-icons/md';
-import { AiOutlineDown } from 'react-icons/ai';
+import React from "react";
+import Logo from "../../assets/logo-cocobod.png";
+import { MdHome } from "react-icons/md";
+import { MdDashboard } from "react-icons/md";
+import { AiOutlineDown } from "react-icons/ai";
 import {
   HiPresentationChartBar,
   HiXCircle,
   HiOutlineCog,
   HiCalendar,
-} from 'react-icons/hi';
-import { NavLink } from 'react-router-dom';
-import { Dropdown, Space } from 'antd';
+} from "react-icons/hi";
+import { NavLink } from "react-router-dom";
+import { Dropdown, Space } from "antd";
 
-import { useContext } from 'react';
-import { AuthContext } from '../context/useAuth.context';
-import { CalendarIcon } from '@heroicons/react/20/solid';
-import { HiOutlineCalendar } from 'react-icons/hi2';
-import { BsCalendar } from 'react-icons/bs';
+import { useContext } from "react";
+import { AuthContext } from "../context/useAuth.context";
+import { CalendarIcon } from "@heroicons/react/20/solid";
+import { HiOutlineCalendar } from "react-icons/hi2";
+import { BsCalendar } from "react-icons/bs";
 import {
   RiCalendarScheduleLine,
   RiCloseLine,
@@ -24,22 +24,30 @@ import {
   RiDashboard3Line,
   RiHome3Line,
   RiPresentationLine,
-} from 'react-icons/ri';
+} from "react-icons/ri";
 
 const items = [
   {
-    key: '1',
+    key: "1",
     label: (
-      <NavLink className="mb-2" to="/admin/employees">
+      <NavLink className="mb-2 w-full" to="/admin/employees">
         Employees
       </NavLink>
     ),
   },
   {
-    key: '2',
+    key: "2",
     label: (
-      <NavLink className="mb-2" to="/admin/tags">
+      <NavLink className="mb-2 w-full" to="/admin/tags">
         Tags
+      </NavLink>
+    ),
+  },
+  {
+    key: "3",
+    label: (
+      <NavLink className="mb-2 w-full" to="/admin/users">
+        Users
       </NavLink>
     ),
   },
@@ -57,12 +65,12 @@ function Sidebar() {
 
         <div
           className="line w-px h-4"
-          style={{ backgroundColor: '#724c2a' }}
+          style={{ backgroundColor: "#724c2a" }}
         ></div>
 
         <h2
           className="brand-text text-sm font-semibold "
-          style={{ color: '#724c2a' }}
+          style={{ color: "#724c2a" }}
         >
           Ghana Cocoa Board
         </h2>
@@ -72,8 +80,8 @@ function Sidebar() {
         <NavLink
           className={({ isActive }) =>
             isActive
-              ? 'flex mb-2 bg-gray-200 p-1 justify-left items-center gap-2 text-base font-semibold group'
-              : 'flex mb-2 hover:bg-gray-100 p-1 justify-left items-center gap-2 text-base font-medium group'
+              ? "flex mb-2 bg-gray-200 p-1 justify-left items-center gap-2 text-base font-semibold group"
+              : "flex mb-2 hover:bg-gray-100 p-1 justify-left items-center gap-2 text-base font-medium group"
           }
           to="/home"
         >
@@ -82,8 +90,8 @@ function Sidebar() {
         <NavLink
           className={({ isActive }) =>
             isActive
-              ? 'flex bg-gray-200 p-1 justify-left items-center gap-2 text-base font-semibold group'
-              : 'flex hover:bg-gray-100 p-1 justify-left items-center gap-2 text-base font-medium group'
+              ? "flex bg-gray-200 p-1 justify-left items-center gap-2 text-base font-semibold group"
+              : "flex hover:bg-gray-100 p-1 justify-left items-center gap-2 text-base font-medium group"
           }
           to="/dashboard"
         >
@@ -92,8 +100,8 @@ function Sidebar() {
         <NavLink
           className={({ isActive }) =>
             isActive
-              ? 'flex bg-gray-200 p-1 justify-left items-center gap-2 text-base font-semibold group'
-              : 'flex hover:bg-gray-100 p-1 justify-left items-center gap-2 text-base font-medium group'
+              ? "flex bg-gray-200 p-1 justify-left items-center gap-2 text-base font-semibold group"
+              : "flex hover:bg-gray-100 p-1 justify-left items-center gap-2 text-base font-medium group"
           }
           to="/reports"
         >
@@ -102,29 +110,29 @@ function Sidebar() {
         <NavLink
           className={({ isActive }) =>
             isActive
-              ? 'flex bg-gray-200 p-1 justify-left items-center gap-2 text-base font-semibold group'
-              : 'flex hover:bg-gray-100 p-1 justify-left items-center gap-2 text-base font-medium group'
+              ? "flex bg-gray-200 p-1 justify-left items-center gap-2 text-base font-semibold group"
+              : "flex hover:bg-gray-100 p-1 justify-left items-center gap-2 text-base font-medium group"
           }
           to="/appointments"
         >
           <RiCalendarScheduleLine
             className="group-hover:fill-green-500"
             size={15}
-          />{' '}
+          />{" "}
           Appointments
         </NavLink>
         <NavLink
           className={({ isActive }) =>
             isActive
-              ? 'flex bg-gray-200 p-1 justify-left items-center gap-2 text-base font-semibold group'
-              : 'flex hover:bg-gray-100 p-1 justify-left items-center gap-2 text-base font-medium group'
+              ? "flex bg-gray-200 p-1 justify-left items-center gap-2 text-base font-semibold group"
+              : "flex hover:bg-gray-100 p-1 justify-left items-center gap-2 text-base font-medium group"
           }
           to="/uncheckedOuts"
         >
           <RiCloseLine className="group-hover:fill-green-500" /> UncheckedOuts
         </NavLink>
 
-        {user?.role === 'ADMIN' && (
+        {user?.role === "ADMIN" && (
           <div className="flex hover:bg-gray-100 p-1 justify-left items-center gap-2 text-base font-medium group">
             <Dropdown
               menu={{

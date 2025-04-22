@@ -1,20 +1,20 @@
-import React from 'react';
-import { RiArrowDownSLine } from 'react-icons/ri';
-import { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-import { useContext } from 'react';
-import { AuthContext } from '../context/useAuth.context';
-import { useRef } from 'react';
-import { CheckOutToggleContext } from '../context/checkoutToggle.context';
-import Loader from '../loader/loader';
+import React from "react";
+import { RiArrowDownSLine } from "react-icons/ri";
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../context/useAuth.context";
+import { useRef } from "react";
+import { CheckOutToggleContext } from "../context/checkoutToggle.context";
+import Loader from "../loader/loader";
 
 function NavBar() {
   const [toggleLogoutBtn, setToggleLogoutBtn] = useState(false);
-  const [initials, setInitials] = useState('');
-  const [day, setDay] = useState('');
-  const [date, setDate] = useState('');
-  const [month, setMonth] = useState('');
-  const [year, setYear] = useState('');
+  const [initials, setInitials] = useState("");
+  const [day, setDay] = useState("");
+  const [date, setDate] = useState("");
+  const [month, setMonth] = useState("");
+  const [year, setYear] = useState("");
   const location = useLocation();
   const { user, logout, loading } = useContext(AuthContext);
   const logoutRef = useRef();
@@ -26,7 +26,7 @@ function NavBar() {
 
   // console.log({ open });
   useEffect(() => {
-    document.addEventListener('click', handleClickOutsideLogout, true);
+    document.addEventListener("click", handleClickOutsideLogout, true);
   }, []);
 
   const handleClickOutsideLogout = (e) => {
@@ -44,89 +44,89 @@ function NavBar() {
     setYear(currentYear);
     switch (currentDay) {
       case 0:
-        setDay('Sunday');
+        setDay("Sunday");
         break;
 
       case 1:
-        setDay('Monday');
+        setDay("Monday");
         break;
 
       case 2:
-        setDay('Tuesday');
+        setDay("Tuesday");
         break;
 
       case 3:
-        setDay('Wednesday');
+        setDay("Wednesday");
         break;
 
       case 4:
-        setDay('Thursday');
+        setDay("Thursday");
         break;
 
       case 5:
-        setDay('Friday');
+        setDay("Friday");
         break;
 
       case 6:
-        setDay('Saturday');
+        setDay("Saturday");
         break;
 
       default:
-        console.log('error in date object');
+        console.log("error in date object");
         break;
     }
 
     switch (currentMonth) {
       case 0:
-        setMonth('January');
+        setMonth("January");
         break;
 
       case 1:
-        setMonth('February');
+        setMonth("February");
         break;
 
       case 2:
-        setMonth('March');
+        setMonth("March");
         break;
 
       case 3:
-        setMonth('April');
+        setMonth("April");
         break;
 
       case 4:
-        setMonth('May');
+        setMonth("May");
         break;
 
       case 5:
-        setMonth('June');
+        setMonth("June");
         break;
 
       case 6:
-        setMonth('July');
+        setMonth("July");
         break;
 
       case 7:
-        setMonth('August');
+        setMonth("August");
         break;
 
       case 8:
-        setMonth('September');
+        setMonth("September");
         break;
 
       case 9:
-        setMonth('October');
+        setMonth("October");
         break;
 
       case 10:
-        setMonth('November');
+        setMonth("November");
         break;
 
       case 11:
-        setMonth('December');
+        setMonth("December");
         break;
 
       default:
-        console.log('error in date object');
+        console.log("error in date object");
         break;
     }
   };
@@ -138,9 +138,9 @@ function NavBar() {
   const getInitials = (string) => {
     return string
       .match(/(\b\S)?/g)
-      .join('')
+      .join("")
       .match(/(^\S|\S$)?/g)
-      .join('');
+      .join("");
   };
 
   useEffect(() => {
@@ -154,14 +154,14 @@ function NavBar() {
   };
 
   return (
-    <div className="navbar w-full h-full flex justify-between items-center relative">
+    <div className="navbar w-full flex justify-between items-center ">
       <div className="home-welcome-div flex flex-col">
         <span className="block text-base text-black font-semibold">
-          {location.pathname.split('/')[1].charAt(0).toUpperCase() +
-            location.pathname.split('/')[1].slice(1).toLowerCase()}
+          {location.pathname.split("/")[1].charAt(0).toUpperCase() +
+            location.pathname.split("/")[1].slice(1).toLowerCase()}
         </span>
         <span className="block text-black text-sm">
-          <span className="font-semibold">{day}</span>{' '}
+          <span className="font-semibold">{day}</span>{" "}
           {`${date} ${month} ${year}`}
         </span>
       </div>
@@ -189,7 +189,7 @@ function NavBar() {
           {loading ? (
             <Loader width="w-5" height="h-5" fillColor="fill-[#6E431D]" />
           ) : (
-            'Logout'
+            "Logout"
           )}
         </button>
       )}

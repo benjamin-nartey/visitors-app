@@ -1,93 +1,76 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
-import axiosInstance from "../../interceptors/axios";
 import {
-  HiOutlineEye,
   HiOutlinePencil,
   HiOutlineTrash,
   HiOutlinePlus,
 } from "react-icons/hi2";
-import Loader from "../../components/loader/loader";
 import { Button, Input, Popconfirm, Table, message } from "antd";
 import { useAdminContext } from "./context/admin.context";
 import AddEmployee from "../../components/adminModals/employees/add";
-import { useGetAllEmployees } from "../../query-hooks/user";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteEmployee } from "../../http/user";
-import { set } from "date-fns";
+import AddUsers from "../../components/adminModals/users/add";
+import { useGetAllEmployees, useGetAllUsers } from "../../query-hooks/user";
 
-const Employees = () => {
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { deleteEmployee, deleteUser } from "../../http/user";
+
+const Users = () => {
   const {
-    setShowEmployeeAddModal,
-    showEmployeeAddModal,
-    showEmployeeEditModal,
-    setShowEmployeeEditModal,
+    showUserAddModal,
+    setshowUserAddModal,
+    showUserEditModal,
+    setshowUserEditModal,
     setSelectedRecord,
     isAddLoading,
     setIsAddLoading,
   } = useAdminContext();
 
-  const { data: employees, isLoading: loadEmployees } = useGetAllEmployees();
+  const { data: users, isLoading: loadusers } = useGetAllUsers();
 
   const [searchText, setSearchText] = useState("");
 
   const qClient = useQueryClient();
 
-  const { mutate: removeEmployee, isPending: isRemoving } = useMutation({
-    mutationKey: "removeEmployee",
-    mutationFn: (id) => deleteEmployee(id),
+  const { mutate: removeUser, isPending: isRemoving } = useMutation({
+    mutationKey: "removeUser",
+    mutationFn: (id) => deleteUser(id),
     onSuccess: () => {
-      message.success("Employee deleted successfully");
-      qClient.invalidateQueries({ queryKey: ["employees"] });
+      message.success("User deleted successfully");
+      qClient.invalidateQueries({ queryKey: ["users"] });
     },
     onError: (err) => message.error(err.response.data.message),
   });
 
   const handleEdit = (row) => {
-    setShowEmployeeEditModal(!showEmployeeAddModal);
+    setshowUserEditModal(!showUserEditModal);
     setSelectedRecord(row);
   };
 
   const handleDelete = async (id) => {
-    removeEmployee(id);
+    removeUser(id);
   };
   const columns = [
     {
-      title: "Staff",
-      dataIndex: "employee",
-      key: "employee",
+      title: "Name",
+      dataIndex: "name",
+      key: "name",
       filteredValue: [searchText],
       onFilter: (value, record) => {
         return (
-          record?.employee.toLowerCase().includes(searchText.toLowerCase()) ||
-          record?.Department.toLowerCase().includes(searchText.toLowerCase())
+          record?.name?.toLowerCase().includes(searchText.toLowerCase()) ||
+          record?.email?.toLowerCase().includes(searchText.toLowerCase())
         );
       },
     },
     {
-      title: "Department",
-      dataIndex: "Department",
-      key: "Department",
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
     },
     {
-      title: "Division",
-      dataIndex: "DDivisions",
-      key: "DDivisions",
-    },
-    {
-      title: "Contact",
-      dataIndex: "directno",
-      key: "directno",
-    },
-    {
-      title: "Room No.",
-      dataIndex: "roomno",
-      key: "roomno",
-    },
-    {
-      title: "Extension",
-      dataIndex: "extensionno",
-      key: "extensionno",
+      title: "Role",
+      dataIndex: "role",
+      key: "role",
     },
 
     {
@@ -124,7 +107,7 @@ const Employees = () => {
   return (
     <div className="p-4 h-full">
       {
-        <div className="w-full h-full">
+        <div className=" w-full h-full">
           <div className="flex justify-end gap-3">
             <Input.Search
               className="w-[20rem]"
@@ -133,7 +116,7 @@ const Employees = () => {
             />
             <Button
               className=" mb-3 bg-black text-white"
-              onClick={() => setShowEmployeeAddModal(!showEmployeeAddModal)}
+              onClick={() => setshowUserAddModal(!showUserAddModal)}
             >
               <div className="flex">
                 <span>Add</span>
@@ -145,20 +128,20 @@ const Employees = () => {
           <Table
             columns={columns}
             dataSource={
-              employees &&
-              employees?.data.map((dat) => ({
+              users &&
+              users?.data.map((dat) => ({
                 ...dat,
                 key: dat?.id,
               }))
             }
-            loading={loadEmployees}
+            loading={loadusers}
           />
         </div>
       }
 
-      {(showEmployeeAddModal || showEmployeeEditModal) && <AddEmployee />}
+      {(showUserAddModal || showUserEditModal) && <AddUsers />}
     </div>
   );
 };
 
-export default Employees;
+export default Users;

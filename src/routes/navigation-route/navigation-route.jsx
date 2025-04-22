@@ -12,8 +12,8 @@ function NavigationRoute() {
           <Sidebar />
         </div>
       </div>
-      <div className="main-column col-span-10 ">
-        <div className="navbar-container w-full h-12 px-6 pt-8">
+      <div className="main-column col-span-10 min-h-screen overflow-y-scroll">
+        <div className="navbar-container w-full px-6 pt-8 sticky top-0 z-[99] bg-white">
           <NavBar />
         </div>
         <FormDialog />

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState } from "react";
 
 export const AdminContext = createContext({
   selectedRecord: null,
@@ -17,6 +17,8 @@ export const AdminContextProvider = ({ children }) => {
   const [showTagEditModal, setShowTagEditModal] = useState(false);
   const [showRolesAddModal, setShowRolesAddModal] = useState(false);
   const [showRolesEditModal, setShowRolesEditModal] = useState(false);
+  const [showUserAddModal, setshowUserAddModal] = useState(false);
+  const [showUserEditModal, setshowUserEditModal] = useState(false);
   const [isAddLoading, setIsAddLoading] = useState(false);
   const [isTagLoading, setIsTagLoading] = useState(false);
   return (
@@ -36,6 +38,10 @@ export const AdminContextProvider = ({ children }) => {
         setShowRolesAddModal,
         showRolesEditModal,
         setShowRolesEditModal,
+        showUserAddModal,
+        setshowUserAddModal,
+        showUserEditModal,
+        setshowUserEditModal,
         isAddLoading,
         setIsAddLoading,
         setIsTagLoading,
