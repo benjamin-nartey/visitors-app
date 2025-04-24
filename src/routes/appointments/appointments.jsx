@@ -300,7 +300,7 @@ const Appointments = () => {
       mutationKey: "rescheduleAppointment",
       mutationFn: (data) => update(selectedAppointment, data),
       onSuccess: () => {
-        setOpenPopConfirm(false);
+        setShowAppModal(false);
         message.success("Appointment Rescheduled Successfully");
         queryClient.invalidateQueries({ queryKey: ["appointments"] });
       },
