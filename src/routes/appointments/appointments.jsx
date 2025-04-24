@@ -49,6 +49,7 @@ const Appointments = () => {
 
   console.log("showAppModal:", showAppModal);
   console.log("isReschedule:", isReschedule);
+  console.log("showModal:", showModal);
 
   // const showPopconfirm = () => {
   //   setOpenPopConfirm(true);
@@ -166,27 +167,30 @@ const Appointments = () => {
         const items = [
           {
             label: (
-              <span
+              <button
+                className="w-full p-1"
                 onClick={() => {
-                  setSelectedAppointment(value);
+                  console.log("cliked");
                   setShowModal(true);
+                  setSelectedAppointment(value);
                 }}
               >
                 Start
-              </span>
+              </button>
             ),
             key: "0",
           },
           {
             label: (
-              <span
+              <button
+                className="w-full p-1"
                 onClick={() => {
                   setIsReschedule(true);
                   setShowAppModal(true);
                 }}
               >
                 Reschedule
-              </span>
+              </button>
             ),
             key: "1",
           },
@@ -195,7 +199,10 @@ const Appointments = () => {
           },
           {
             label: (
-              <span onClick={() => setSelectedAppointment(value)}>
+              <button
+                className="w-full p-1"
+                onClick={() => setSelectedAppointment(value)}
+              >
                 <Popconfirm
                   title="Title"
                   description="Are you sure you want to cancel appointment?. This action cannot be undone."
@@ -206,7 +213,7 @@ const Appointments = () => {
                 >
                   <span>Cancel</span>
                 </Popconfirm>
-              </span>
+              </button>
             ),
             key: "3",
           },
@@ -217,11 +224,11 @@ const Appointments = () => {
             {record.status === "PENDING" && (
               <div>
                 <Dropdown menu={{ items }} trigger={["click"]}>
-                  <a onClick={(e) => e.preventDefault()}>
+                  <span className="w-full" onClick={(e) => e.preventDefault()}>
                     <Space>
                       <HiOutlineDotsVertical />
                     </Space>
-                  </a>
+                  </span>
                 </Dropdown>
               </div>
             )}
@@ -400,6 +407,7 @@ const Appointments = () => {
           >
             <Form.Item name="staff_name" label="Staff" required>
               <Select
+                disabled={isReschedule}
                 optionFilterProp="label"
                 onChange={(e) => setSelectedUser(e)}
                 showSearch
@@ -427,13 +435,20 @@ const Appointments = () => {
               <Input disabled />
             </Form.Item>
             <Form.Item name="guest_name" label="Visitors Name" required>
-              <Input placeholder="Enter Visitors Name...." />
+              <Input
+                disabled={isReschedule}
+                placeholder="Enter Visitors Name...."
+              />
             </Form.Item>
             <Form.Item name="guest_contact" label="Visitors Contact" required>
-              <Input placeholder="Enter Guest Contact...." />
+              <Input
+                disabled={isReschedule}
+                placeholder="Enter Guest Contact...."
+              />
             </Form.Item>
             <Form.Item name="gender" label="Gender" required>
               <Select
+                disabled={isReschedule}
                 placeholder="Select Gender"
                 options={[
                   { label: "Male", value: "MALE" },
@@ -450,6 +465,7 @@ const Appointments = () => {
             </Form.Item>
             <Form.Item name="purpose" label="Purpose">
               <TextArea
+                disabled={isReschedule}
                 autoSize={{ minRows: 2, maxRows: 6 }}
                 placeholder="Enter purpose"
               />
