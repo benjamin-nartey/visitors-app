@@ -111,12 +111,15 @@ function Dashboard() {
           </div>
         </button>
       </div>
-      <div className="checks-container h-[15rem] w-full grid grid-cols-2 gap-4 mt-1 overflow-y-scroll">
-        <div className="h-full">
+      <div className="checks-container w-full grid grid-cols-2 gap-4 mt-1">
+        <div className="h-full overflow-y-scroll">
           <h2 className="text-base font-semibold mb-1 flex justify-start ">
             {`Checked In's (${checkedInToday?.data?.checkIns.length})`}
           </h2>
           <Table
+            scroll={{
+              y: 150,
+            }}
             className="h-full"
             dataSource={
               checkedInToday &&
@@ -130,12 +133,15 @@ function Dashboard() {
           />
         </div>
 
-        <div className="h-full">
+        <div className="h-full overflow-y-scroll">
           <h2 className="text-base font-semibold mb-1 flex justify-end ">
             {`Checked Outs (${checkedOutToday?.data?.checkOuts.length})`}
           </h2>
 
           <Table
+            scroll={{
+              y: 150,
+            }}
             dataSource={
               checkedOutToday &&
               checkedOutToday?.data?.checkOuts.map((item) => ({

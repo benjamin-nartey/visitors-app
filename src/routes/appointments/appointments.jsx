@@ -1,40 +1,71 @@
 import {
   Button,
   DatePicker,
+  Dropdown,
   Form,
   Input,
   message,
   Modal,
+  Popconfirm,
   Select,
+  Space,
   Table,
   Tag,
   Tooltip,
-} from 'antd';
-import TextArea from 'antd/es/input/TextArea';
-import { data } from 'autoprefixer';
-import React, { useContext, useEffect, useState } from 'react';
-import { AiOutlineFullscreenExit } from 'react-icons/ai';
-import { BsClock } from 'react-icons/bs';
-import { HiLogout } from 'react-icons/hi';
-import { HiMiniClock } from 'react-icons/hi2';
-import { useGetAllUsers } from '../../query-hooks/user';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { makeAppointment, updateAppointment } from '../../http/apointment';
-import dayjs from 'dayjs';
-import { useGetAllAppointments } from '../../query-hooks/appointment';
-import { useGetUnIssuedTags } from '../../query-hooks/tags';
-import { render } from 'react-dom';
-import { APPOINTMENT_STATUS } from '../../constants/divisions';
-import { CheckOutToggleContext } from '../../components/context/checkoutToggle.context';
+} from "antd";
+import TextArea from "antd/es/input/TextArea";
+import { data } from "autoprefixer";
+import React, { useContext, useEffect, useState } from "react";
+import { AiOutlineFullscreenExit } from "react-icons/ai";
+import { BsClock } from "react-icons/bs";
+import { HiLogout, HiOutlineDotsVertical } from "react-icons/hi";
+import { HiMiniClock } from "react-icons/hi2";
+import { useGetAllUsers } from "../../query-hooks/user";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  makeAppointment,
+  updateAppointment,
+  cancelAppointMent,
+} from "../../http/apointment";
+import dayjs from "dayjs";
+import { useGetAllAppointments } from "../../query-hooks/appointment";
+import { useGetUnIssuedTags } from "../../query-hooks/tags";
+import { render } from "react-dom";
+import { APPOINTMENT_STATUS } from "../../constants/divisions";
+import { CheckOutToggleContext } from "../../components/context/checkoutToggle.context";
+import { ArrowDownIcon } from "@heroicons/react/20/solid";
 
 const Appointments = () => {
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [showAppModal, setShowAppModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [form] = Form.useForm();
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const { open, setOpen } = useContext(CheckOutToggleContext);
+
+  const [openPopConfirm, setOpenPopConfirm] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+
+  // const showPopconfirm = () => {
+  //   setOpenPopConfirm(true);
+  // };
+  // const handleOk = () => {
+  //   setConfirmLoading(true);
+  //   setTimeout(() => {
+  //     setOpenPopConfirm(false);
+  //     setConfirmLoading(false);
+  //   }, 2000);
+  // };
+  // const handleCancel = () => {
+  //   console.log("Clicked cancel button");
+  //   setOpenPopConfirm(false);
+  // };
+  const confirm = () => {
+    setOpenPopConfirm(true);
+    console.log(selectedAppointment);
+    handleCancelAppointment({ status: "CANCELLED" });
+  };
 
   const { data: users, isLoading } = useGetAllUsers();
 
@@ -43,18 +74,18 @@ const Appointments = () => {
       const user =
         users && users.data.find((user) => user.employee === selectedUser);
 
-      form.setFieldValue('division', user?.DDivisions);
-      form.setFieldValue('department', user?.Department);
-      form.setFieldValue('room_no', user?.roomno);
-      form.setFieldValue('extension', user?.extensionno);
+      form.setFieldValue("division", user?.DDivisions);
+      form.setFieldValue("department", user?.Department);
+      form.setFieldValue("room_no", user?.roomno);
+      form.setFieldValue("extension", user?.extensionno);
     }
   }, [selectedUser]);
 
   const columns = [
     {
       title: "Visitor's Name",
-      dataIndex: 'guest_name',
-      key: 'guest_name',
+      dataIndex: "guest_name",
+      key: "guest_name",
       filteredValue: [searchText],
       onFilter: (value, record) => {
         return (
@@ -65,59 +96,59 @@ const Appointments = () => {
     },
     {
       title: "Visitor's Contact",
-      dataIndex: 'guest_contact',
-      key: 'guest_contact',
+      dataIndex: "guest_contact",
+      key: "guest_contact",
     },
     {
-      title: 'Staff',
-      dataIndex: 'staff_name',
-      key: 'staff_name',
+      title: "Staff",
+      dataIndex: "staff_name",
+      key: "staff_name",
     },
     {
-      title: 'Staff Room No.',
-      dataIndex: 'room_no',
-      key: 'room_no',
+      title: "Staff Room No.",
+      dataIndex: "room_no",
+      key: "room_no",
     },
     {
-      title: 'Staff Extension',
-      dataIndex: 'extension',
-      key: 'extension',
+      title: "Staff Extension",
+      dataIndex: "extension",
+      key: "extension",
     },
     {
-      title: 'Scheduled Time',
-      dataIndex: 'appointmentDate',
-      key: 'appointmentDate',
+      title: "Scheduled Time",
+      dataIndex: "appointmentDate",
+      key: "appointmentDate",
       render: (value) => (
-        <span>{dayjs(value).format('YYYY-MM-DD HH:mm A')}</span>
+        <span>{dayjs(value).format("YYYY-MM-DD HH:mm A")}</span>
       ),
     },
     {
-      title: 'Purpose',
-      dataIndex: 'purpose',
-      key: 'purpose',
+      title: "Purpose",
+      dataIndex: "purpose",
+      key: "purpose",
     },
     {
-      title: 'Status',
-      dataIndex: 'status',
-      key: 'status',
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
       render: (status) => {
         let color;
 
         switch (status) {
-          case 'PENDING':
-            color = 'gold';
+          case "PENDING":
+            color = "gold";
             break;
-          case 'IN_PROGRESS':
-            color = 'blue';
+          case "IN_PROGRESS":
+            color = "blue";
             break;
-          case 'COMPLETED':
-            color = 'green';
+          case "COMPLETED":
+            color = "green";
             break;
-          case 'CANCELLED':
-            color = 'red';
+          case "CANCELLED":
+            color = "red";
             break;
           default:
-            color = 'default';
+            color = "default";
         }
 
         return <Tag color={color}>{APPOINTMENT_STATUS[status]}</Tag>;
@@ -125,172 +156,75 @@ const Appointments = () => {
     },
 
     {
-      title: 'Action',
-      dataIndex: 'id',
+      title: "Action",
+      dataIndex: "id",
 
-      render: (value, record) => (
-        <div className="flex gap-2">
-          {record.status === 'PENDING' && (
-            <div>
-              <Tooltip title="CheckIn">
-                <BsClock
-                  className="text-green-500"
+      render: (value, record) => {
+        // Define items inside render so it has access to the value parameter
+        const items = [
+          {
+            label: (
+              <span
+                onClick={() => {
+                  setSelectedAppointment(value);
+                  setShowModal(true);
+                }}
+              >
+                Start
+              </span>
+            ),
+            key: "0",
+          },
+          {
+            label: <span>Reschedule</span>,
+            key: "1",
+          },
+          {
+            type: "divider",
+          },
+          {
+            label: (
+              <span onClick={() => setSelectedAppointment(value)}>
+                <Popconfirm
+                  title="Title"
+                  description="Are you sure you want to cancel appointment?. This action cannot be undone."
+                  onConfirm={confirm}
+                  onOpenChange={setOpenPopConfirm}
+                >
+                  <span>Cancel</span>
+                </Popconfirm>
+              </span>
+            ),
+            key: "3",
+          },
+        ];
+
+        return (
+          <div className="flex gap-2">
+            {record.status === "PENDING" && (
+              <div>
+                <Dropdown menu={{ items }} trigger={["click"]}>
+                  <a onClick={(e) => e.preventDefault()}>
+                    <Space>
+                      <HiOutlineDotsVertical />
+                    </Space>
+                  </a>
+                </Dropdown>
+              </div>
+            )}
+
+            {record.status === "IN_PROGRESS" && (
+              <Tooltip title="CheckOut">
+                <HiLogout
+                  className="text-red-500"
                   size={17}
-                  onClick={() => {
-                    setSelectedAppointment(value);
-                    setShowModal(true);
-                  }}
+                  onClick={() => setOpen(true)}
                 />
               </Tooltip>
-            </div>
-          )}
-
-          {record.status === 'IN_PROGRESS' && (
-            <Tooltip title="CheckOut">
-              <HiLogout
-                className="text-red-500"
-                size={17}
-                onClick={() => setOpen(true)}
-              />
-            </Tooltip>
-          )}
-        </div>
-      ),
-    },
-  ];
-
-  const data = [
-    {
-      key: '1',
-      visitorsName: 'John Doe',
-      visitorsContact: '0244123456',
-      staff: 'Mr. Kwame Mensah',
-      staffRoomNo: 'B102',
-      staffExtension: '234',
-      scheduledTime: '2025-04-16 10:00 AM',
-      status: 'Pending',
-      id: 1,
-    },
-    {
-      key: '2',
-      visitorsName: 'Ama Serwaa',
-      visitorsContact: '0209876543',
-      staff: 'Ms. Akua Boateng',
-      staffRoomNo: 'C203',
-      staffExtension: '321',
-      scheduledTime: '2025-04-16 11:30 AM',
-      status: 'Approved',
-      id: 2,
-    },
-    {
-      key: '3',
-      visitorsName: 'Kofi Asare',
-      visitorsContact: '0267894321',
-      staff: 'Dr. Yaw Ofori',
-      staffRoomNo: 'D401',
-      staffExtension: '456',
-      scheduledTime: '2025-04-17 09:00 AM',
-      status: 'Completed',
-      id: 3,
-    },
-    {
-      key: '4',
-      visitorsName: 'Martha Adjei',
-      visitorsContact: '0501234567',
-      staff: 'Mrs. Akosua Ntim',
-      staffRoomNo: 'E302',
-      staffExtension: '567',
-      scheduledTime: '2025-04-17 02:00 PM',
-      status: 'Pending',
-      id: 4,
-    },
-    {
-      key: '5',
-      visitorsName: 'Daniel Owusu',
-      visitorsContact: '0558765432',
-      staff: 'Mr. Kojo Antwi',
-      staffRoomNo: 'F105',
-      staffExtension: '789',
-      scheduledTime: '2025-04-18 03:45 PM',
-      status: 'Cancelled',
-      id: 5,
-    },
-    {
-      key: '6',
-      visitorsName: 'Linda Darko',
-      visitorsContact: '0245567890',
-      staff: 'Ms. Cecilia Boadu',
-      staffRoomNo: 'G201',
-      staffExtension: '890',
-      scheduledTime: '2025-04-19 12:00 PM',
-      status: 'Approved',
-      id: 6,
-    },
-    {
-      key: '7',
-      visitorsName: 'Peter Mensah',
-      visitorsContact: '0274432111',
-      staff: 'Dr. Henry Kyei',
-      staffRoomNo: 'H305',
-      staffExtension: '654',
-      scheduledTime: '2025-04-20 04:00 PM',
-      status: 'Pending',
-      id: 7,
-    },
-    {
-      key: '8',
-      visitorsName: 'Nana Ama Asiedu',
-      visitorsContact: '0509988776',
-      staff: 'Mr. Kwesi Agyeman',
-      staffRoomNo: 'I407',
-      staffExtension: '321',
-      scheduledTime: '2025-04-20 10:15 AM',
-      status: 'Completed',
-      id: 8,
-    },
-    {
-      key: '9',
-      visitorsName: 'Yaw Dapaah',
-      visitorsContact: '0234455667',
-      staff: 'Ms. Efua Owusu',
-      staffRoomNo: 'J509',
-      staffExtension: '432',
-      scheduledTime: '2025-04-21 01:00 PM',
-      status: 'Approved',
-      id: 9,
-    },
-    {
-      key: '10',
-      visitorsName: 'Akua Mensima',
-      visitorsContact: '0543322110',
-      staff: 'Dr. Nana Kumi',
-      staffRoomNo: 'K601',
-      staffExtension: '213',
-      scheduledTime: '2025-04-22 11:00 AM',
-      status: 'Cancelled',
-      id: 10,
-    },
-    {
-      key: '11',
-      visitorsName: 'Isaac Addo',
-      visitorsContact: '0201122334',
-      staff: 'Mrs. Adjoa Sarfo',
-      staffRoomNo: 'L302',
-      staffExtension: '876',
-      scheduledTime: '2025-04-22 03:00 PM',
-      status: 'Pending',
-      id: 11,
-    },
-    {
-      key: '12',
-      visitorsName: 'Abena Boateng',
-      visitorsContact: '0265544332',
-      staff: 'Mr. Kwaku Acheampong',
-      staffRoomNo: 'M405',
-      staffExtension: '109',
-      scheduledTime: '2025-04-23 09:30 AM',
-      status: 'Completed',
-      id: 12,
+            )}
+          </div>
+        );
+      },
     },
   ];
 
@@ -302,40 +236,60 @@ const Appointments = () => {
     useGetUnIssuedTags();
 
   const { mutate: createAppointment, isPending } = useMutation({
-    mutationKey: 'createAppointment',
+    mutationKey: "createAppointment",
     mutationFn: (data) => {
       return makeAppointment(data);
     },
     onSuccess: () => {
       setShowAppModal(false);
-      message.success('Appointment Booked Successfully');
-      queryClient.invalidateQueries({ queryKey: ['appointments'] });
+      message.success("Appointment Booked Successfully");
+      queryClient.invalidateQueries({ queryKey: ["appointments"] });
     },
     onError: (err) =>
       message.error(
-        err?.response?.data?.message || err.message || 'An error occurred'
+        err?.response?.data?.message || err.message || "An error occurred"
       ),
   });
+
   const { mutate: startAppointment, isPending: startPending } = useMutation({
-    mutationKey: 'updateAppointment',
+    mutationKey: "updateAppointment",
     mutationFn: (data) => updateAppointment(selectedAppointment, data),
     onSuccess: () => {
       setShowModal(false);
-      message.success('Appointment Started Successfully');
-      queryClient.invalidateQueries({ queryKey: ['appointments'] });
+      message.success("Appointment Started Successfully");
+      queryClient.invalidateQueries({ queryKey: ["appointments"] });
     },
     onError: (err) =>
       message.error(
-        err?.response?.data?.message || err.message || 'An error occurred'
+        err?.response?.data?.message || err.message || "An error occurred"
       ),
   });
+
+  const { mutate: cancelAppointmentStart, isPending: cancelPending } =
+    useMutation({
+      mutationKey: "cancelAppointment",
+      mutationFn: (data) => cancelAppointMent(selectedAppointment, data),
+      onSuccess: () => {
+        setOpenPopConfirm(false);
+        message.success("Appointment Cancelled Successfully");
+        queryClient.invalidateQueries({ queryKey: ["appointments"] });
+      },
+      onError: (err) =>
+        message.error(
+          err?.response?.data?.message || err.message || "An error occurred"
+        ),
+    });
+
+  const handleCancelAppointment = (values) => {
+    cancelAppointmentStart(values);
+  };
 
   const handleMakeAppointment = (values) => {
     const _values = {
       ...values,
-      appointmentDate: dayjs(values['appointmentDate']).toISOString(),
-      extension: `${values['extension']}`,
-      guest_type: 'Company',
+      appointmentDate: dayjs(values["appointmentDate"]).toISOString(),
+      extension: `${values["extension"]}`,
+      guest_type: "Company",
     };
     createAppointment(_values);
   };
@@ -366,7 +320,7 @@ const Appointments = () => {
             onFinish={handleStartAppointment}
             requiredMark
           >
-            <Form.Item name={'tagId'} required label="Tag">
+            <Form.Item name={"tagId"} required label="Tag">
               <Select
                 showSearch
                 optionFilterProp="label"
@@ -441,17 +395,17 @@ const Appointments = () => {
               <Select
                 placeholder="Select Gender"
                 options={[
-                  { label: 'Male', value: 'MALE' },
-                  { label: 'Female', value: 'FEMALE' },
+                  { label: "Male", value: "MALE" },
+                  { label: "Female", value: "FEMALE" },
                 ]}
               />
             </Form.Item>
             <Form.Item
-              name={'appointmentDate'}
+              name={"appointmentDate"}
               label="Appointment Date"
               required
             >
-              <DatePicker className="w-full" />
+              <DatePicker showTime className="w-full" />
             </Form.Item>
             <Form.Item name="purpose" label="Purpose">
               <TextArea

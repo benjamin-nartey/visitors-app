@@ -1,11 +1,15 @@
-import axiosInstance from '../interceptors/axios';
+import axiosInstance from "../interceptors/axios";
 
 export const makeAppointment = (data) => {
-  return axiosInstance.post('/appointment', data);
+  return axiosInstance.post("/appointment", data);
+};
+
+export const cancelAppointMent = (id, data) => {
+  return axiosInstance.patch(`/appointment/${id}`, data);
 };
 
 export const getAppointments = () => {
-  return axiosInstance.get('/appointment');
+  return axiosInstance.get("/appointment");
 };
 
 export const updateAppointment = (id, data) => {
