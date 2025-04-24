@@ -20,12 +20,12 @@ import { AiOutlineFullscreenExit } from "react-icons/ai";
 import { BsClock } from "react-icons/bs";
 import { HiLogout, HiOutlineDotsVertical } from "react-icons/hi";
 import { HiMiniClock } from "react-icons/hi2";
-import { useGetAllUsers } from "../../query-hooks/user";
+import { useGetAllEmployees } from "../../query-hooks/user";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   makeAppointment,
   updateAppointment,
-  cancelAppointMent,
+  update,
 } from "../../http/apointment";
 import dayjs from "dayjs";
 import { useGetAllAppointments } from "../../query-hooks/appointment";
@@ -45,7 +45,10 @@ const Appointments = () => {
   const { open, setOpen } = useContext(CheckOutToggleContext);
 
   const [openPopConfirm, setOpenPopConfirm] = useState(false);
-  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [isReschedule, setIsReschedule] = useState(false);
+
+  console.log("showAppModal:", showAppModal);
+  console.log("isReschedule:", isReschedule);
 
   // const showPopconfirm = () => {
   //   setOpenPopConfirm(true);
@@ -63,11 +66,10 @@ const Appointments = () => {
   // };
   const confirm = () => {
     setOpenPopConfirm(true);
-    console.log(selectedAppointment);
     handleCancelAppointment({ status: "CANCELLED" });
   };
 
-  const { data: users, isLoading } = useGetAllUsers();
+  const { data: users, isLoading } = useGetAllEmployees();
 
   useEffect(() => {
     if (selectedUser) {
@@ -176,7 +178,16 @@ const Appointments = () => {
             key: "0",
           },
           {
-            label: <span>Reschedule</span>,
+            label: (
+              <span
+                onClick={() => {
+                  setIsReschedule(true);
+                  setShowAppModal(true);
+                }}
+              >
+                Reschedule
+              </span>
+            ),
             key: "1",
           },
           {
@@ -190,6 +201,8 @@ const Appointments = () => {
                   description="Are you sure you want to cancel appointment?. This action cannot be undone."
                   onConfirm={confirm}
                   onOpenChange={setOpenPopConfirm}
+                  okText="Continue"
+                  cancelText="No"
                 >
                   <span>Cancel</span>
                 </Popconfirm>
@@ -268,10 +281,25 @@ const Appointments = () => {
   const { mutate: cancelAppointmentStart, isPending: cancelPending } =
     useMutation({
       mutationKey: "cancelAppointment",
-      mutationFn: (data) => cancelAppointMent(selectedAppointment, data),
+      mutationFn: (data) => update(selectedAppointment, data),
       onSuccess: () => {
         setOpenPopConfirm(false);
         message.success("Appointment Cancelled Successfully");
+        queryClient.invalidateQueries({ queryKey: ["appointments"] });
+      },
+      onError: (err) =>
+        message.error(
+          err?.response?.data?.message || err.message || "An error occurred"
+        ),
+    });
+
+  const { mutate: rescheduleAppointment, isPending: reschedulePending } =
+    useMutation({
+      mutationKey: "rescheduleAppointment",
+      mutationFn: (data) => update(selectedAppointment, data),
+      onSuccess: () => {
+        setOpenPopConfirm(false);
+        message.success("Appointment Rescheduled Successfully");
         queryClient.invalidateQueries({ queryKey: ["appointments"] });
       },
       onError: (err) =>
@@ -292,6 +320,14 @@ const Appointments = () => {
       guest_type: "Company",
     };
     createAppointment(_values);
+  };
+
+  const handleMakeReschedule = (values) => {
+    const _values = {
+      ...values,
+      appointmentDate: dayjs(values["appointmentDate"]).toISOString(),
+    };
+    rescheduleAppointment(_values);
   };
 
   const handleStartAppointment = (values) => {
@@ -345,7 +381,10 @@ const Appointments = () => {
 
       <Modal
         open={showAppModal}
-        onCancel={() => setShowAppModal(false)}
+        onCancel={() => {
+          setIsReschedule(false);
+          setShowAppModal(false);
+        }}
         title="Book Appointmnet"
         footer={null}
       >
@@ -355,7 +394,9 @@ const Appointments = () => {
             layout="vertical"
             requiredMark
             form={form}
-            onFinish={handleMakeAppointment}
+            onFinish={
+              isReschedule ? handleMakeReschedule : handleMakeAppointment
+            }
           >
             <Form.Item name="staff_name" label="Staff" required>
               <Select

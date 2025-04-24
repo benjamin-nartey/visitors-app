@@ -4,7 +4,7 @@ export const makeAppointment = (data) => {
   return axiosInstance.post("/appointment", data);
 };
 
-export const cancelAppointMent = (id, data) => {
+export const update = (id, data) => {
   return axiosInstance.patch(`/appointment/${id}`, data);
 };
 
