@@ -47,10 +47,6 @@ const Appointments = () => {
   const [openPopConfirm, setOpenPopConfirm] = useState(false);
   const [isReschedule, setIsReschedule] = useState(false);
 
-  console.log("showAppModal:", showAppModal);
-  console.log("isReschedule:", isReschedule);
-  console.log("showModal:", showModal);
-
   // const showPopconfirm = () => {
   //   setOpenPopConfirm(true);
   // };
@@ -170,7 +166,6 @@ const Appointments = () => {
               <button
                 className="w-full p-1"
                 onClick={() => {
-                  console.log("cliked");
                   setShowModal(true);
                   setSelectedAppointment(value);
                 }}
