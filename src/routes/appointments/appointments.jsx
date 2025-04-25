@@ -12,31 +12,31 @@ import {
   Table,
   Tag,
   Tooltip,
-} from "antd";
-import TextArea from "antd/es/input/TextArea";
-import { data } from "autoprefixer";
-import React, { useContext, useEffect, useState } from "react";
-import { AiOutlineFullscreenExit } from "react-icons/ai";
-import { BsClock } from "react-icons/bs";
-import { HiLogout, HiOutlineDotsVertical } from "react-icons/hi";
-import { HiMiniClock } from "react-icons/hi2";
-import { useGetAllEmployees } from "../../query-hooks/user";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+} from 'antd';
+import TextArea from 'antd/es/input/TextArea';
+import { data } from 'autoprefixer';
+import React, { useContext, useEffect, useState } from 'react';
+import { AiOutlineFullscreenExit } from 'react-icons/ai';
+import { BsClock } from 'react-icons/bs';
+import { HiLogout, HiOutlineDotsVertical } from 'react-icons/hi';
+import { HiMiniClock } from 'react-icons/hi2';
+import { useGetAllEmployees } from '../../query-hooks/user';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   makeAppointment,
   updateAppointment,
   update,
-} from "../../http/apointment";
-import dayjs from "dayjs";
-import { useGetAllAppointments } from "../../query-hooks/appointment";
-import { useGetUnIssuedTags } from "../../query-hooks/tags";
-import { render } from "react-dom";
-import { APPOINTMENT_STATUS } from "../../constants/divisions";
-import { CheckOutToggleContext } from "../../components/context/checkoutToggle.context";
-import { ArrowDownIcon } from "@heroicons/react/20/solid";
+} from '../../http/apointment';
+import dayjs from 'dayjs';
+import { useGetAllAppointments } from '../../query-hooks/appointment';
+import { useGetUnIssuedTags } from '../../query-hooks/tags';
+import { render } from 'react-dom';
+import { APPOINTMENT_STATUS } from '../../constants/divisions';
+import { CheckOutToggleContext } from '../../components/context/checkoutToggle.context';
+import { ArrowDownIcon } from '@heroicons/react/20/solid';
 
 const Appointments = () => {
-  const [searchText, setSearchText] = useState("");
+  const [searchText, setSearchText] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [showAppModal, setShowAppModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -63,7 +63,7 @@ const Appointments = () => {
   // };
   const confirm = () => {
     setOpenPopConfirm(true);
-    handleCancelAppointment({ status: "CANCELLED" });
+    handleCancelAppointment({ status: 'CANCELLED' });
   };
 
   const { data: users, isLoading } = useGetAllEmployees();
@@ -73,18 +73,18 @@ const Appointments = () => {
       const user =
         users && users.data.find((user) => user.employee === selectedUser);
 
-      form.setFieldValue("division", user?.DDivisions);
-      form.setFieldValue("department", user?.Department);
-      form.setFieldValue("room_no", user?.roomno);
-      form.setFieldValue("extension", user?.extensionno);
+      form.setFieldValue('division', user?.DDivisions);
+      form.setFieldValue('department', user?.Department);
+      form.setFieldValue('room_no', user?.roomno);
+      form.setFieldValue('extension', user?.extensionno);
     }
   }, [selectedUser]);
 
   const columns = [
     {
       title: "Visitor's Name",
-      dataIndex: "guest_name",
-      key: "guest_name",
+      dataIndex: 'guest_name',
+      key: 'guest_name',
       filteredValue: [searchText],
       onFilter: (value, record) => {
         return (
@@ -95,59 +95,63 @@ const Appointments = () => {
     },
     {
       title: "Visitor's Contact",
-      dataIndex: "guest_contact",
-      key: "guest_contact",
+      dataIndex: 'guest_contact',
+      key: 'guest_contact',
     },
     {
-      title: "Staff",
-      dataIndex: "staff_name",
-      key: "staff_name",
+      title: 'Staff',
+      dataIndex: 'staff_name',
+      key: 'staff_name',
     },
     {
-      title: "Staff Room No.",
-      dataIndex: "room_no",
-      key: "room_no",
+      title: 'Staff Room No.',
+      dataIndex: 'room_no',
+      key: 'room_no',
     },
     {
-      title: "Staff Extension",
-      dataIndex: "extension",
-      key: "extension",
+      title: 'Staff Extension',
+      dataIndex: 'extension',
+      key: 'extension',
     },
     {
-      title: "Scheduled Time",
-      dataIndex: "appointmentDate",
-      key: "appointmentDate",
-      render: (value) => (
-        <span>{dayjs(value).format("YYYY-MM-DD HH:mm A")}</span>
-      ),
+      title: 'Date',
+      dataIndex: 'appointmentDate',
+      key: 'appointmentDate',
+      render: (value) => <span>{dayjs(value).format('YYYY-MM-DD')}</span>,
     },
     {
-      title: "Purpose",
-      dataIndex: "purpose",
-      key: "purpose",
+      title: 'Time',
+      dataIndex: 'appointmentDate',
+      key: 'appointmentDate',
+      render: (value) => <span>{dayjs(value).format('HH:mm A')}</span>,
     },
     {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
+      title: 'Purpose',
+      dataIndex: 'purpose',
+      key: 'purpose',
+    },
+    {
+      title: 'Status',
+      dataIndex: 'status',
+      key: 'status',
       render: (status) => {
         let color;
 
         switch (status) {
-          case "PENDING":
-            color = "gold";
+          case 'PENDING':
+            color = 'gold';
             break;
-          case "IN_PROGRESS":
-            color = "blue";
+          case 'IN_PROGRESS':
+            color = 'blue';
             break;
-          case "COMPLETED":
-            color = "green";
+          case 'COMPLETED':
+            color = 'green';
             break;
-          case "CANCELLED":
-            color = "red";
+          case 'CANCELLED':
+            color = 'red';
             break;
           default:
-            color = "default";
+            color = 'default';
         }
 
         return <Tag color={color}>{APPOINTMENT_STATUS[status]}</Tag>;
@@ -155,8 +159,8 @@ const Appointments = () => {
     },
 
     {
-      title: "Action",
-      dataIndex: "id",
+      title: 'Action',
+      dataIndex: 'id',
 
       render: (value, record) => {
         // Define items inside render so it has access to the value parameter
@@ -173,7 +177,7 @@ const Appointments = () => {
                 Start
               </button>
             ),
-            key: "0",
+            key: '0',
           },
           {
             label: (
@@ -187,10 +191,10 @@ const Appointments = () => {
                 Reschedule
               </button>
             ),
-            key: "1",
+            key: '1',
           },
           {
-            type: "divider",
+            type: 'divider',
           },
           {
             label: (
@@ -210,15 +214,15 @@ const Appointments = () => {
                 </Popconfirm>
               </button>
             ),
-            key: "3",
+            key: '3',
           },
         ];
 
         return (
           <div className="flex gap-2">
-            {record.status === "PENDING" && (
+            {record.status === 'PENDING' && (
               <div>
-                <Dropdown menu={{ items }} trigger={["click"]}>
+                <Dropdown menu={{ items }} trigger={['click']}>
                   <span className="w-full" onClick={(e) => e.preventDefault()}>
                     <Space>
                       <HiOutlineDotsVertical />
@@ -228,7 +232,7 @@ const Appointments = () => {
               </div>
             )}
 
-            {record.status === "IN_PROGRESS" && (
+            {record.status === 'IN_PROGRESS' && (
               <Tooltip title="CheckOut">
                 <HiLogout
                   className="text-red-500"
@@ -251,62 +255,62 @@ const Appointments = () => {
     useGetUnIssuedTags();
 
   const { mutate: createAppointment, isPending } = useMutation({
-    mutationKey: "createAppointment",
+    mutationKey: 'createAppointment',
     mutationFn: (data) => {
       return makeAppointment(data);
     },
     onSuccess: () => {
       setShowAppModal(false);
-      message.success("Appointment Booked Successfully");
-      queryClient.invalidateQueries({ queryKey: ["appointments"] });
+      message.success('Appointment Booked Successfully');
+      queryClient.invalidateQueries({ queryKey: ['appointments'] });
     },
     onError: (err) =>
       message.error(
-        err?.response?.data?.message || err.message || "An error occurred"
+        err?.response?.data?.message || err.message || 'An error occurred'
       ),
   });
 
   const { mutate: startAppointment, isPending: startPending } = useMutation({
-    mutationKey: "updateAppointment",
+    mutationKey: 'updateAppointment',
     mutationFn: (data) => updateAppointment(selectedAppointment, data),
     onSuccess: () => {
       setShowModal(false);
-      message.success("Appointment Started Successfully");
-      queryClient.invalidateQueries({ queryKey: ["appointments"] });
+      message.success('Appointment Started Successfully');
+      queryClient.invalidateQueries({ queryKey: ['appointments'] });
     },
     onError: (err) =>
       message.error(
-        err?.response?.data?.message || err.message || "An error occurred"
+        err?.response?.data?.message || err.message || 'An error occurred'
       ),
   });
 
   const { mutate: cancelAppointmentStart, isPending: cancelPending } =
     useMutation({
-      mutationKey: "cancelAppointment",
+      mutationKey: 'cancelAppointment',
       mutationFn: (data) => update(selectedAppointment, data),
       onSuccess: () => {
         setOpenPopConfirm(false);
-        message.success("Appointment Cancelled Successfully");
-        queryClient.invalidateQueries({ queryKey: ["appointments"] });
+        message.success('Appointment Cancelled Successfully');
+        queryClient.invalidateQueries({ queryKey: ['appointments'] });
       },
       onError: (err) =>
         message.error(
-          err?.response?.data?.message || err.message || "An error occurred"
+          err?.response?.data?.message || err.message || 'An error occurred'
         ),
     });
 
   const { mutate: rescheduleAppointment, isPending: reschedulePending } =
     useMutation({
-      mutationKey: "rescheduleAppointment",
+      mutationKey: 'rescheduleAppointment',
       mutationFn: (data) => update(selectedAppointment, data),
       onSuccess: () => {
         setShowAppModal(false);
-        message.success("Appointment Rescheduled Successfully");
-        queryClient.invalidateQueries({ queryKey: ["appointments"] });
+        message.success('Appointment Rescheduled Successfully');
+        queryClient.invalidateQueries({ queryKey: ['appointments'] });
       },
       onError: (err) =>
         message.error(
-          err?.response?.data?.message || err.message || "An error occurred"
+          err?.response?.data?.message || err.message || 'An error occurred'
         ),
     });
 
@@ -317,9 +321,9 @@ const Appointments = () => {
   const handleMakeAppointment = (values) => {
     const _values = {
       ...values,
-      appointmentDate: dayjs(values["appointmentDate"]).toISOString(),
-      extension: `${values["extension"]}`,
-      guest_type: "Company",
+      appointmentDate: dayjs(values['appointmentDate']).toISOString(),
+      extension: `${values['extension']}`,
+      guest_type: 'Company',
     };
     createAppointment(_values);
   };
@@ -327,7 +331,7 @@ const Appointments = () => {
   const handleMakeReschedule = (values) => {
     const _values = {
       ...values,
-      appointmentDate: dayjs(values["appointmentDate"]).toISOString(),
+      appointmentDate: dayjs(values['appointmentDate']).toISOString(),
     };
     rescheduleAppointment(_values);
   };
@@ -358,7 +362,7 @@ const Appointments = () => {
             onFinish={handleStartAppointment}
             requiredMark
           >
-            <Form.Item name={"tagId"} required label="Tag">
+            <Form.Item name={'tagId'} required label="Tag">
               <Select
                 showSearch
                 optionFilterProp="label"
@@ -446,13 +450,13 @@ const Appointments = () => {
                 disabled={isReschedule}
                 placeholder="Select Gender"
                 options={[
-                  { label: "Male", value: "MALE" },
-                  { label: "Female", value: "FEMALE" },
+                  { label: 'Male', value: 'MALE' },
+                  { label: 'Female', value: 'FEMALE' },
                 ]}
               />
             </Form.Item>
             <Form.Item
-              name={"appointmentDate"}
+              name={'appointmentDate'}
               label="Appointment Date"
               required
             >

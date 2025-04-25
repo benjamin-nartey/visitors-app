@@ -35,9 +35,10 @@ export const useUnCheckedOut = () => {
   });
 };
 
-export const useGetReport = () => {
+export const useGetReport = (options) => {
   return useQuery({
     queryKey: ['report'],
     queryFn: getReport,
+    ...options,
   });
 };

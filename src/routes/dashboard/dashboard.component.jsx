@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from "react";
-import DashboardImage from "../../assets/receptionist-02@2x.png";
-import { BsPeople } from "react-icons/bs";
-import { AuthContext } from "../../components/context/useAuth.context";
-import { useContext } from "react";
-import axiosInstance from "../../interceptors/axios";
-import OnPremise from "../../components/on-premise/on-premise";
+import React, { useEffect, useState } from 'react';
+import DashboardImage from '../../assets/receptionist-02@2x.png';
+import { BsPeople } from 'react-icons/bs';
+import { AuthContext } from '../../components/context/useAuth.context';
+import { useContext } from 'react';
+import axiosInstance from '../../interceptors/axios';
+import OnPremise from '../../components/on-premise/on-premise';
 
-import { CHECKINS_COLUMN } from "../../utils/checkins-column/checkins-column";
-import { CHECKOUTS_COLUMN } from "../../utils/checkouts-column/checkouts-column";
+import { CHECKINS_COLUMN } from '../../utils/checkins-column/checkins-column';
+import { CHECKOUTS_COLUMN } from '../../utils/checkouts-column/checkouts-column';
 import {
   useFetchCheckedInToday,
   useFetchCheckedOutToday,
   useFetchOnPremises,
-} from "../../query-hooks/visit";
-import { Table } from "antd";
+} from '../../query-hooks/visit';
+import { Table } from 'antd';
 
 function Dashboard() {
   const { user } = useContext(AuthContext);
-  const [firstName, setFirstName] = useState("");
+  const [firstName, setFirstName] = useState('');
   // const [checkedInToday, setCheckedInToday] = useState([]);
   // const [checkedOutInToday, setCheckedOutInToday] = useState([]);
   // const [onPremise, setOnPremise] = useState([]);
@@ -57,7 +57,7 @@ function Dashboard() {
   // }, []);
 
   const getFirstName = (name) => {
-    const splittedName = name.split(" ");
+    const splittedName = name.split(' ');
     const stripFirstName = splittedName.shift();
     return stripFirstName;
   };
@@ -88,7 +88,7 @@ function Dashboard() {
               className="absolute right-0 block bottom-0 "
               src={DashboardImage}
               alt="dashboard-image"
-              style={{ height: "15rem" }}
+              style={{ height: '15rem' }}
             />
           </div>
         </div>
@@ -114,7 +114,7 @@ function Dashboard() {
       <div className="checks-container w-full grid grid-cols-2 gap-4 mt-1">
         <div className="h-full overflow-y-scroll">
           <h2 className="text-base font-semibold mb-1 flex justify-start ">
-            {`Checked In's (${checkedInToday?.data?.checkIns.length})`}
+            {`Visits (${checkedInToday?.data?.checkIns.length})`}
           </h2>
           <Table
             scroll={{

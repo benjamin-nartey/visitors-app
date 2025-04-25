@@ -1,30 +1,40 @@
 import React, { useEffect, useState } from 'react';
 import axiosInstance from '../../interceptors/axios';
-
-import { Controller, useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import reportVaildation from '../../utils/validations/report';
-import { DatePicker, Input, Table } from 'antd';
+import {
+  Button,
+  DatePicker,
+  Form,
+  Input,
+  message,
+  Modal,
+  Table,
+  Tooltip,
+} from 'antd';
 import dayjs from 'dayjs';
-import SearchModal from '../../components/search_modal/searchModal.component';
-import { useReportContext } from './context/report.context';
+import { BsFilter } from 'react-icons/bs';
+import { useMutation } from '@tanstack/react-query';
+import { postReportFilters } from '../../http/report';
 import { useGetReport } from '../../query-hooks/visit';
+import { useReportContext } from './context/report.context';
 
 const Report = () => {
   const [searchText, setSearchText] = useState('');
-  // const [showModal, setshowModal] = useState(false);
-  // const { setshowReportModal, showReportModal } = useReportContext();
+  const [showModal, setShowModal] = useState(false);
+  const { setshowReportModal, showReportModal } = useReportContext();
 
-  const { data: report, isPending } = useGetReport();
+  // Initialize with proper structure that matches your API response
+  const [reportData, setReportData] = useState([]);
 
-  // const fetchAllVisits = async () => {
-  //   const response = await axiosInstance.get('/visit');
-  //   setReportData(response.data);
-  // };
+  const { data: report, isLoading } = useGetReport({
+    enabled: true,
+  });
 
-  // useEffect(() => {
-  //   fetchAllVisits();
-  // }, []);
+  useEffect(() => {
+    if (report && !isLoading) {
+      // Make sure we're setting the data in the correct format
+      setReportData(Array.isArray(report) ? report : report?.data || []);
+    }
+  }, [report, isLoading]);
 
   const columns = [
     {
@@ -33,7 +43,9 @@ const Report = () => {
       key: 'guest_name',
       filteredValue: [searchText],
       onFilter: (value, record) => {
-        return record.guest_name.toLowerCase().includes(value.toLowerCase());
+        return String(record.guest_name || '')
+          .toLowerCase()
+          .includes(value.toLowerCase());
       },
     },
     {
@@ -42,7 +54,7 @@ const Report = () => {
       key: 'staff_name',
     },
     {
-      title: ' Department',
+      title: 'Department',
       dataIndex: 'department',
       key: 'department',
     },
@@ -57,76 +69,143 @@ const Report = () => {
       key: 'guest_contact',
     },
     {
-      title: ' Tag',
+      title: 'Tag',
       dataIndex: ['tag', 'number'],
+      key: 'tag',
+      render: (text, record) => record.tag?.number || 'N/A',
     },
     {
-      title: ' Day of Visit',
+      title: 'Day of Visit',
       dataIndex: 'createdAt',
       key: 'createdAt',
-      render: (row) => {
-        return <span>{new Date(row).toDateString()}</span>;
-      },
+      render: (createdAt) =>
+        createdAt ? new Date(createdAt).toDateString() : 'N/A',
     },
     {
-      title: ' Time In',
+      title: 'Time In',
       dataIndex: 'time_in',
       key: 'time_in',
+      render: (time_in) => {
+        if (!time_in) return 'N/A';
 
-      render: (row) => {
-        const hours = new Date(row.time_out).getHours();
+        const date = new Date(time_in);
+        const hours = date.getHours();
+        const minutes = date.getMinutes().toString().padStart(2, '0');
         const amPM = hours >= 12 ? 'PM' : 'AM';
-        return (
-          <span>{`${new Date(row).getHours()}: ${new Date(
-            row
-          ).getMinutes()} : ${amPM}`}</span>
-        );
+        const displayHours = hours % 12 || 12;
+
+        return `${displayHours}:${minutes} ${amPM}`;
       },
     },
     {
-      title: ' Tim Out',
+      title: 'Time Out',
       dataIndex: 'time_out',
       key: 'time_out',
+      render: (time_out) => {
+        if (!time_out) return 'N/A';
 
-      render: (row) => {
-        const hours = new Date(row).getHours();
+        const date = new Date(time_out);
+        const hours = date.getHours();
+        const minutes = date.getMinutes().toString().padStart(2, '0');
         const amPM = hours >= 12 ? 'PM' : 'AM';
-        return (
-          <span>{`${new Date(row).getHours()}: ${new Date(
-            row
-          ).getMinutes()}  ${amPM} `}</span>
-        );
+        const displayHours = hours % 12 || 12;
+
+        return `${displayHours}:${minutes} ${amPM}`;
       },
     },
     {
       title: 'CheckOut Date',
       dataIndex: 'time_out',
-      key: 'time_out',
-      render: (row) => {
-        return <span>{new Date(row).toDateString()}</span>;
-      },
+      key: 'checkout_date',
+      render: (time_out) =>
+        time_out ? new Date(time_out).toDateString() : 'N/A',
     },
   ];
 
+  const { mutate, isLoading: isFilterLoading } = useMutation({
+    mutationKey: ['fetchReport'],
+    mutationFn: (data) => postReportFilters(data),
+    onSuccess: (response) => {
+      // Handle the response consistently with our state structure
+
+      // Extract data properly based on your API response format
+      const filteredData = Array.isArray(response)
+        ? response
+        : Array.isArray(response.data)
+        ? response.data
+        : [];
+
+      setReportData(filteredData);
+      message.success('Filters applied successfully');
+    },
+    onError: (err) => {
+      message.error(err.message || 'Failed to fetch report data');
+    },
+  });
+
+  const handleSubmit = (values) => {
+    console.log('Submitting filter values:', values);
+    mutate({
+      fromDate: dayjs(values.fromDate).toISOString(),
+      toDate: dayjs(values.toDate).toISOString(),
+    });
+    setShowModal(false);
+  };
+
   return (
-    <div className="flex  flex-col justify-center  items-center my-auto w-[40-rem]  mx-auto ">
-      {/* {showReportModal && <SearchModal setterFn={setReportData} />} */}
-      <div className="my-10">
-        <Input.Search
-          placeholder="Search..."
-          className="w-full"
-          onChange={(e) => setSearchText(e.target.value)}
-        />
+    <div className="flex flex-col justify-center items-center my-auto w-full mx-auto">
+      <Modal
+        open={showModal}
+        onCancel={() => setShowModal(false)}
+        title="FILTERS"
+        footer={false}
+      >
+        <div className="mt-5">
+          <Form name="reportFilter" layout="vertical" onFinish={handleSubmit}>
+            <Form.Item name="fromDate" required label="From">
+              <DatePicker className="w-full" />
+            </Form.Item>
+            <Form.Item name="toDate" required label="To">
+              <DatePicker className="w-full" />
+            </Form.Item>
+            <Button
+              htmlType="submit"
+              className="w-full bg-green-500"
+              type="primary"
+            >
+              Submit
+            </Button>
+          </Form>
+        </div>
+      </Modal>
+
+      <div className="my-10 w-full">
+        <div className="flex justify-end gap-3 items-center mb-4">
+          <Input.Search
+            placeholder="Search..."
+            className="w-[10rem]"
+            onChange={(e) => setSearchText(e.target.value)}
+          />
+          <Tooltip title="Filter">
+            <BsFilter
+              className="text-lg text-green-500 cursor-pointer"
+              onClick={() => setShowModal(true)}
+            />
+          </Tooltip>
+        </div>
+
         <Table
           columns={columns}
-          loading={isPending}
+          loading={isLoading || isFilterLoading}
           dataSource={
-            report &&
-            report?.data.map((rep) => ({
-              ...rep,
-              key: rep.id,
-            }))
+            Array.isArray(reportData)
+              ? reportData.map((rep) => ({
+                  ...rep,
+                  key: rep.id || Math.random().toString(),
+                }))
+              : []
           }
+          pagination={{ pageSize: 10 }}
         />
       </div>
     </div>
