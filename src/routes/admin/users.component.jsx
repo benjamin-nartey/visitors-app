@@ -1,18 +1,18 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
 import {
   HiOutlinePencil,
   HiOutlineTrash,
   HiOutlinePlus,
-} from "react-icons/hi2";
-import { Button, Input, Popconfirm, Table, message } from "antd";
-import { useAdminContext } from "./context/admin.context";
-import AddEmployee from "../../components/adminModals/employees/add";
-import AddUsers from "../../components/adminModals/users/add";
-import { useGetAllEmployees, useGetAllUsers } from "../../query-hooks/user";
+} from 'react-icons/hi2';
+import { Button, Input, Popconfirm, Table, message } from 'antd';
+import { useAdminContext } from './context/admin.context';
+import AddEmployee from '../../components/adminModals/employees/add';
+import AddUsers from '../../components/adminModals/users/add';
+import { useGetAllEmployees, useGetAllUsers } from '../../query-hooks/user';
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteEmployee, deleteUser } from "../../http/user";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { deleteEmployee, deleteUser } from '../../http/user';
 
 const Users = () => {
   const {
@@ -27,16 +27,16 @@ const Users = () => {
 
   const { data: users, isLoading: loadusers } = useGetAllUsers();
 
-  const [searchText, setSearchText] = useState("");
+  const [searchText, setSearchText] = useState('');
 
   const qClient = useQueryClient();
 
   const { mutate: removeUser, isPending: isRemoving } = useMutation({
-    mutationKey: "removeUser",
+    mutationKey: 'removeUser',
     mutationFn: (id) => deleteUser(id),
     onSuccess: () => {
-      message.success("User deleted successfully");
-      qClient.invalidateQueries({ queryKey: ["users"] });
+      message.success('User deleted successfully');
+      qClient.invalidateQueries({ queryKey: ['getAllUsers'] });
     },
     onError: (err) => message.error(err.response.data.message),
   });
@@ -51,9 +51,9 @@ const Users = () => {
   };
   const columns = [
     {
-      title: "Name",
-      dataIndex: "name",
-      key: "name",
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
       filteredValue: [searchText],
       onFilter: (value, record) => {
         return (
@@ -63,20 +63,20 @@ const Users = () => {
       },
     },
     {
-      title: "Email",
-      dataIndex: "email",
-      key: "email",
+      title: 'Email',
+      dataIndex: 'email',
+      key: 'email',
     },
     {
-      title: "Role",
-      dataIndex: "role",
-      key: "role",
+      title: 'Role',
+      dataIndex: 'role',
+      key: 'role',
     },
 
     {
-      title: "Actions",
-      dataIndex: "id",
-      key: "id",
+      title: 'Actions',
+      dataIndex: 'id',
+      key: 'id',
       render: (_, row) => {
         return (
           <div className="flex gap-2">
@@ -92,7 +92,7 @@ const Users = () => {
               // onCancel={cancel}
               okText="Yes"
               cancelText="No"
-              okButtonProps={{ style: { backgroundColor: "red" } }}
+              okButtonProps={{ style: { backgroundColor: 'red' } }}
             >
               <div>
                 <HiOutlineTrash className="text-red-500 cursor-pointer text-lg" />

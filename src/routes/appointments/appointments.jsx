@@ -34,6 +34,7 @@ import { render } from 'react-dom';
 import { APPOINTMENT_STATUS } from '../../constants/divisions';
 import { CheckOutToggleContext } from '../../components/context/checkoutToggle.context';
 import { ArrowDownIcon } from '@heroicons/react/20/solid';
+import { AuthContext } from '../../components/context/useAuth.context';
 
 const Appointments = () => {
   const [searchText, setSearchText] = useState('');
@@ -46,6 +47,8 @@ const Appointments = () => {
 
   const [openPopConfirm, setOpenPopConfirm] = useState(false);
   const [isReschedule, setIsReschedule] = useState(false);
+
+  const { user } = useContext(AuthContext);
 
   // const showPopconfirm = () => {
   //   setOpenPopConfirm(true);
@@ -114,6 +117,11 @@ const Appointments = () => {
       key: 'extension',
     },
     {
+      title: 'Company',
+      dataIndex: 'company',
+      key: 'company',
+    },
+    {
       title: 'Date',
       dataIndex: 'appointmentDate',
       key: 'appointmentDate',
@@ -158,7 +166,7 @@ const Appointments = () => {
       },
     },
 
-    {
+    user.role !== 'SECURITY' && {
       title: 'Action',
       dataIndex: 'id',
 
@@ -245,7 +253,7 @@ const Appointments = () => {
         );
       },
     },
-  ];
+  ].filter(Boolean);
 
   const queryClient = useQueryClient();
 
@@ -462,6 +470,9 @@ const Appointments = () => {
             >
               <DatePicker showTime className="w-full" />
             </Form.Item>
+            <Form.Item name={'company'} label="Company">
+              <Input className="w-full" placeholder="Enter Company" />
+            </Form.Item>
             <Form.Item name="purpose" label="Purpose">
               <TextArea
                 disabled={isReschedule}
@@ -485,7 +496,9 @@ const Appointments = () => {
           className="w-[20rem]"
           placeholder="Search..."
         />
-        <Button onClick={() => setShowAppModal(true)}>Add Appointment</Button>
+        {user.role !== 'SECURITY' && (
+          <Button onClick={() => setShowAppModal(true)}>Add Appointment</Button>
+        )}
       </div>
       <Table
         columns={columns}

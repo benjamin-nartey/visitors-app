@@ -1,31 +1,31 @@
-import React, { useEffect } from "react";
-import HeroImg from "../../assets/Login Illustration@2x.png";
-import Logo from "../../assets/logo-cocobod.png";
-import { useState } from "react";
-import { NavLink } from "react-router-dom";
-import { useNavigate, useLocation } from "react-router-dom";
+import React, { useEffect } from 'react';
+import HeroImg from '../../assets/Login Illustration@2x.png';
+import Logo from '../../assets/logo-cocobod.png';
+import { useState } from 'react';
+import { NavLink } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
-import axios from "axios";
-import SignInLoader from "../../components/circlular-loader/circular-loader";
-import { AuthContext } from "../../components/context/useAuth.context";
-import { useContext } from "react";
-import { useLocalStorage } from "../../utils/useLocalStorage";
+import axios from 'axios';
+import SignInLoader from '../../components/circlular-loader/circular-loader';
+import { AuthContext } from '../../components/context/useAuth.context';
+import { useContext } from 'react';
+import { useLocalStorage } from '../../utils/useLocalStorage';
 
 const defaultFormFields = {
-  email: "",
-  password: "",
+  email: '',
+  password: '',
 };
 
 function SignIn() {
   const [formFields, setFormFields] = useState(defaultFormFields);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
-  const from = location.state?.from?.pathname || "/home";
+  const from = location.state?.from?.pathname || '/home';
   const { user, setTokens, setUser } = useContext(AuthContext);
-  const [authTokens, setAuthTokens] = useLocalStorage("authTokens", null);
+  const [authTokens, setAuthTokens] = useLocalStorage('authTokens', null);
 
   const { email, password } = formFields;
 
@@ -44,7 +44,8 @@ function SignIn() {
     try {
       setLoading(true);
       const response = await axios.post(
-        "https://receptionapi.cocobod.net/auth/signin",
+        // "https://receptionapi.cocobod.net/auth/signin",
+        'http://localhost:9000/auth/signin',
         {
           email: email,
           password: password,
@@ -52,10 +53,11 @@ function SignIn() {
       );
 
       const userResponse = await axios.get(
-        "https://receptionapi.cocobod.net/user/me",
+        // "https://receptionapi.cocobod.net/user/me",
+        'http://localhost:9000/user/me',
         {
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
             Authorization: `Bearer ${response?.data?.access_token}`,
           },
         }
@@ -68,11 +70,11 @@ function SignIn() {
     } catch (error) {
       setError(true);
       switch (error.code) {
-        case "ERR_NETWORK":
-          setErrorMessage("Network Error!, check internet connection");
+        case 'ERR_NETWORK':
+          setErrorMessage('Network Error!, check internet connection');
           break;
-        case "ERR_BAD_REQUEST":
-          setErrorMessage("Opps! incorrect email or password!");
+        case 'ERR_BAD_REQUEST':
+          setErrorMessage('Opps! incorrect email or password!');
           break;
         default:
           console.log(error);
@@ -111,12 +113,12 @@ function SignIn() {
 
               <div
                 className="line w-px h-6"
-                style={{ backgroundColor: "#724c2a" }}
+                style={{ backgroundColor: '#724c2a' }}
               ></div>
 
               <h2
                 className="brand-text text-lg font-semibold "
-                style={{ color: "#724c2a" }}
+                style={{ color: '#724c2a' }}
               >
                 Ghana Cocoa Board
               </h2>

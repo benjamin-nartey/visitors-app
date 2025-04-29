@@ -1,11 +1,11 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useState } from "react";
-import { useForm, Controller } from "react-hook-form";
-import { UsersValidationSchema } from "../../../utils/validations/users";
-import { Button, Input, InputNumber, Modal, Select, message } from "antd";
-import { useAdminContext } from "../../../routes/admin/context/admin.context";
-import axiosInstance from "../../../interceptors/axios";
-import { roles } from "../../../constants/roles";
+import { zodResolver } from '@hookform/resolvers/zod';
+import React, { useState } from 'react';
+import { useForm, Controller } from 'react-hook-form';
+import { UsersValidationSchema } from '../../../utils/validations/users';
+import { Button, Input, InputNumber, Modal, Select, message } from 'antd';
+import { useAdminContext } from '../../../routes/admin/context/admin.context';
+import axiosInstance from '../../../interceptors/axios';
+import { roles } from '../../../constants/roles';
 
 const AddUsers = (setFn) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -30,15 +30,15 @@ const AddUsers = (setFn) => {
   } = useForm({
     resolver: zodResolver(UsersValidationSchema),
     defaultValues: {
-      name: selectedRecord ? selectedRecord.name : "",
-      email: selectedRecord ? selectedRecord.email : "",
-      password: selectedRecord ? selectedRecord.password : "",
-      role: selectedRecord ? selectedRecord.role : "",
+      name: selectedRecord ? selectedRecord.name : '',
+      email: selectedRecord ? selectedRecord.email : '',
+      // password: selectedRecord ? selectedRecord.password : '',
+      role: selectedRecord ? selectedRecord.role : '',
     },
   });
 
   const addUser = async (data) => {
-    return await axiosInstance.post("/user", data);
+    return await axiosInstance.post('/user', data);
   };
 
   const updateUser = async (data) => {
@@ -62,7 +62,7 @@ const AddUsers = (setFn) => {
         ? setshowUserEditModal(!showUserEditModal)
         : setshowUserAddModal(!showUserAddModal);
       message.success(
-        `Successfully ${selectedRecord ? "Updated" : "Added"} user`
+        `Successfully ${selectedRecord ? 'Updated' : 'Added'} user`
       );
       setIsLoading(false);
       setSelectedRecord(null);
@@ -127,7 +127,7 @@ const AddUsers = (setFn) => {
             )}
           </div>
 
-          <div>
+          {/* <div>
             <label htmlFor="">Password</label>
             <Controller
               name="password"
@@ -135,6 +135,7 @@ const AddUsers = (setFn) => {
               render={({ field }) => (
                 <Input
                   type="password"
+                  // required={false}
                   placeholder="Enter password"
                   {...field}
                   defaultValue={defaultValues.password}
@@ -146,7 +147,7 @@ const AddUsers = (setFn) => {
                 {errors.password.message}
               </p>
             )}
-          </div>
+          </div> */}
           <div>
             <label htmlFor="">Role</label>
             <Controller

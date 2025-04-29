@@ -6,18 +6,19 @@ import { useContext } from 'react';
 import axiosInstance from '../../interceptors/axios';
 import OnPremise from '../../components/on-premise/on-premise';
 
-import { CHECKINS_COLUMN } from '../../utils/checkins-column/checkins-column';
-import { CHECKOUTS_COLUMN } from '../../utils/checkouts-column/checkouts-column';
 import {
   useFetchCheckedInToday,
   useFetchCheckedOutToday,
   useFetchOnPremises,
 } from '../../query-hooks/visit';
-import { Table } from 'antd';
+import { Input, Table } from 'antd';
+import dayjs from 'dayjs';
 
 function Dashboard() {
   const { user } = useContext(AuthContext);
   const [firstName, setFirstName] = useState('');
+  const [searchTextIn, setSearchTextIn] = useState('');
+  const [searchTextOut, setSearchTextOut] = useState('');
   // const [checkedInToday, setCheckedInToday] = useState([]);
   // const [checkedOutInToday, setCheckedOutInToday] = useState([]);
   // const [onPremise, setOnPremise] = useState([]);
@@ -26,6 +27,121 @@ function Dashboard() {
   const handleClickOpen = () => {
     setOpen(true);
   };
+
+  const CHECKINS_COLUMN = [
+    {
+      title: "Visitor's Name",
+
+      dataIndex: 'guest_name',
+      key: 'guest_name',
+      filteredValue: [searchTextIn],
+      onFilter: (value, record) => {
+        return (
+          String(record.guest_name)
+            .toLowerCase()
+            .includes(searchTextIn.toLowerCase()) ||
+          record.staff_name
+            .toLowerCase()
+            .includes(searchTextIn.toLowerCase()) ||
+          record.tag.number
+            .toLowerCase()
+            .includes(searchTextIn.toLowerCase()) ||
+          record.department.toLowerCase().includes(searchTextIn.toLowerCase())
+        );
+      },
+    },
+    {
+      title: 'Staff Name',
+      dataIndex: 'staff_name',
+      key: 'staff_name',
+    },
+    {
+      title: ' Department',
+      dataIndex: 'department',
+      key: 'department',
+    },
+    {
+      title: ' Tag',
+      dataIndex: ['tag', 'number'],
+      key: 'tag.number',
+    },
+
+    // {
+    //   Header: "Custom Cell",
+    //   accessor: "additionalInfo",
+    //   Cell: ({ cell }) => (
+    //     <span data-tip={cell.value} data-for={`row-${cell.row.index}-tooltip`}>
+    //       Hover me
+    //     </span>
+    //   ),
+    // },
+    {
+      title: 'Time In',
+      dataIndex: 'time_in',
+      render: (value) => {
+        return value ? dayjs(value).format('hh:mm A') : '-';
+      },
+    },
+    {
+      title: 'Time Out',
+      dataIndex: 'time_out',
+      render: (value) => {
+        return value ? dayjs(value).format('hh:mm A') : '-';
+      },
+    },
+  ];
+
+  const CHECKOUTS_COLUMN = [
+    {
+      title: "Visitor's Name",
+      dataIndex: 'guest_name',
+      key: 'guest_name',
+      filteredValue: [searchTextOut],
+      onFilter: (value, record) => {
+        return (
+          String(record.guest_name)
+            .toLowerCase()
+            .includes(searchTextOut.toLowerCase()) ||
+          record.staff_name
+            .toLowerCase()
+            .includes(searchTextOut.toLowerCase()) ||
+          record.tag.number
+            .toLowerCase()
+            .includes(searchTextOut.toLowerCase()) ||
+          record.department.toLowerCase().includes(searchTextOut.toLowerCase())
+        );
+      },
+    },
+    {
+      title: 'Staff Name',
+      dataIndex: 'staff_name',
+      key: 'staff_name',
+    },
+    {
+      title: ' Department',
+      dataIndex: 'department',
+      key: 'department',
+    },
+    {
+      title: ' Tag',
+      dataIndex: ['tag', 'number'],
+      key: 'tag.number',
+    },
+    {
+      title: 'Time In',
+      dataIndex: 'time_in',
+      render: (value) => {
+        return value ? dayjs(value).format('hh:mm A') : '-';
+      },
+    },
+    {
+      title: 'Time Out',
+      dataIndex: 'time_out',
+      render: (value) => {
+        return value ? dayjs(value).format('hh:mm A') : '-';
+      },
+    },
+  ];
 
   // const fetchCheckedInToday = async () => {
   //   const response = await axiosInstance.get('/visit/checkinsTodayRecords');
@@ -113,9 +229,16 @@ function Dashboard() {
       </div>
       <div className="checks-container w-full grid grid-cols-2 gap-4 mt-1">
         <div className="h-full overflow-y-scroll">
-          <h2 className="text-base font-semibold mb-1 flex justify-start ">
-            {`Visits (${checkedInToday?.data?.checkIns.length})`}
-          </h2>
+          <div className="flex justify-between mb-2 ">
+            <h2 className="text-base font-semibold mb-1  ">
+              {`Visits (${checkedInToday?.data?.checkIns.length})`}
+            </h2>
+            <Input.Search
+              className="w-[40%] "
+              onChange={(e) => setSearchTextIn(e.target.value)}
+            />
+          </div>
+
           <Table
             scroll={{
               y: 150,
@@ -134,9 +257,15 @@ function Dashboard() {
         </div>
 
         <div className="h-full overflow-y-scroll">
-          <h2 className="text-base font-semibold mb-1 flex justify-end ">
-            {`Checked Outs (${checkedOutToday?.data?.checkOuts.length})`}
-          </h2>
+          <div className="flex justify-between mb-2 ">
+            <h2 className="text-base font-semibold mb-1 flex justify-end ">
+              {`Checked Outs (${checkedOutToday?.data?.checkOuts.length})`}
+            </h2>
+            <Input.Search
+              className="w-[40%] "
+              onChange={(e) => setSearchTextOut(e.target.value)}
+            />
+          </div>
 
           <Table
             scroll={{

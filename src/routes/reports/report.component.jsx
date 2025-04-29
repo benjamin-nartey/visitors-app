@@ -11,7 +11,7 @@ import {
   Tooltip,
 } from 'antd';
 import dayjs from 'dayjs';
-import { BsFilter } from 'react-icons/bs';
+import { BsFilter, BsFunnel } from 'react-icons/bs';
 import { useMutation } from '@tanstack/react-query';
 import { postReportFilters } from '../../http/report';
 import { useGetReport } from '../../query-hooks/visit';
@@ -179,16 +179,16 @@ const Report = () => {
         </div>
       </Modal>
 
-      <div className="my-10 w-full">
-        <div className="flex justify-end gap-3 items-center mb-4">
+      <div className="my-10 w-[90%]">
+        <div className="flex justify-end gap-3 items-center mb-4 ">
           <Input.Search
             placeholder="Search..."
             className="w-[10rem]"
             onChange={(e) => setSearchText(e.target.value)}
           />
           <Tooltip title="Filter">
-            <BsFilter
-              className="text-lg text-green-500 cursor-pointer"
+            <BsFunnel
+              className="text-2xl text-green-500 cursor-pointer"
               onClick={() => setShowModal(true)}
             />
           </Tooltip>

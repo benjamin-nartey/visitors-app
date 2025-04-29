@@ -107,6 +107,7 @@ const Tags = () => {
           <Table
             columns={columns}
             dataSource={tags?.data.map((tag) => ({ key: tag.id, ...tag }))}
+            loading={loadTags}
           />
         </div>
       )}

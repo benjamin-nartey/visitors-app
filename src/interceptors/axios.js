@@ -49,8 +49,8 @@ import jwt_decode from 'jwt-decode';
 import dayjs from 'dayjs';
 
 // Define API URL in one place for easier configuration
-const API_BASE_URL = 'https://receptionapi.cocobod.net';
-// const API_BASE_URL = 'http://localhost:9000'; // Uncomment for local development
+// const API_BASE_URL = 'https://receptionapi.cocobod.net';
+const API_BASE_URL = 'http://localhost:9000'; // Uncomment for local development
 
 const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
